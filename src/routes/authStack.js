@@ -17,7 +17,7 @@ export default function () {
         }}
       />
       <AuthStack.Screen
-        name="SignUpPage"
+        name="SignUp"
         component={SignUp}
         options={{
           headerShown: false,
