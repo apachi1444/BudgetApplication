@@ -24,7 +24,7 @@ const SIZES = {
   PADDING: 12,
 };
 
-export default ({ navigation }) => {
+export default SignUp = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [birthDate, setBirthDate] = useState("");
