@@ -7,20 +7,13 @@ import {
   TextInput,
   StyleSheet,
   View,
-  ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from "react-native";
 
-const COLORS = {
-  WHITE: "#FFF",
-  BLACK: "#000",
-  PRIMARY: "#9C7DE4",
-  BLUE: "#4856B7",
-  GREY: "#AFAFAF",
-  GOOGLE: "#DC4E41",
-  FACEBOOK: "#3A5896",
-};
+import COLORS from "../../consts/color";
+// import styless from "./loginStyle";
 
 const SIZES = {
   BASE: 6,
@@ -31,7 +24,7 @@ const SIZES = {
   PADDING: 12,
 };
 
-export default () => {
+export default ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("contact@react-ui-kit.com");
   const [password, setPassword] = useState("subscribe");
@@ -73,10 +66,12 @@ export default () => {
         </View>
         <Text style={styles.divider}>or</Text>
         {renderActions()}
+        {renderGoToSignUpPage()}
       </View>
     );
   };
 
+  // this is for showing the buttons of google and facebook sign up
   const renderSocials = () => {
     return (
       <View style={styles.social}>
@@ -97,6 +92,7 @@ export default () => {
     );
   };
 
+  // this is for the button of the sign in
   const renderActions = () => {
     const isValid = email && password;
     return (
@@ -125,9 +121,21 @@ export default () => {
     );
   };
 
+  const renderGoToSignUpPage = () => {
+    return (
+      <View style={styles.containerGoToSignUpPage}>
+        <Text>Don't have an account? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+          <Text style={styles.textGoToSignUpPage}>Please Sign Up Here!</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { textAlign: "center" }]}>Login</Text>
+      <Text style={[{ textAlign: "center" }]}>IMAGE OF LOGIN PAGE</Text>
+      <Text style={[styles.title]}>Login</Text>
       {renderInputs()}
     </View>
   );
@@ -136,9 +144,9 @@ export default () => {
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: SIZES.BASE * 4,
     height: SIZES.BASE * 8,
-    justifyContent: "center",
     padding: SIZES.PADDING,
   },
   container: {
@@ -164,10 +172,11 @@ const styles = StyleSheet.create({
     paddingLeft: SIZES.BASE * 7.5,
     fontSize: SIZES.FONT,
     backgroundColor: COLORS.WHITE, // "rgba(255, 255, 255, 0.5)",
-    borderRadius: SIZES.BASE * 2,
+    borderWidth: 0,
+    borderRadius: SIZES.BASE * 2.5,
   },
   inputContainer: {
-    marginBottom: SIZES.PADDING * 2,
+    marginBottom: SIZES.PADDING * 1.2,
   },
   inputIcon: {
     left: SIZES.BASE * 2.8,
@@ -179,8 +188,10 @@ const styles = StyleSheet.create({
     top: SIZES.BASE * 2.2,
   },
   signin: {
+    borderRadius: SIZES.BASE * 2,
     backgroundColor: COLORS.PRIMARY,
     marginVertical: SIZES.BASE * 3,
+    marginBottom: SIZES.BASE * 2,
   },
   social: {
     flexDirection: "row",
@@ -197,6 +208,17 @@ const styles = StyleSheet.create({
     fontSize: SIZES.TITLE,
     fontWeight: "600",
     letterSpacing: 1,
-    marginBottom: SIZES.BASE,
+    marginBottom: SIZES.BASE * 0.1,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+  },
+  containerGoToSignUpPage: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  textGoToSignUpPage: {
+    color: COLORS.PRIMARY,
+    fontWeight: "bold",
+    marginHorizontal: SIZES.BASE * 1,
   },
 });
