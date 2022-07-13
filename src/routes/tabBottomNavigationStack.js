@@ -1,31 +1,42 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import Login from "../screens/login/login";
-import Signup from "../screens/signup/signup";
+import { FontAwesome } from "@expo/vector-icons";
+import editProfile from "../screens/editProfile/editProfile";
 
 const Tab = createBottomTabNavigator();
-
-function MyTabs() {
+import React from "react";
+import ProfileUser from "../screens/profile/profile";
+const MyTabs = () => {
   return (
     <Tab.Navigator
       initialRouteName="Feed"
       screenOptions={{
         tabBarActiveTintColor: "#e91e63",
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 25,
+          left: 20,
+          right: 20,
+          elevation: 0,
+          backgroundColor: "#FFF",
+          borderRadius: 15,
+          height: 10,
+        },
       }}
     >
       <Tab.Screen
         name="Feed"
-        component={Login}
+        component={editProfile}
         options={{
           tabBarLabel: "Login",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <FontAwesome name="home" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
         name="SignUp"
-        component={Signup}
+        component={ProfileUser}
         options={{
           tabBarLabel: "Updates",
           tabBarIcon: ({ color, size }) => (
@@ -36,6 +47,6 @@ function MyTabs() {
       />
     </Tab.Navigator>
   );
-}
+};
 
 export default MyTabs();
