@@ -10,11 +10,11 @@ export default function () {
       <WelcomePageStack.Screen
         name="WelcomePage"
         component={WelcomePage}
-        // options={{
-        //   headerTitle: () => <Header title="About YessineZone" />,
-        //   headerShown: false,
-        //   headerStyle: {backgroundColor: '#eee'},
-        // }}
+        options={{
+          // headerTitle: () => <Header title="About YessineZone" />,
+          headerShown: false,
+          headerStyle: { backgroundColor: "#eee" },
+        }}
       />
     </WelcomePageStack.Navigator>
   );

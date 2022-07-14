@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import WelcomePage from "../screens/welcomePage/welcomePage";
 import Login from "./../screens/login/login";
 import SignUp from "./../screens/signup/signup";
 
@@ -9,16 +10,16 @@ export default function () {
   return (
     <AuthStack.Navigator>
       <AuthStack.Screen
-        name="LoginPage"
-        component={Login}
+        name="SignUp"
+        component={SignUp}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
       />
       <AuthStack.Screen
-        name="SignUpPage"
-        component={SignUp}
+        name="LoginPage"
+        component={Login}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },

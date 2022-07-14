@@ -9,13 +9,13 @@ export default function () {
   return (
     <WelcomeStack.Navigator>
       <WelcomeStack.Screen
-        name="WelcomePage"
+        name="WelcomePageStack"
         component={welcomePageStack}
-        // options={{
-        //   headerTitle: () => <Header title="About YessineZone" />,
-        //   headerShown: false,
-        //   headerStyle: {backgroundColor: '#eee'},
-        // }}
+        options={{
+          // headerTitle: () => <Header title="About YessineZone" />,
+          headerShown: false,
+          headerStyle: { backgroundColor: "#eee" },
+        }}
       />
       <WelcomeStack.Screen
         name="AuthStack"
