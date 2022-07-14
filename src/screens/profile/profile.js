@@ -12,6 +12,11 @@ export default function ProfileUser({ navigation }) {
   const logOut = () => {
     navigation.goBack();
   };
+
+  const goToHistory = () => {
+    navigation.navigate("IncomesAndSpendings");
+  };
+
   return (
     <>
       <View style={profileStyles.container}>
@@ -111,24 +116,28 @@ export default function ProfileUser({ navigation }) {
           </View>
 
           {/* // this is for the each line of profile Details */}
-          <TouchableOpacity onPress={goToSettings}>
-            <View style={profileStyles.profileDetailLine}>
-              <FontAwesome
-                name="user"
-                color={COLORS.PRIMARY}
-                size={SIZES.BASE * 4.2}
-              />
-              <Text style={profileStyles.textInsideProfileDetailLine}>
-                Edit Profile
-              </Text>
-              <FontAwesome
-                name="arrow-right"
-                color={COLORS.PRIMARY}
-                size={SIZES.BASE * 2.9}
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={profileStyles.profileDetailLine}>
+          <View
+            style={profileStyles.profileDetailLine}
+            onStartShouldSetResponder={editProfile}
+          >
+            <FontAwesome
+              name="user"
+              color={COLORS.PRIMARY}
+              size={SIZES.BASE * 4.2}
+            />
+            <Text style={profileStyles.textInsideProfileDetailLine}>
+              Edit Profile
+            </Text>
+            <FontAwesome
+              name="arrow-right"
+              color={COLORS.PRIMARY}
+              size={SIZES.BASE * 2.9}
+            />
+          </View>
+          <View
+            style={profileStyles.profileDetailLine}
+            onStartShouldSetResponder={goToSettings}
+          >
             <FontAwesome
               name="user"
               color={COLORS.PRIMARY}
@@ -143,7 +152,10 @@ export default function ProfileUser({ navigation }) {
               size={SIZES.BASE * 2.9}
             />
           </View>
-          <View style={profileStyles.profileDetailLine}>
+          <View
+            style={profileStyles.profileDetailLine}
+            onStartShouldSetResponder={goToHistory}
+          >
             <FontAwesome
               name="history"
               color={COLORS.PRIMARY}
@@ -168,7 +180,6 @@ export default function ProfileUser({ navigation }) {
 
 import COLORS from "../../consts/color";
 import { windowWidth, windowHeight } from "../../utils/dimensions";
-import { TouchableOpacity } from "react-native-gesture-handler";
 const SIZES = {
   BASE: 6,
   FONT: 12,

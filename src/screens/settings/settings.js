@@ -1,13 +1,5 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Switch,
-  TouchableHighlight,
-  Pressable,
-} from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { StyleSheet, Text, View, Alert } from "react-native";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Avatar } from "react-native-paper";
 
 import COLORS from "../../consts/color";
@@ -20,6 +12,25 @@ export default function Settings({ navigation }) {
 
   const toggleSwitch = () => {
     setIsEnabledSettings(!isEnabledSettings);
+  };
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  const showLanguages = () => {
+    Alert.alert("Alert Title", "My Alert Msg", [
+      {
+        text: "Ask me later",
+        onPress: () => console.log("Ask me later pressed"),
+      },
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => console.log("OK Pressed") },
+    ]);
   };
 
   const profileStyles = StyleSheet.create({
@@ -82,6 +93,9 @@ export default function Settings({ navigation }) {
       flexDirection: "row",
       justifyContent: "space-evenly",
     },
+    specificLanguageText: {
+      marginHorizontal: SIZES.BASE * 1.2,
+    },
     toggleSetting: {
       backgroundColor: isEnabledSettings ? COLORS.GREY : COLORS.PRIMARY,
       width: windowWidth * 0.08,
@@ -141,7 +155,7 @@ export default function Settings({ navigation }) {
       <View style={profileStyles.container}>
         <View style={profileStyles.containerInformationsUser}>
           <Avatar.Image
-            source={require("../../assets/images/facebook.png")}
+            source={require("../../assets/images/elon_musk.jpg")}
             size={130}
           />
           {/* <Image
@@ -150,43 +164,22 @@ export default function Settings({ navigation }) {
           ></Image> */}
           <Text style={profileStyles.nameUser}>Yessine Jaoua</Text>
           <TouchableOpacity style={profileStyles.buttonEditProfile}>
-            <Text style={profileStyles.editProfileText}> EDIT PROFILE</Text>
+            <Text style={profileStyles.editProfileText}> SETTINGS</Text>
           </TouchableOpacity>
 
           <View style={profileStyles.categorySettings}>
             <Text>Preferences</Text>
           </View>
           {/* // this is for the each line of profile Details */}
-          <View style={profileStyles.profileDetailLine}>
-            <FontAwesome
-              name="user"
-              color={COLORS.PRIMARY}
-              size={SIZES.BASE * 4.2}
-            />
-            <Text style={profileStyles.textInsideProfileDetailLine}>
-              Edit Profile
-            </Text>
-            <View
-              style={[
-                profileStyles.lastElementOfProfileDetailLine,
-                profileStyles.toggleSetting,
-              ]}
-            >
-              <View
-                style={profileStyles.circleInsideToggleSetting}
-                onTouchStart={toggleSwitch}
-              ></View>
-            </View>
-          </View>
 
           <View style={profileStyles.profileDetailLine}>
-            <FontAwesome
-              name="user"
+            <Ionicons
+              name="bulb"
               color={COLORS.PRIMARY}
               size={SIZES.BASE * 4.2}
             />
             <Text style={profileStyles.textInsideProfileDetailLine}>
-              Settings
+              Dark Mode
             </Text>
             <View
               style={[
@@ -201,29 +194,32 @@ export default function Settings({ navigation }) {
             </View>
           </View>
 
-          <View style={profileStyles.profileDetailLine}>
-            <FontAwesome
-              name="history"
+          <View
+            style={profileStyles.profileDetailLine}
+            onStartShouldSetResponder={showLanguages}
+          >
+            <Ionicons
+              name="language"
               color={COLORS.PRIMARY}
               size={SIZES.BASE * 4.2}
               style={profileStyles.iconProfileDetailLine}
             />
             <Text style={profileStyles.textInsideProfileDetailLine}>
-              History
+              Language
             </Text>
             <View style={profileStyles.lastElementOfProfileDetailLine}>
-              <Text>English</Text>
+              <Text style={profileStyles.specificLanguageText}>English</Text>
               <FontAwesome
                 name="arrow-right"
                 color={COLORS.PRIMARY}
                 size={SIZES.BASE * 2.9}
-                style={profileStyles}
               />
             </View>
           </View>
           <TouchableOpacity
             disabled={true}
             style={[profileStyles.button, profileStyles.saveButton]}
+            onPress={goBack}
           >
             <Text
               style={{
@@ -233,7 +229,7 @@ export default function Settings({ navigation }) {
                 backgroundColor: "transparent",
               }}
             >
-              UPDATE PROFILE
+              UPDATE SETTINGS
             </Text>
           </TouchableOpacity>
         </View>

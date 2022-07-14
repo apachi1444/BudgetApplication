@@ -3,7 +3,7 @@ import React from "react";
 import editProfile from "../screens/editProfile/editProfile";
 import ProfileUser from "../screens/profile/profile";
 import Settings from "../screens/settings/settings";
-
+import IncomesAndSpendingsStack from "./IncomesAndSpendingsStack";
 const ProfileUserStack = createNativeStackNavigator();
 
 export default function () {
@@ -21,13 +21,19 @@ export default function () {
         name="Settings"
         component={Settings}
         options={{
-          headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
       />
       <ProfileUserStack.Screen
         name="EditProfile"
         component={editProfile}
+        options={{
+          headerStyle: { backgroundColor: "#eee" },
+        }}
+      />
+      <ProfileUserStack.Screen
+        name="History"
+        component={IncomesAndSpendingsStack}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
