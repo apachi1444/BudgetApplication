@@ -1,11 +1,19 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, View, Text, Button, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Avatar } from "react-native-paper";
+import COLORS from "../consts/color";
 import { globalStyles } from "../global/styles/globalStyles";
 import Card from "../shared/card";
-const SpecificCard = ({ item }) => {
-  const { title, body, image, date, price, rating } = item;
+const SpecificCard = (props) => {
+  const { title, body, image, date, price, rating, key } = props.item;
   return (
     <View style={globalStyles.container}>
       <Card>
@@ -19,6 +27,9 @@ const SpecificCard = ({ item }) => {
             <Text>{title}</Text>
             <Text style={globalStyles.priceText}>{price}</Text>
           </View>
+          <TouchableOpacity onPress={() => props.deleteItem(key)}>
+            <FontAwesome name="trash" size={28} color={COLORS.PRIMARY} />
+          </TouchableOpacity>
         </View>
         <View style={globalStyles.date}>
           <FontAwesome

@@ -4,7 +4,7 @@ import { Avatar, Caption, Title } from "react-native-paper";
 import COLORS from "../../consts/color";
 import { windowWidth, windowHeight } from "../../utils/dimensions";
 import SpecificCard from "../../components/specificCard";
-export default function ListIncomes({ navigation }) {
+export default function ListIncomes() {
   const renderItem = ({ item }) => <SpecificCard item={item} />;
   const arraySpendings = [
     {

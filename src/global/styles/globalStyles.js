@@ -23,10 +23,10 @@ export const globalStyles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: "#aaa",
   },
+  iconDate: { marginHorizontal: 10, fontWeight: "bold" },
 
   image: {
     backgroundColor: "transparent",
-    marginRight: windowWidth * 0.15,
   },
 
   semiContainer: {
@@ -34,12 +34,17 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
   },
 
+  iconDelete: {
+    marginLeft: windowWidth * 0.02,
+    color: COLORS.PRIMARY,
+  },
+
   priceText: {
     fontSize: 25,
     fontWeight: "bold",
+    marginRight: windowWidth * 0.2,
   },
   containerPriceAndTitle: {},
-  iconDate: { marginHorizontal: 10, fontWeight: "bold" },
 
   errorText: {
     color: "crimson",
