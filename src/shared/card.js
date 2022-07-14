@@ -1,5 +1,6 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import COLORS from "../consts/color";
 // import {MaterialIcons} from '@expo/vector-icons';
 export default function Card(props) {
   return (
@@ -11,14 +12,14 @@ export default function Card(props) {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 6,
+    borderRadius: 9,
     elevation: 3,
-    backgroundColor: 'white',
-    shadowOffset: {width: 1, height: 1},
-    shadowColor: '#333',
-    shadowOpacity: 0.3,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#222",
+    shadowOpacity: 0.9,
     marginHorizontal: 4,
     marginVertical: 5,
+    padding: 8,
   },
   cardContent: {
     marginHorizontal: 10,

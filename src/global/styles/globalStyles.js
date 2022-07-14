@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 export const globalStyles = StyleSheet.create({
   container: {
-    padding: 24,
+    padding: 5,
     flex: 1,
   },
 
@@ -14,22 +14,32 @@ export const globalStyles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  rating: {
+  date: {
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
     paddingTop: 16,
     marginTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
+    borderTopWidth: 2,
+    borderTopColor: "#aaa",
   },
 
-  input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    fontSize: 15,
-    borderRadius: 6,
+  image: {
+    backgroundColor: "transparent",
+    marginRight: windowWidth * 0.15,
   },
+
+  semiContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  priceText: {
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  containerPriceAndTitle: {},
+  iconDate: { marginHorizontal: 10, fontWeight: "bold" },
 
   errorText: {
     color: "crimson",
@@ -51,6 +61,7 @@ export const globalStyles = StyleSheet.create({
 // };
 
 import COLORS from "../../consts/color";
+import { windowHeight, windowWidth } from "../../utils/dimensions";
 
 export const STYLES = StyleSheet.create({
   inputContainer: {
