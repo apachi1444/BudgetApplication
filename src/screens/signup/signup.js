@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import COLORS from "../../consts/color";
+import { globalStyles } from "../../global/styles/globalStyles";
 // import styless from "./loginStyle";
 
 const SIZES = {
@@ -38,115 +39,103 @@ export default SignUp = ({ navigation }) => {
       <View>
         {/* this is for the username */}
 
-        <View style={styles.inputContainer}>
-          <Ionicons
-            name="ios-person"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={styles.inputIcon}
-          />
-          <View style={styles.input}>
-            <TextInput
-              value={username}
-              placeholder="Type Your UserName Here"
-              placeholderTextColor={COLORS.GREY}
-              onChangeText={(value) => setUsername(value)}
-            />
-          </View>
-        </View>
-
-        {/* this is for the email */}
-
-        <View style={styles.inputContainer}>
+        <View style={globalStyles.inputContainer}>
           <Ionicons
             name="ios-mail"
             size={SIZES.FONT * 1.5}
             color={COLORS.PRIMARY}
-            style={styles.inputIcon}
+            style={globalStyles.inputIcon}
           />
-          <View style={styles.input}>
-            <TextInput
-              value={email}
-              placeholder="you@email.com"
-              placeholderTextColor={COLORS.GREY}
-              onChangeText={(value) => setEmail(value)}
-            />
-          </View>
+          <TextInput
+            value={email}
+            placeholder="you@email.com"
+            placeholderTextColor={COLORS.GREY}
+            onChangeText={(value) => setEmail(value)}
+          />
+        </View>
+
+        {/* this is for the email */}
+
+        <View style={globalStyles.inputContainer}>
+          <Ionicons
+            name="person"
+            size={SIZES.FONT * 1.5}
+            color={COLORS.PRIMARY}
+            style={globalStyles.inputIcon}
+          />
+          <TextInput
+            value={username}
+            placeholder="type your userame here"
+            placeholderTextColor={COLORS.GREY}
+            onChangeText={(value) => setEmail(value)}
+          />
         </View>
 
         {/* this is for the birthDate  */}
 
-        <View style={styles.inputContainer}>
+        <View style={globalStyles.inputContainer}>
           <Ionicons
             name="ios-calendar"
             size={SIZES.FONT * 1.5}
             color={COLORS.PRIMARY}
-            style={styles.inputIcon}
+            style={globalStyles.inputIcon}
           />
-          <View style={styles.input}>
-            <TextInput
-              value={birthDate}
-              placeholder="choose your birthDate"
-              placeholderTextColor={COLORS.GREY}
-              onChangeText={(value) => setBirthDate(value)}
-            />
-          </View>
+          <TextInput
+            value={birthDate}
+            placeholder="choose your birthDate"
+            placeholderTextColor={COLORS.GREY}
+            onChangeText={(value) => setBirthDate(value)}
+          />
         </View>
 
         {/* this is for the city */}
 
-        <View style={styles.inputContainer}>
+        <View style={globalStyles.inputContainer}>
           <Ionicons
-            name="house"
+            name="arrow-forward-circle-sharp"
             size={SIZES.FONT * 1.5}
             color={COLORS.PRIMARY}
-            style={styles.inputIcon}
+            style={globalStyles.inputIcon}
           />
-          <View style={styles.input}>
-            <TextInput
-              value={city}
-              placeholder="choose your city"
-              placeholderTextColor={COLORS.GREY}
-              onChangeText={(value) => setCity(value)}
-            />
-          </View>
+          <TextInput
+            value={city}
+            placeholder="choose your city"
+            placeholderTextColor={COLORS.GREY}
+            onChangeText={(value) => setCity(value)}
+          />
         </View>
 
         {/* this is for the password */}
 
-        <View style={styles.inputContainer}>
+        <View style={globalStyles.inputContainer}>
           <Ionicons
             name="md-lock-closed"
             color={COLORS.PRIMARY}
             size={SIZES.FONT * 1.8}
-            style={[styles.inputIcon, styles.passwordIcon]}
+            style={globalStyles.inputIcon}
           />
-          <View style={styles.input}>
-            <TextInput
-              secureTextEntry
-              value={password}
-              placeholder="Enter your password..."
-              placeholderTextColor={COLORS.GREY}
-              onChangeText={(value) => setPassword(value)}
-            />
-          </View>
+          <TextInput
+            secureTextEntry
+            value={password}
+            placeholder="Enter your password..."
+            placeholderTextColor={COLORS.GREY}
+            onChangeText={(value) => setPassword(value)}
+          />
         </View>
-        <View style={styles.inputContainer}>
+        <View style={globalStyles.inputContainer}>
           <Ionicons
             name="md-lock-closed"
             color={COLORS.PRIMARY}
             size={SIZES.FONT * 1.8}
-            style={[styles.inputIcon, styles.passwordIcon]}
+            style={globalStyles.inputIcon}
           />
-          <View style={styles.input}>
-            <TextInput
-              secureTextEntry
-              value={confirmPassword}
-              placeholder="Enter your password again ..."
-              placeholderTextColor={COLORS.GREY}
-              onChangeText={(value) => setConfirmPassword(value)}
-            />
-          </View>
+          <TextInput
+            secureTextEntry
+            value={confirmPassword}
+            placeholder="Enter your password again ..."
+            placeholderTextColor={COLORS.GREY}
+            onChangeText={(value) => setConfirmPassword(value)}
+          />
         </View>
 
         {renderActions()}
@@ -157,17 +146,25 @@ export default SignUp = ({ navigation }) => {
   // this is for showing the buttons of google and facebook sign up
   const renderSocials = () => {
     return (
-      <View style={styles.social}>
+      <View style={globalStyles.social}>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={[styles.button, styles.socialButton, styles.facebook]}
+          style={[
+            styles.button,
+            globalStyles.socialButton,
+            globalStyles.facebook,
+          ]}
         >
           <FontAwesome size={18} name="facebook" color={COLORS.WHITE} />
         </TouchableOpacity>
 
         <TouchableOpacity
           activeOpacity={0.8}
-          style={[styles.button, styles.socialButton, styles.google]}
+          style={[
+            styles.button,
+            globalStyles.socialButton,
+            globalStyles.google,
+          ]}
         >
           <FontAwesome name="google" size={18} color={COLORS.WHITE} />
         </TouchableOpacity>
@@ -207,7 +204,7 @@ export default SignUp = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.title]}>REGISTER NOW</Text>
+      <Text style={styles.title}>REGISTER NOW</Text>
       {renderInputs()}
     </View>
   );
@@ -230,65 +227,22 @@ const styles = StyleSheet.create({
   divider: {
     color: COLORS.BLACK,
     fontSize: SIZES.TITLE,
-    marginBottom: SIZES.BASE * 2,
+    marginBottom: SIZES.BASE * 0.1,
     textAlign: "center",
   },
-  facebook: {
-    backgroundColor: COLORS.FACEBOOK,
-  },
-  google: {
-    backgroundColor: COLORS.GOOGLE,
-  },
-  input: {
-    padding: SIZES.PADDING * 1.5,
-    paddingLeft: SIZES.BASE * 7.5,
-    fontSize: SIZES.FONT,
-    backgroundColor: COLORS.WHITE, // "rgba(255, 255, 255, 0.5)",
-    borderWidth: 0,
-    borderRadius: SIZES.BASE * 2.5,
-  },
-  inputContainer: {
-    marginBottom: SIZES.PADDING * 1.2,
-  },
-  inputIcon: {
-    left: SIZES.BASE * 2.8,
-    position: "absolute",
-    top: SIZES.BASE * 2.8,
-    zIndex: 1,
-  },
-  passwordIcon: {
-    top: SIZES.BASE * 2.2,
-  },
+
   signin: {
     borderRadius: SIZES.BASE * 2,
     backgroundColor: COLORS.PRIMARY,
     marginVertical: SIZES.BASE * 3,
     marginBottom: SIZES.BASE * 2,
   },
-  social: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginVertical: SIZES.BASE * 0.2,
-  },
-  socialButton: {
-    height: SIZES.BASE * 8,
-    marginHorizontal: SIZES.BASE * 2,
-    width: SIZES.BASE * 8,
-  },
+
   title: {
     color: COLORS.BLACK,
     fontSize: SIZES.TITLE,
     fontWeight: "600",
     letterSpacing: 1,
-    marginBottom: SIZES.BASE * 1.2,
-  },
-  containerGoToSignUpPage: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  textGoToSignUpPage: {
-    color: COLORS.PRIMARY,
-    fontWeight: "bold",
-    marginHorizontal: SIZES.BASE * 1,
+    marginBottom: SIZES.BASE * 3,
   },
 });

@@ -8,49 +8,42 @@ export default function ListIncomes() {
   const renderItem = ({ item }) => <SpecificCard item={item} />;
   const arraySpendings = [
     {
-      image: "../../assets/images/facebook.png",
       title: "PC GAMER 2022 ",
       price: " +5000DH",
       date: "13/07/2022",
       key: "1",
     },
     {
-      image: "../../assets/images/facebook.png",
       title: "PC GAMER 2022 ",
       price: " +5000DH",
       date: "13/07/2022",
       key: "2",
     },
     {
-      image: "../../assets/images/facebook.png",
       title: "PC GAMER 2022 ",
       price: " +5000DH",
       date: "13/07/2022",
       key: "3",
     },
     {
-      image: "../../assets/images/facebook.png",
       title: "PC GAMER 2022 ",
       price: " +5000DH",
       date: "13/07/2022",
       key: "4",
     },
     {
-      image: "../../assets/images/facebook.png",
       title: "PC GAMER 2022 ",
       price: " +5000DH",
       date: "13/07/2022",
       key: "5",
     },
     {
-      image: "../../assets/images/facebook.png",
       title: "PC GAMER 2022 ",
       price: " +5000DH",
       date: "13/07/2022",
       key: "6",
     },
     {
-      image: "../../assets/images/facebook.png",
       title: "PC GAMER 2022 ",
       price: " +5000DH",
       date: "13/07/2022",
@@ -63,7 +56,7 @@ export default function ListIncomes() {
       <View style={listIncomesStyle.container}>
         <View style={listIncomesStyle.titlePage}>
           <Avatar.Image
-            source={require("../../assets/images/facebook.png")}
+            source={require("../../assets/images/elon_musk.jpg")}
             size={75}
           />
           <View style={listIncomesStyle.titleTextContainer}>

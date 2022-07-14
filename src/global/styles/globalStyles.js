@@ -1,8 +1,50 @@
+import COLORS from "../../consts/color";
+import { windowWidth } from "../../utils/dimensions";
 import { StyleSheet } from "react-native";
+
+const SIZES = {
+  BASE: 6,
+  FONT: 12,
+  TITLE: 24,
+  SUBTITLE: 11,
+  LABEL: 12,
+  PADDING: 12,
+};
 export const globalStyles = StyleSheet.create({
   container: {
     padding: 5,
     flex: 1,
+  },
+
+  inputContainer: {
+    padding: SIZES.PADDING * 1.5,
+    paddingLeft: SIZES.BASE * 2.5,
+    fontSize: SIZES.FONT,
+    backgroundColor: COLORS.WHITE, // "rgba(255, 255, 255, 0.5)",
+    borderRadius: SIZES.BASE * 2.5,
+    marginBottom: SIZES.PADDING * 1.2,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  inputIcon: { marginRight: windowWidth * 0.04 },
+
+  social: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: SIZES.BASE * 3,
+  },
+  socialButton: {
+    height: SIZES.BASE * 8,
+    marginHorizontal: SIZES.BASE * 2,
+    width: SIZES.BASE * 8,
+  },
+
+  facebook: {
+    backgroundColor: COLORS.FACEBOOK,
+  },
+  google: {
+    backgroundColor: COLORS.GOOGLE,
   },
 
   titleText: {
@@ -64,63 +106,3 @@ export const globalStyles = StyleSheet.create({
 //     5: require("../assets/images/rating-5.png"),
 //   },
 // };
-
-import COLORS from "../../consts/color";
-import { windowHeight, windowWidth } from "../../utils/dimensions";
-
-export const STYLES = StyleSheet.create({
-  inputContainer: {
-    marginStart: 30,
-    marginEnd: 30,
-    flexDirection: "row",
-    marginTop: 20,
-  },
-  input: {
-    color: COLORS.light,
-    paddingLeft: 30,
-    borderBottomWidth: 1,
-    borderColor: COLORS.light,
-    borderBottomWidth: 0.5,
-    flex: 1,
-    fontSize: 18,
-  },
-  inputIcon: {
-    marginTop: 15,
-    position: "absolute",
-  },
-  btnPrimary: {
-    backgroundColor: COLORS.primary,
-    height: 50,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-    marginHorizontal: 30,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  line: {
-    width: 30,
-    borderWidth: 1,
-    color: COLORS.light,
-  },
-  btnSecondary: {
-    flexDirection: "row",
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#a5a5a5",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 5,
-    marginVertical: 50,
-    flex: 1,
-  },
-  btnImage: {
-    width: 20,
-    height: 20,
-    marginLeft: 5,
-  },
-});

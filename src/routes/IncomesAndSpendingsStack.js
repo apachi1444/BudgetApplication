@@ -6,6 +6,7 @@ import ListSpendings from "../screens/listSpendings/listSpendings";
 import ListSpendingsAndIncomes from "../screens/listSpendingsAndIncomes/listSpendingsAndIncomes";
 import ProfileUser from "../screens/profile/profile";
 import Settings from "../screens/settings/settings";
+import { TabBottomNavigation } from "./tabBottomNavigationStack";
 
 const IncomesAndSpendingsStack = createNativeStackNavigator();
 
