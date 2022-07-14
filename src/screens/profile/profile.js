@@ -1,21 +1,30 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Avatar, Caption, Title } from "react-native-paper";
 export default function ProfileUser({ navigation }) {
   const editProfile = () => {
     navigation.navigate("EditProfile");
   };
+  const goToSettings = () => {
+    navigation.navigate("Settings");
+  };
+
+  const logOut = () => {
+    navigation.goBack();
+  };
   return (
     <>
       <View style={profileStyles.container}>
-        <FontAwesome
-          name="user"
-          style={profileStyles.logoutIcon}
-          size={SIZES.BASE * 6}
-        />
+        <View onStartShouldSetResponder={logOut}>
+          <Ionicons
+            name="log-out-outline"
+            style={profileStyles.logoutIcon}
+            size={SIZES.BASE * 6}
+          />
+        </View>
         <View style={profileStyles.containerInformationsUser}>
           <Avatar.Image
-            source={require("../../assets/images/facebook.png")}
+            source={require("../../assets/images/elon_musk.jpg")}
             size={130}
           />
           {/* <Image
@@ -102,21 +111,23 @@ export default function ProfileUser({ navigation }) {
           </View>
 
           {/* // this is for the each line of profile Details */}
-          <View style={profileStyles.profileDetailLine}>
-            <FontAwesome
-              name="user"
-              color={COLORS.PRIMARY}
-              size={SIZES.BASE * 4.2}
-            />
-            <Text style={profileStyles.textInsideProfileDetailLine}>
-              Edit Profile
-            </Text>
-            <FontAwesome
-              name="arrow-right"
-              color={COLORS.PRIMARY}
-              size={SIZES.BASE * 2.9}
-            />
-          </View>
+          <TouchableOpacity onPress={goToSettings}>
+            <View style={profileStyles.profileDetailLine}>
+              <FontAwesome
+                name="user"
+                color={COLORS.PRIMARY}
+                size={SIZES.BASE * 4.2}
+              />
+              <Text style={profileStyles.textInsideProfileDetailLine}>
+                Edit Profile
+              </Text>
+              <FontAwesome
+                name="arrow-right"
+                color={COLORS.PRIMARY}
+                size={SIZES.BASE * 2.9}
+              />
+            </View>
+          </TouchableOpacity>
           <View style={profileStyles.profileDetailLine}>
             <FontAwesome
               name="user"

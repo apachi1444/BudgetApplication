@@ -9,23 +9,30 @@ const WelcomePage = ({ navigation }) => {
     <View style={welcomePageStyle.container}>
       <View style={welcomePageStyle.firstContainer}>
         <Text style={welcomePageStyle.organizeMeText}>Organize Me</Text>
-        <Button
-          title="here will be the image of the welcome page"
-          onPress={() => navigation.navigate("AuthStack")}
+        <Image
+          source={require("../../assets/images/welcomePage.png")}
+          style={{
+            width: windowWidth * 0.6,
+            height: windowHeight * 0.25,
+          }}
         />
       </View>
       <View style={welcomePageStyle.secondContainer}>
         <Text style={welcomePageStyle.textInsideSecondContainer}>
           Welcome To Our Application
         </Text>
-        <TouchableOpacity
+        <Button
+          title="haha"
+          style={welcomePageStyle.buttonInsideSecondContainer}
           onPress={() => navigation.navigate("AuthStack")}
+        />
+        <TouchableOpacity
+          onPressIn={() => navigation.navigate("AuthStack")}
           style={welcomePageStyle.buttonInsideSecondContainer}
         >
           <Text>Start Now</Text>
         </TouchableOpacity>
       </View>
-      <Image source={require("../../assets/images/facebook.png")} />
     </View>
   );
 };
@@ -67,6 +74,7 @@ const welcomePageStyle = StyleSheet.create({
     backgroundColor: COLORS.SECONDARY,
     borderRadius: 25,
     padding: 15,
+    fontSize: 25,
     justifyContent: "center",
     alignItems: "center",
     width: windowWidth * 0.25,

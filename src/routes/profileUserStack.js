@@ -10,6 +10,14 @@ export default function () {
   return (
     <ProfileUserStack.Navigator>
       <ProfileUserStack.Screen
+        name="ProfilePage"
+        component={ProfileUser}
+        options={{
+          headerShown: false,
+          headerStyle: { backgroundColor: "#eee" },
+        }}
+      />
+      <ProfileUserStack.Screen
         name="Settings"
         component={Settings}
         options={{
@@ -20,14 +28,6 @@ export default function () {
       <ProfileUserStack.Screen
         name="EditProfile"
         component={editProfile}
-        options={{
-          headerShown: false,
-          headerStyle: { backgroundColor: "#eee" },
-        }}
-      />
-      <ProfileUserStack.Screen
-        name="ProfilePage"
-        component={ProfileUser}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
