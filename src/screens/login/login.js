@@ -1,8 +1,12 @@
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-
-import React, { useState, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
-  Alert,
+  increment,
+  login,
+  incrementByAmount,
+} from "../../stateManagement/features/user/userSlice";
+import React, { useRef, useState } from "react";
+import {
   Text,
   TextInput,
   StyleSheet,
@@ -10,12 +14,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  Button,
 } from "react-native";
 
 import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
-import { windowWidth } from "../../utils/dimensions";
-// import styless from "./loginStyle";
 
 const SIZES = {
   BASE: 6,
@@ -31,6 +34,16 @@ export default ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const inputRef = useRef(null);
+
+  const count = useSelector((state) => {
+    return state.user.count;
+  });
+
+  const dispatch = useDispatch();
+
+  const [incrementAmount, setIncremenetAmount] = useState(0);
+  const addValue = Number(incrementAmount) || 0;
   const renderInputs = () => {
     return (
       <View>
@@ -42,6 +55,7 @@ export default ({ navigation }) => {
             style={globalStyles.inputIcon}
           />
           <TextInput
+            ref={inputRef}
             value={email}
             placeholder="you@email.com"
             placeholderTextColor={COLORS.GREY}
@@ -63,8 +77,18 @@ export default ({ navigation }) => {
             onChangeText={(value) => setPassword(value)}
           />
         </View>
-        <Text style={styles.divider}>or</Text>
+        <Text style={styles.divider}>or {count}</Text>
         {renderActions()}
+        <Text>{count}</Text>
+        <Button title="increment" onClick={() => dispatch(increment())} />
+        <TextInput
+          value={incrementAmount}
+          onChangeText={(value) => setIncremenetAmount(value)}
+        />
+        <Button
+          title="incrementByAmount"
+          onClick={() => dispatch(incrementByAmount(addValue))}
+        />
         {renderGoToSignUpPage()}
       </View>
     );
@@ -149,7 +173,7 @@ export default ({ navigation }) => {
         source={require("../../assets/images/loginImage.png")}
         style={styles.loginImage}
       />
-      <Text style={[styles.title]}>Login</Text>
+      <Text style={[styles.title]}>Login {count}</Text>
       {renderInputs()}
     </View>
   );
