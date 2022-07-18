@@ -48,4 +48,10 @@ export const welcomePageStyle = StyleSheet.create({
     alignItems: "center",
     width: windowWidth * 0.25,
   },
+  box: {
+    height: 150,
+    width: 150,
+    backgroundColor: "blue",
+    borderRadius: 5,
+  },
 });

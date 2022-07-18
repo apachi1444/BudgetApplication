@@ -4,6 +4,7 @@ import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
   const opacityRef = useRef(new Animated.Value(0)).current;
+
   function moveTheBall() {
     Animated.sequence([
       Animated.timing(opacityRef, {
