@@ -101,10 +101,15 @@ export default function ListSpendings({ navigation }) {
         {/* this is the end of user informations about spendings */}
 
         {/* // this is the button for adding a spending  */}
-
-        <View style={listSpendingsStyle.buttonAddSpendings}>
-          <FontAwesome name="plus" size={23} />
-        </View>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Add Spending To The List of Spendings")
+          }
+        >
+          <View style={listSpendingsStyle.buttonAddSpendings}>
+            <FontAwesome name="plus" size={23} />
+          </View>
+        </TouchableOpacity>
 
         {/* // this is the button for adding a spending  */}
 

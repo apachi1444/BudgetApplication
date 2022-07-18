@@ -5,39 +5,94 @@ const Tab = createMaterialBottomTabNavigator();
 import ProfileUserStack from "../routes/profileUserStack";
 import IncomesAndSpendingsStack from "./IncomesAndSpendingsStack";
 import { Ionicons } from "@expo/vector-icons";
-import { Image, Text, View } from "react-native";
 import { INCOMESANDSENDINGSNAME, PROFILENAME } from "../consts/consts";
+import { View, Text, TouchableOpacity } from "react-native";
+import { BlurView } from "expo-blur";
+function MyTabBar({ state, descriptors, navigation }) {
+  return (
+    <View style={{ flexDirection: "row" }}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: "tabPress",
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            // The `merge: true` option makes sure that the params inside the tab screen are preserved
+            navigation.navigate({ name: route.name, merge: true });
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: "tabLongPress",
+            target: route.key,
+          });
+        };
+
+        return (
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            style={{ flex: 1 }}
+          >
+            <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
+              {label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
 export function TabBottomNavigation() {
   return (
     <Tab.Navigator
       initialRouteName={PROFILENAME}
-      activeColor={COLORS.PRIMARY}
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          let rn = route.name;
-          if (rn === PROFILENAME) {
-            iconName = focused ? "home" : "home-outline";
-          } else if (rn === INCOMESANDSENDINGSNAME) {
-            iconName = focused ? "settings" : "settings-outline";
-          }
-          return <Ionicons name={iconName} size={30} color={color} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: "#fff",
-        inactiveTintColor: "#000",
-        labelStyle: {
-          paddingBottom: 10,
-          fontSize: 15,
-        },
-        style: { padidng: 10, height: 70 },
+      tabBar={(props) => <MyTabBar {...props} />}
+      screenOptions={{
+        tabBarStyle: { position: "absolute", backgroundColor: "red" },
+
+        // tabBarIcon: ({ focused, color }) => {
+        //   let iconName;
+        //   let rn = route.name;
+        //   let text;
+        //   if (rn === PROFILENAME) {
+        //     iconName = focused ? "home" : "home-outline";
+        //     text = "Home";
+        //   } else if (rn === INCOMESANDSENDINGSNAME) {
+        //     iconName = focused ? "settings" : "settings-outline";
+        //     text = "Settings";
+        //   }
+        //   color = focused ? COLORS.FOCUSEDTAB : COLORS.PRIMARY;
+        //   return <Ionicons name={iconName} size={30} color={color} />;
+        // },
       }}
     >
       <Tab.Screen name={PROFILENAME} component={ProfileUserStack} />
       <Tab.Screen
         name={INCOMESANDSENDINGSNAME}
         component={IncomesAndSpendingsStack}
+        // options={{
+        //   tabBarLabel: "YessineZone",
+        //   tabBarIcon: ({ color, focused }) => {},
+        // }}
       />
     </Tab.Navigator>
   );

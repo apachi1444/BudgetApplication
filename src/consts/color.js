@@ -8,6 +8,7 @@ const COLORS = {
   GOOGLE: "#DC4E41",
   FACEBOOK: "#3A5896",
   GREY: "#AFAFAF",
+  FOCUSEDTAB: "#3D40FE",
 };
 
 export default COLORS;

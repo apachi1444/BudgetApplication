@@ -37,6 +37,7 @@ export default ({ navigation }) => {
   const inputRef = useRef(null);
 
   const count = useSelector((state) => {
+    console.log(state);
     return state.user.count;
   });
 
@@ -77,18 +78,37 @@ export default ({ navigation }) => {
             onChangeText={(value) => setPassword(value)}
           />
         </View>
-        <Text style={styles.divider}>or {count}</Text>
+        <Text style={styles.divider}>or </Text>
         {renderActions()}
         <Text>{count}</Text>
-        <Button title="increment" onClick={() => dispatch(increment())} />
+        <TouchableOpacity onPress={() => dispatch(increment())}>
+          <Text
+            style={{
+              fontWeight: "500",
+              letterSpacing: 0.5,
+              color: COLORS.WHITE,
+              backgroundColor: "red",
+            }}
+          >
+            Increment By One
+          </Text>
+        </TouchableOpacity>
         <TextInput
           value={incrementAmount}
           onChangeText={(value) => setIncremenetAmount(value)}
         />
-        <Button
-          title="incrementByAmount"
-          onClick={() => dispatch(incrementByAmount(addValue))}
-        />
+        <TouchableOpacity onPress={() => dispatch(incrementByAmount(addValue))}>
+          <Text
+            style={{
+              fontWeight: "500",
+              letterSpacing: 0.5,
+              color: COLORS.WHITE,
+              backgroundColor: "red",
+            }}
+          >
+            Increment By HAHA
+          </Text>
+        </TouchableOpacity>
         {renderGoToSignUpPage()}
       </View>
     );
@@ -173,7 +193,7 @@ export default ({ navigation }) => {
         source={require("../../assets/images/loginImage.png")}
         style={styles.loginImage}
       />
-      <Text style={[styles.title]}>Login {count}</Text>
+      <Text style={[styles.title]}>Login </Text>
       {renderInputs()}
     </View>
   );

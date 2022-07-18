@@ -13,8 +13,15 @@ import COLORS from "../../consts/color";
 import { windowWidth, windowHeight } from "../../utils/dimensions";
 import SpecificCard from "../../components/specificCard";
 import React, { useState } from "react";
-import { set } from "react-native-reanimated";
+import { useSelector, useDispatch } from "react-redux";
+import { selectAllSpendings } from "../../stateManagement/features/spendings/userSpendings";
 export default function ListIncomes({ navigation }) {
+  const spendings = useSelector(selectAllSpendings);
+  const dispatch = useDispatch();
+  const renderListSpendings = () => {
+    spendings.map((item) => {});
+  };
+
   const SIZES = {
     BASE: 6,
     FONT: 12,
@@ -274,7 +281,7 @@ export default function ListIncomes({ navigation }) {
               Last Spendings
             </Text>
             <FlatList
-              data={arraySpendings}
+              data={spendings}
               renderItem={renderItem}
               keyExtractor={(item) => item.key}
             />

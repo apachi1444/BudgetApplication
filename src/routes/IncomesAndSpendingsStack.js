@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import AddSpending from "../screens/addModalSpending/addModalSpending";
 import editProfile from "../screens/editProfile/editProfile";
 import ListIncomes from "../screens/listIncomes/listIncomes";
 import ListSpendings from "../screens/listSpendings/listSpendings";
@@ -31,6 +32,13 @@ export default function () {
       <IncomesAndSpendingsStack.Screen
         name="ListSpendings"
         component={ListSpendings}
+        options={{
+          headerStyle: { backgroundColor: "#eee" },
+        }}
+      />
+      <IncomesAndSpendingsStack.Screen
+        name="Add Spending To The List of Spendings"
+        component={AddSpending}
         options={{
           headerStyle: { backgroundColor: "#eee" },
         }}
