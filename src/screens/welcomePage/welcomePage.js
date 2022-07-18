@@ -5,6 +5,7 @@ import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
   const moveTheBall = () => {
+    // 1de0b8b0218bd9634e85a3bbb9d93b4a8c87d6ed
     console.log("first");
     Animated.timing(value, {
       toValue: { x: 200, y: 200 },
