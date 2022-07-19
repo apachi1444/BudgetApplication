@@ -1,11 +1,45 @@
 import React, { useState, useRef } from "react";
-import { Animated, View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  Animated,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  PanResponder,
+} from "react-native";
+import MoviesCarousel from "../carousel/moviesCarouselGestureResponder";
 import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
   const opacityRef = useRef(new Animated.Value(0)).current;
 
+  const pan = useRef(new Animated.ValueXY()).current;
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("we are in the onPanResponderGrant haha");
+        console.log(pan.getLayout());
+        pan.setOffset({
+          x: pan.x._value,
+          y: pan.y._value,
+        });
+      },
+      onPanResponderMove: (_, gesture) => {
+        // console.log("ARGS ! ", { ...args[1] });
+        console.log(gesture);
+        pan.x.setValue(gesture.dx);
+        pan.y.setValue(gesture.dy);
+      },
+      onPanResponderRelease: () => {
+        pan.flattenOffset();
+      },
+    })
+  ).current;
+
   function moveTheBall() {
+    console.log(panResponder.panHandlers);
     Animated.sequence([
       Animated.timing(opacityRef, {
         toValue: 1,
@@ -19,19 +53,24 @@ const WelcomePage = ({ navigation }) => {
       }),
     ]).start();
   }
+
   return (
     <View style={welcomePageStyle.container}>
       <View style={welcomePageStyle.firstContainer}>
         <View>
           <Animated.View style={value.getLayout()}>
             <Animated.View
-              style={{
-                width: 100,
-                height: 100,
-                backgroundColor: "red",
-                borderRadius: 20,
-                opacity: opacityRef,
-              }}
+              style={[
+                {
+                  width: 100,
+                  height: 100,
+                  backgroundColor: "red",
+                  borderRadius: 20,
+                  opacity: opacityRef,
+                },
+                pan.getLayout(),
+              ]}
+              {...panResponder.panHandlers}
             />
           </Animated.View>
           <View onStartShouldSetResponder={() => moveTheBall()}>

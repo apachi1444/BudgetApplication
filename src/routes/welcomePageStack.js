@@ -1,6 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import WelcomePage from "../screens/welcomePage/welcomePage";
+import MoviesCarousel from "../screens/carousel/moviesCarouselGestureResponder";
+import MoviesCarouselPanResponder from "../screens/carousel/moviesCarouselPanResponder";
+import WelcomePage from "./../screens/welcomePage/welcomePage";
 
 const WelcomePageStack = createNativeStackNavigator();
 
@@ -9,7 +11,7 @@ export default function () {
     <WelcomePageStack.Navigator>
       <WelcomePageStack.Screen
         name="WelcomePage"
-        component={WelcomePage}
+        component={MoviesCarouselPanResponder}
         options={{
           // headerTitle: () => <Header title="About YessineZone" />,
           headerShown: false,
