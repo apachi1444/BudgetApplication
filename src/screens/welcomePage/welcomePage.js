@@ -28,12 +28,15 @@ const WelcomePage = ({ navigation }) => {
       },
       onPanResponderMove: (_, gesture) => {
         // console.log("ARGS ! ", { ...args[1] });
-        console.log(gesture);
+        console.log("this is the gesture after doing some shit");
+        console.log(gesture.dx);
         pan.x.setValue(gesture.dx);
         pan.y.setValue(gesture.dy);
       },
       onPanResponderRelease: () => {
-        pan.flattenOffset();
+        console.log("BEFORE", pan);
+        // pan.flattenOffset();
+        console.log("AFTER", pan);
       },
     })
   ).current;
@@ -59,6 +62,7 @@ const WelcomePage = ({ navigation }) => {
       <View style={welcomePageStyle.firstContainer}>
         <View>
           <Animated.View style={value.getLayout()}>
+            {console.log("this is the values of pan ", pan)}
             <Animated.View
               style={[
                 {
@@ -67,8 +71,22 @@ const WelcomePage = ({ navigation }) => {
                   backgroundColor: "red",
                   borderRadius: 20,
                   opacity: opacityRef,
+
+                  // this is one method that should be called when the animation  is finished
+                  // left: pan.x,
+                  // top: pan.y,
+
+                  // or
+                  transform: [
+                    {
+                      translateX: pan.x,
+                    },
+                    {
+                      translateY: pan.y,
+                    },
+                  ],
                 },
-                pan.getLayout(),
+                // pan.getLayout(),
               ]}
               {...panResponder.panHandlers}
             />

@@ -11,7 +11,7 @@ export default function () {
     <WelcomePageStack.Navigator>
       <WelcomePageStack.Screen
         name="WelcomePage"
-        component={MoviesCarouselPanResponder}
+        component={WelcomePage}
         options={{
           // headerTitle: () => <Header title="About YessineZone" />,
           headerShown: false,
