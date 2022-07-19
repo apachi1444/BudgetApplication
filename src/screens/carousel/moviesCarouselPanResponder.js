@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { View, Text, Image, PanResponder } from "react-native";
+import { View, Text, Image, PanResponder, Animated } from "react-native";
 import { windowWidth } from "../../utils/dimensions";
 
 const MoviesCarouselPanResponder = (props) => {
@@ -9,10 +9,22 @@ const MoviesCarouselPanResponder = (props) => {
         flexDirection: "row",
         height: 300,
         width: movies.length * windowWidth,
+        transform: [
+          {
+            translateX: translate,
+          },
+        ],
       },
       image: { width: windowWidth, height: 300 },
     };
   };
+
+  const translate = new Animated.Value(0);
+
+  const translation = Animated.timing(translate, {
+    toValue: windowWidth * -1,
+    duration: 300,
+  });
 
   const panResponder = useRef(
     PanResponder.create({
@@ -29,15 +41,10 @@ const MoviesCarouselPanResponder = (props) => {
       onMoveShouldSetPanResponder: (evt, gesture) => {
         return Math.abs(gesture.dx) > 7;
       },
-      onPanResponderMove: (evt, gesture) => {
-        // console.log("ARGS ! ", { ...args[1] });
-        // pan.x.setValue(gesture.dx);
-        // pan.y.setValue(gesture.dy);
-        console.log(evt.nativeEvent.locationX);
-        console.log("Je Bouge");
-      },
+      onPanResponderMove: Animated.event([null, { dx: translate }]),
       onPanResponderRelease: () => {
         console.log("Je Lache");
+
         // pan.flattenOffset();
       },
       onPanResponderTerminate: (evt, gesture) => {
@@ -45,6 +52,23 @@ const MoviesCarouselPanResponder = (props) => {
       },
     })
   ).current;
+
+  const endGesture = (evt, gesture) => {
+    let toValue = 0;
+
+    if (Math.abs(gesture.dx) / windowWidth > 0.2) {
+      if (gesture.dx) {
+        toValue = windowWidth * -1;
+      } else {
+        toValue = windowWidth * 1;
+      }
+      Animated.timing(translate, {
+        toValue: toValue,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
 
   const movies = [
     {
@@ -59,7 +83,7 @@ const MoviesCarouselPanResponder = (props) => {
 
   const style = getStyle();
   return (
-    <View style={style.slider} {...panResponder.panHandlers}>
+    <Animated.View style={style.slider} {...panResponder.panHandlers}>
       {movies.map((movie, index) => {
         return (
           <Image
@@ -69,7 +93,7 @@ const MoviesCarouselPanResponder = (props) => {
           />
         );
       })}
-    </View>
+    </Animated.View>
   );
 };
 
