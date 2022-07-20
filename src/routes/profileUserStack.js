@@ -5,11 +5,20 @@ import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import ProfileUser from "../screens/profile/profile";
 import Settings from "../screens/settings/settings";
 import IncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
+import { TabBottomNavigation } from "./tabBottomNavigationStack";
 const ProfileUserStack = createNativeStackNavigator();
 
 export default function () {
   return (
     <ProfileUserStack.Navigator>
+      <ProfileUserStack.Screen
+        name="BottomBar"
+        component={TabBottomNavigation}
+        options={{
+          headerShown: false,
+          headerStyle: { backgroundColor: "#eee" },
+        }}
+      />
       <ProfileUserStack.Screen
         name="ProfilePage"
         component={ProfileUser}
@@ -18,13 +27,7 @@ export default function () {
           headerStyle: { backgroundColor: "#eee" },
         }}
       />
-      <ProfileUserStack.Screen
-        name="Settings"
-        component={Settings}
-        options={{
-          headerStyle: { backgroundColor: "#eee" },
-        }}
-      />
+
       <ProfileUserStack.Screen
         name="EditProfile"
         component={editProfile}
@@ -44,7 +47,6 @@ export default function () {
         name="PlannedPayments"
         component={PlannedPayments}
         options={{
-          headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
       />

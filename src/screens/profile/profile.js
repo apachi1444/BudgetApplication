@@ -1,12 +1,20 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Avatar, Caption, Title } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import COLORS from "../../consts/color";
+import { windowWidth, windowHeight } from "../../utils/dimensions";
+import PlannedPayments from "./../plannedPayments/plannedPayments";
+
 export default function ProfileUser({ navigation }) {
+  const navigationn = useNavigation();
+
   const editProfile = () => {
     navigation.navigate("EditProfile");
   };
+
   const goToSettings = () => {
-    navigation.navigate("Settings");
+    navigationn.navigate("Settings");
   };
 
   const logOut = () => {
@@ -14,7 +22,11 @@ export default function ProfileUser({ navigation }) {
   };
 
   const goToHistory = () => {
-    navigation.navigate("IncomesAndSpendings");
+    navigation.navigate("History");
+  };
+
+  const goToPlannedPayments = () => {
+    navigation.navigate("PlannedPayments");
   };
 
   return (
@@ -170,6 +182,24 @@ export default function ProfileUser({ navigation }) {
               size={SIZES.BASE * 2.9}
             />
           </View>
+          <View
+            style={profileStyles.profileDetailLine}
+            onStartShouldSetResponder={goToPlannedPayments}
+          >
+            <FontAwesome
+              name="user"
+              color={COLORS.PRIMARY}
+              size={SIZES.BASE * 4.2}
+            />
+            <Text style={profileStyles.textInsideProfileDetailLine}>
+              PlannedPayments
+            </Text>
+            <FontAwesome
+              name="arrow-right"
+              color={COLORS.PRIMARY}
+              size={SIZES.BASE * 2.9}
+            />
+          </View>
 
           <View style={profileStyles.dividerOfProfileDetailsLines}></View>
         </View>
@@ -178,8 +208,6 @@ export default function ProfileUser({ navigation }) {
   );
 }
 
-import COLORS from "../../consts/color";
-import { windowWidth, windowHeight } from "../../utils/dimensions";
 const SIZES = {
   BASE: 6,
   FONT: 12,

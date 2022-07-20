@@ -12,8 +12,9 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Icons } from "../components/icon";
 import Guide_50_30_20_Stack from "./guide_50_30_20_Stack";
-import SettingsStack from "./settingsStack";
 import CustomTabBar from "../components/customTabBar";
+import ProfileUser from "../screens/profile/profile";
+import Settings from "../screens/settings/settings";
 const TabArr = [
   {
     route: "Home",
@@ -21,7 +22,7 @@ const TabArr = [
     type: Icons.Ionicons,
     activeIcon: "grid",
     inActiveIcon: "grid-outline",
-    component: ProfileUserStack,
+    component: ProfileUser,
   },
   {
     route: "History",
@@ -45,7 +46,7 @@ const TabArr = [
     type: Icons.FontAwesome,
     activeIcon: "user-circle",
     inActiveIcon: "user-circle-o",
-    component: SettingsStack,
+    component: Settings,
   },
 ];
 
@@ -70,6 +71,8 @@ export function TabBottomNavigation() {
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={50} color={color} />;
         },
+        tabBarActiveTintColor: "green",
+        tabBarInactiveTintColor: "gray",
       })}
       tabBarOptions={{
         activeTintColor: "green",
@@ -88,6 +91,7 @@ export function TabBottomNavigation() {
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="home" color={color} size={size} />
               ),
+              tabBarBadge: 3,
             }}
           />
         );
