@@ -9,6 +9,8 @@ const WelcomePageStack = createNativeStackNavigator();
 export default function () {
   return (
     <WelcomePageStack.Navigator>
+      {/* we did it a stack for this welcomePage if we want to add some other pages in the welcoming Part so we won't find problems there */}
+
       <WelcomePageStack.Screen
         name="WelcomePage"
         component={WelcomePage}

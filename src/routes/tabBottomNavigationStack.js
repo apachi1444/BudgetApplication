@@ -1,8 +1,5 @@
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import COLORS from "../consts/color";
 const Tab = createMaterialBottomTabNavigator();
-import ProfileUserStack from "../routes/profileUserStack";
-import HistoryStackIncomesAndSpendings from "./historyIncomesAndSpendingsStack";
 import {
   GUIDE_50_30_20,
   HISTORYOFINCOMESANDSENDINGS,
@@ -15,6 +12,9 @@ import Guide_50_30_20_Stack from "./guide_50_30_20_Stack";
 import CustomTabBar from "../components/customTabBar";
 import ProfileUser from "../screens/profile/profile";
 import Settings from "../screens/settings/settings";
+import HistoryIncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
+import PlannedPayments from "../screens/plannedPayments/plannedPayments";
+import HistoryStack from "./historyStack";
 const TabArr = [
   {
     route: "Home",
@@ -25,12 +25,20 @@ const TabArr = [
     component: ProfileUser,
   },
   {
-    route: "History",
+    route: "HistoryBottomBar",
     label: "History",
     type: Icons.MaterialCommunityIcons,
     activeIcon: "heart-plus",
     inActiveIcon: "heart-plus-outline",
-    component: HistoryStackIncomesAndSpendings,
+    component: HistoryStack,
+  },
+  {
+    route: "AddButton",
+    label: "Add",
+    type: Icons.MaterialCommunityIcons,
+    activeIcon: "heart-plus",
+    inActiveIcon: "heart-plus-outline",
+    component: PlannedPayments,
   },
   {
     route: "Guide",
@@ -91,6 +99,7 @@ export function TabBottomNavigation() {
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="home" color={color} size={size} />
               ),
+              tabBarLabel: element.label,
               tabBarBadge: 3,
             }}
           />

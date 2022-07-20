@@ -4,6 +4,7 @@ import AddSpending from "../screens/addModalSpending/addModalSpending";
 import ListIncomes from "../screens/listIncomes/listIncomes";
 import ListSpendings from "../screens/listSpendings/listSpendings";
 import ListSpendingsAndIncomes from "../screens/listSpendingsAndIncomes/listSpendingsAndIncomes";
+import { TabBottomNavigation } from "./tabBottomNavigationStack";
 
 const IncomesAndSpendingsStack = createNativeStackNavigator();
 

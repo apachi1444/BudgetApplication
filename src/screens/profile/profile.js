@@ -22,7 +22,7 @@ export default function ProfileUser({ navigation }) {
   };
 
   const goToHistory = () => {
-    navigation.navigate("History");
+    navigation.navigate("HistoryBottomBar");
   };
 
   const goToPlannedPayments = () => {
@@ -146,7 +146,7 @@ export default function ProfileUser({ navigation }) {
               size={SIZES.BASE * 2.9}
             />
           </View>
-          <View
+          {/* <View
             style={profileStyles.profileDetailLine}
             onStartShouldSetResponder={goToSettings}
           >
@@ -163,7 +163,7 @@ export default function ProfileUser({ navigation }) {
               color={COLORS.PRIMARY}
               size={SIZES.BASE * 2.9}
             />
-          </View>
+          </View> */}
           <View
             style={profileStyles.profileDetailLine}
             onStartShouldSetResponder={goToHistory}

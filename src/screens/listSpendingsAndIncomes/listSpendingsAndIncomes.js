@@ -12,15 +12,11 @@ import { Avatar, Caption, Title } from "react-native-paper";
 import COLORS from "../../consts/color";
 import { windowWidth, windowHeight } from "../../utils/dimensions";
 import SpecificCard from "../../components/specificCard";
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { selectAllSpendings } from "../../stateManagement/features/spendings/userSpendings";
-export default function ListIncomes({ navigation }) {
+export default function ListIncomesAndSpendings({ navigation }) {
   const spendings = useSelector(selectAllSpendings);
-  const dispatch = useDispatch();
-  const renderListSpendings = () => {
-    spendings.map((item) => {});
-  };
 
   const SIZES = {
     BASE: 6,
@@ -31,16 +27,22 @@ export default function ListIncomes({ navigation }) {
     PADDING: 12,
   };
 
+  useEffect(() => {
+    console.log("first");
+  });
+
   const navigateToSpecificPage = () => {
     if (itemSelected == 1) navigation.navigate("ListSpendings");
     else navigation.navigate("ListIncomes");
   };
 
   const [itemSelected, setItemSelected] = useState(1);
+
   const toggleItemSelected = (value) => {
     if (value === 1) setItemSelected(1);
     else setItemSelected(0);
   };
+
   const [arraySpendings, setArraySpendings] = useState([
     {
       title: `${itemSelected === 0}`,

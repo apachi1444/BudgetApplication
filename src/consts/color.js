@@ -9,6 +9,7 @@ const COLORS = {
   FACEBOOK: "#3A5896",
   GREY: "#AFAFAF",
   FOCUSEDTAB: "#3D40FE",
+  DELETEBUTTONRED: "#FFA1A1",
 };
 
 export default COLORS;
