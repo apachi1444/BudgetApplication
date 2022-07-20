@@ -1,99 +1,97 @@
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import COLORS from "../consts/color";
 const Tab = createMaterialBottomTabNavigator();
 import ProfileUserStack from "../routes/profileUserStack";
-import IncomesAndSpendingsStack from "./IncomesAndSpendingsStack";
-import { Ionicons } from "@expo/vector-icons";
-import { INCOMESANDSENDINGSNAME, PROFILENAME } from "../consts/consts";
-import { View, Text, TouchableOpacity } from "react-native";
-import { BlurView } from "expo-blur";
-function MyTabBar({ state, descriptors, navigation }) {
-  return (
-    <View style={{ flexDirection: "row" }}>
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
+import HistoryStackIncomesAndSpendings from "./historyIncomesAndSpendingsStack";
+import {
+  GUIDE_50_30_20,
+  HISTORYOFINCOMESANDSENDINGS,
+  PROFILE,
+  SETTINGS,
+} from "../consts/consts";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { Icons } from "../components/icon";
+import Guide_50_30_20_Stack from "./guide_50_30_20_Stack";
+import SettingsStack from "./settingsStack";
+import CustomTabBar from "../components/customTabBar";
+const TabArr = [
+  {
+    route: "Home",
+    label: "Home",
+    type: Icons.Ionicons,
+    activeIcon: "grid",
+    inActiveIcon: "grid-outline",
+    component: ProfileUserStack,
+  },
+  {
+    route: "History",
+    label: "History",
+    type: Icons.MaterialCommunityIcons,
+    activeIcon: "heart-plus",
+    inActiveIcon: "heart-plus-outline",
+    component: HistoryStackIncomesAndSpendings,
+  },
+  {
+    route: "Guide",
+    label: "Guide",
+    type: Icons.MaterialCommunityIcons,
+    activeIcon: "timeline-plus",
+    inActiveIcon: "timeline-plus-outline",
+    component: Guide_50_30_20_Stack,
+  },
+  {
+    route: "Settings",
+    label: "Settings",
+    type: Icons.FontAwesome,
+    activeIcon: "user-circle",
+    inActiveIcon: "user-circle-o",
+    component: SettingsStack,
+  },
+];
 
-        const isFocused = state.index === index;
-
-        const onPress = () => {
-          const event = navigation.emit({
-            type: "tabPress",
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            // The `merge: true` option makes sure that the params inside the tab screen are preserved
-            navigation.navigate({ name: route.name, merge: true });
-          }
-        };
-
-        const onLongPress = () => {
-          navigation.emit({
-            type: "tabLongPress",
-            target: route.key,
-          });
-        };
-
-        return (
-          <TouchableOpacity
-            accessibilityRole="button"
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
-            onPress={onPress}
-            onLongPress={onLongPress}
-            style={{ flex: 1 }}
-          >
-            <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
-              {label}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
-}
 export function TabBottomNavigation() {
   return (
     <Tab.Navigator
-      initialRouteName={PROFILENAME}
-      tabBar={(props) => <MyTabBar {...props} />}
-      screenOptions={{
-        tabBarStyle: { position: "absolute", backgroundColor: "red" },
+      initialRouteName={PROFILE}
+      tabBar={(props) => <CustomTabBar {...props} />}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          let rn = route.name;
 
-        // tabBarIcon: ({ focused, color }) => {
-        //   let iconName;
-        //   let rn = route.name;
-        //   let text;
-        //   if (rn === PROFILENAME) {
-        //     iconName = focused ? "home" : "home-outline";
-        //     text = "Home";
-        //   } else if (rn === INCOMESANDSENDINGSNAME) {
-        //     iconName = focused ? "settings" : "settings-outline";
-        //     text = "Settings";
-        //   }
-        //   color = focused ? COLORS.FOCUSEDTAB : COLORS.PRIMARY;
-        //   return <Ionicons name={iconName} size={30} color={color} />;
-        // },
+          if (rn === PROFILE) {
+            iconName = focused ? "home" : "home-outline";
+          } else if (rn === HISTORYOFINCOMESANDSENDINGS) {
+            iconName = focused ? "list" : "list-outline";
+          } else if (rn === SETTINGS) {
+            iconName = focused ? "settings" : "settings-outline";
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={50} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: "green",
+        inactiveTintColor: "grey",
+        labelStyle: { paddingBottom: 10, fontSize: 30 },
+        style: { padding: 10, height: 70 },
       }}
     >
-      <Tab.Screen name={PROFILENAME} component={ProfileUserStack} />
-      <Tab.Screen
-        name={INCOMESANDSENDINGSNAME}
-        component={IncomesAndSpendingsStack}
-        // options={{
-        //   tabBarLabel: "YessineZone",
-        //   tabBarIcon: ({ color, focused }) => {},
-        // }}
-      />
+      {TabArr.map((element) => {
+        return (
+          <Tab.Screen
+            name={element.route}
+            component={element.component}
+            options={{
+              iconName: "home",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+        );
+      })}
     </Tab.Navigator>
   );
 }

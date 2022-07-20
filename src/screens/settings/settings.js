@@ -163,9 +163,6 @@ export default function Settings({ navigation }) {
             source={require("../../assets/images/facebook.png")}
           ></Image> */}
           <Text style={profileStyles.nameUser}>Yessine Jaoua</Text>
-          <TouchableOpacity style={profileStyles.buttonEditProfile}>
-            <Text style={profileStyles.editProfileText}> SETTINGS</Text>
-          </TouchableOpacity>
 
           <View style={profileStyles.categorySettings}>
             <Text>Preferences</Text>
@@ -216,22 +213,6 @@ export default function Settings({ navigation }) {
               />
             </View>
           </View>
-          <TouchableOpacity
-            disabled={true}
-            style={[profileStyles.button, profileStyles.saveButton]}
-            onPress={goBack}
-          >
-            <Text
-              style={{
-                fontWeight: "500",
-                letterSpacing: 0.5,
-                color: COLORS.WHITE,
-                backgroundColor: "transparent",
-              }}
-            >
-              UPDATE SETTINGS
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
     </>

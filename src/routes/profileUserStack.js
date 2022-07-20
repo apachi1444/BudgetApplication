@@ -1,9 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import editProfile from "../screens/editProfile/editProfile";
+import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import ProfileUser from "../screens/profile/profile";
 import Settings from "../screens/settings/settings";
-import IncomesAndSpendingsStack from "./IncomesAndSpendingsStack";
+import IncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
 const ProfileUserStack = createNativeStackNavigator();
 
 export default function () {
@@ -34,6 +35,14 @@ export default function () {
       <ProfileUserStack.Screen
         name="History"
         component={IncomesAndSpendingsStack}
+        options={{
+          headerShown: false,
+          headerStyle: { backgroundColor: "#eee" },
+        }}
+      />
+      <ProfileUserStack.Screen
+        name="PlannedPayments"
+        component={PlannedPayments}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
