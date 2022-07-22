@@ -1,6 +1,6 @@
 import COLORS from "../../consts/color";
 import { windowWidth } from "../../utils/dimensions";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform, StatusBar } from "react-native";
 
 const SIZES = {
   BASE: 6,
@@ -94,6 +94,11 @@ export const globalStyles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 6,
     textAlign: "center",
+  },
+  AndroidSafeArea: {
+    flex: 1,
+    backgroundColor: "white",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
 

@@ -6,6 +6,7 @@ import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
 import PlannedPayments from "./../plannedPayments/plannedPayments";
 import { profileStyles } from "./profileStyle";
+import { windowWidth } from "../../utils/dimensions";
 export default function ProfileUser({ navigation }) {
   const navigationn = useNavigation();
 
@@ -147,6 +148,13 @@ export default function ProfileUser({ navigation }) {
             size={SIZES.BASE * 2.9}
           />
         </View>
+        <View
+          style={{
+            borderWidth: 0.2,
+            width: windowWidth * 0.48,
+            marginVertical: 8,
+          }}
+        ></View>
         <View
           style={profileStyles.profileDetailLine}
           onStartShouldSetResponder={editProfile}
