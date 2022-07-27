@@ -4,7 +4,7 @@ import {
   increment,
   login,
   incrementByAmount,
-} from "../../stateManagement/features/user/userSlice";
+} from "../../redux/features/user/userSlice";
 import React, { useRef, useState } from "react";
 import {
   Text,
@@ -14,7 +14,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
-  Button,
 } from "react-native";
 
 import COLORS from "../../consts/color";

@@ -11,8 +11,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Avatar, Caption, Title } from "react-native-paper";
 import COLORS from "../../consts/color";
 import { windowWidth, windowHeight } from "../../utils/dimensions";
-import Card from "../../shared/card";
-import { globalStyles } from "../../global/styles/globalStyles";
 import SpecificCard from "../../components/specificCard";
 export default function ListSpendings({ navigation }) {
   const renderItem = ({ item }) => <SpecificCard item={item} />;

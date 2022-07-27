@@ -14,6 +14,7 @@ const COLORS = {
   TOTALSPENDINGS: "#FFB149",
   GREEN: "#0F0",
   RED: "#F00",
+  BOTTOMBAR: "#F0F0F0",
 };
 
 export default COLORS;

@@ -3,10 +3,9 @@ import React from "react";
 import editProfile from "../screens/editProfile/editProfile";
 import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import ProfileUser from "../screens/profile/profile";
-import Settings from "../screens/settings/settings";
 import HistoryIncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
-import IncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
-import { TabBottomNavigation } from "./tabBottomNavigationStack";
+// import { TabBottomNavigation } from "./tabBottomNavigationStack";
+import AnimTab1 from "../components/bottomBar";
 const ProfileUserStack = createNativeStackNavigator();
 
 export default function () {
@@ -14,7 +13,7 @@ export default function () {
     <ProfileUserStack.Navigator>
       <ProfileUserStack.Screen
         name="BottomBar"
-        component={TabBottomNavigation}
+        component={AnimTab1}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },

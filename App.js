@@ -1,6 +1,6 @@
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { Provider } from "react-redux";
-import { store } from "./src/stateManagement/store";
+import { store } from "./src/redux/store";
 import IncomesAndSpendingsStack from "./src/routes/historyIncomesAndSpendingsStack";
 
 import ProfileUserStack from "./src/routes/profileUserStack";

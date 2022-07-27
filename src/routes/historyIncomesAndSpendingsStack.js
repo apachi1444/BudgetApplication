@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import AddSpending from "../screens/addModalSpending/addModalSpending";
 import ListIncomes from "../screens/listIncomes/listIncomes";
 import ListSpendings from "../screens/listSpendings/listSpendings";
 import ListSpendingsAndIncomes from "../screens/listSpendingsAndIncomes/listSpendingsAndIncomes";
@@ -33,13 +32,13 @@ export default function () {
           headerStyle: { backgroundColor: "#eee" },
         }}
       />
-      <IncomesAndSpendingsStack.Screen
+      {/* <IncomesAndSpendingsStack.Screen
         name="Add Spending To The List of Spendings"
         component={AddSpending}
         options={{
           headerStyle: { backgroundColor: "#eee" },
         }}
-      />
+      /> */}
     </IncomesAndSpendingsStack.Navigator>
   );
 }

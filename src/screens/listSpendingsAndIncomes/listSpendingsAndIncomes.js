@@ -14,7 +14,7 @@ import { windowWidth, windowHeight } from "../../utils/dimensions";
 import SpecificCard from "../../components/specificCard";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectAllSpendings } from "../../stateManagement/features/spendings/userSpendings";
+import { selectAllSpendings } from "../../redux/features/spendings/userSpendings";
 export default function ListIncomesAndSpendings({ navigation }) {
   const spendings = useSelector(selectAllSpendings);
 
