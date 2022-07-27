@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   PanResponder,
 } from "react-native";
-import MoviesCarousel from "../carousel/moviesCarouselGestureResponder";
 import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];

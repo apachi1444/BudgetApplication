@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, Button, SafeAreaView, Image } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Avatar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
+
+import COLORS from "../../consts/color";
+import { SIZES } from "./../../consts/theme";
 
 import Grid from "react-native-grid-component";
 
@@ -30,8 +40,6 @@ const renderProfileInformations = () => {
   );
 };
 
-import COLORS from "../../consts/color";
-import { SIZES } from "./../../consts/theme";
 import styles from "./../login/loginStyle";
 
 const renderOneCircle = (name, price) => {

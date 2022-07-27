@@ -44,6 +44,8 @@ import { StyleSheet } from "react-native";
 // };
 
 import React from "react";
+import { SIZES } from "../../consts/theme";
+import COLORS from "../../consts/color";
 export const aa = StyleSheet.create({
   button: {
     alignItems: "center",
