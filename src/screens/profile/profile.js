@@ -14,16 +14,8 @@ export default function ProfileUser({ navigation }) {
     navigation.navigate("EditProfile");
   };
 
-  const goToSettings = () => {
-    navigationn.navigate("Settings");
-  };
-
   const logOut = () => {
     navigation.goBack();
-  };
-
-  const goToHistory = () => {
-    navigation.navigate("HistoryBottomBar");
   };
 
   const goToPlannedPayments = () => {

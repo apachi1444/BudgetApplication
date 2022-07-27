@@ -12,6 +12,8 @@ const COLORS = {
   DELETEBUTTONRED: "#FFA1A1",
   TOTALINCOMES: "#8FFF5A",
   TOTALSPENDINGS: "#FFB149",
+  GREEN: "#0F0",
+  RED: "#F00",
 };
 
 export default COLORS;

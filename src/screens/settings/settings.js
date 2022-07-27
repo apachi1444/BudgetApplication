@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View, Alert, SafeAreaView } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Avatar } from "react-native-paper";
-
+import { globalStyles } from "../../global/styles/globalStyles";
 import COLORS from "../../consts/color";
 import { windowWidth, windowHeight } from "../../utils/dimensions";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 import React, { useState } from "react";
 export default function Settings({ navigation }) {
@@ -151,7 +150,7 @@ export default function Settings({ navigation }) {
   });
 
   return (
-    <>
+    <SafeAreaView style={globalStyles.AndroidSafeArea}>
       <View style={profileStyles.container}>
         <View style={profileStyles.containerInformationsUser}>
           <Avatar.Image
@@ -215,7 +214,7 @@ export default function Settings({ navigation }) {
           </View>
         </View>
       </View>
-    </>
+    </SafeAreaView>
   );
 }
 

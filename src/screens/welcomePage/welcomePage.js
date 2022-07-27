@@ -91,11 +91,11 @@ const WelcomePage = ({ navigation }) => {
               {...panResponder.panHandlers}
             />
           </Animated.View>
-          <View onStartShouldSetResponder={() => moveTheBall()}>
+          {/* <View onStartShouldSetResponder={() => moveTheBall()}>
             <Text>Click here</Text>
-          </View>
+          </View> */}
         </View>
-        <Text style={welcomePageStyle.organizeMeText}>Organize Me</Text>
+        <Text style={welcomePageStyle.organizeMeText}>E-Wall$T</Text>
         <Image
           source={require("../../assets/images/welcomePage.png")}
           style={welcomePageStyle.imageLogin}
