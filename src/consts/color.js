@@ -15,6 +15,7 @@ const COLORS = {
   GREEN: "#0F0",
   RED: "#F00",
   BOTTOMBAR: "#F0F0F0",
+  LIGHTGREY: "#F6F2F2",
 };
 
 export default COLORS;

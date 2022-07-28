@@ -7,6 +7,7 @@ export const historyStyle = StyleSheet.create({
   wholeContainer: {
     paddingHorizontal: "5%",
   },
+
   containerProfileInformations: {
     paddingVertical: "6%",
     flexDirection: "row",
@@ -14,15 +15,14 @@ export const historyStyle = StyleSheet.create({
   },
 
   containerThreeCircles: {
-    maxWidth: windowWidth * 0.5,
     flexDirection: "row",
   },
   containerImageBudget: (color) => {
     return {
       marginTop: SIZES.BASE * 3,
       marginHorizontal: SIZES.BASE,
-      width: windowWidth * 0.29,
-      height: windowHeight * 0.155,
+      width: windowWidth * 0.27,
+      height: windowHeight * 0.15,
       borderRadius: windowWidth * 0.2,
       borderColor: color,
       borderWidth: 2,
@@ -74,11 +74,27 @@ export const historyStyle = StyleSheet.create({
   },
   categoryIcon: {
     color: COLORS.BLACK,
-    fontSize: 26,
+    fontSize: 50,
     fontWeight: "bold",
     marginRight: SIZES.BASE * 2,
   },
+  moreDetailsText: {
+    fontSize: SIZES.BASE * 2.6,
+    color: COLORS.PRIMARY,
+
+    fontWeight: "bold",
+  },
   buttonGoToCategoryList: {
     padding: SIZES.BASE * 2,
+  },
+  shadow: {
+    shadowColor: "#aaa",
+    shadowOffset: {
+      width: 10,
+      height: 2,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 20,
+    elevation: 5,
   },
 });

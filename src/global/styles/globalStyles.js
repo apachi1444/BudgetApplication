@@ -27,7 +27,18 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
   },
+  inputContainerHistoryPage: {
+    padding: SIZES.PADDING * 1,
+    fontSize: SIZES.FONT,
+    backgroundColor: COLORS.LIGHTGREY, // "rgba(255, 255, 255, 0.5)",
+    borderRadius: SIZES.BASE * 2.5,
+    marginBottom: SIZES.PADDING * 1.2,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   inputIcon: { marginRight: windowWidth * 0.04 },
+  inputText: { fontSize: SIZES.BASE * 3, fontWeight: "bold" },
 
   social: {
     flexDirection: "row",

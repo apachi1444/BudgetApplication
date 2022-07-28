@@ -18,7 +18,7 @@ export const SIZESS = {
 export const SIZES = {
   BASE: 6,
   FONT: 12,
-  TITLE: 24,
+  TITLE: 20,
   SUBTITLE: 11,
   LABEL: 12,
   PADDING: 12,
