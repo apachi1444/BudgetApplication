@@ -1,7 +1,9 @@
+import { windowHeight, windowWidth } from "../utils/dimensions";
 export const SIZESS = {
   base: 8,
   font: 14,
   radius: 12,
+
   padding: 14,
   padding2: 26,
 
@@ -10,9 +12,12 @@ export const SIZESS = {
   h2: 22,
   h3: 18,
   h4: 12,
+
   body1: 30,
   body2: 20,
   body3: 10,
+  width: windowWidth,
+  height: windowHeight,
 };
 
 export const SIZES = {
@@ -26,13 +31,11 @@ export const SIZES = {
 
 export const FONTS = {
   largeTitle: {
-    fontFamily: "Roboto-regular",
-    fontSize: SIZES.largeTitle,
+    fontSize: SIZESS.largeTitle,
     lineHeight: 5,
   },
   h1: {
-    fontFamily: "Roboto-regular",
-    fontSize: SIZES.h1,
+    fontSize: SIZESS.h1,
     lineHeight: 30,
   },
   h2: {},

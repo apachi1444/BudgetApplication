@@ -10,6 +10,7 @@ import History from "../screens/history/history";
 import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import Guide_50_30_20_Summary from "../screens/50-30-20/summary/guide_50_30_20_Summary";
 import { SIZES } from "../consts/theme";
+import HistoryStack from "../routes/historyStack";
 
 const TabArr = [
   {
@@ -24,7 +25,7 @@ const TabArr = [
     label: "History",
     type: Icons.MaterialCommunityIcons,
     icon: "briefcase",
-    component: History,
+    component: HistoryStack,
   },
   {
     route: "Add",

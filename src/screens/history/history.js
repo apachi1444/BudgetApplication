@@ -103,6 +103,48 @@ const History = ({ navigation }) => {
           date: "20 July 2022",
           total: 100.0,
         },
+        {
+          id: 2,
+          title: "Tuition Fee",
+          date: "20 July 2022",
+          total: 100.0,
+        },
+        {
+          id: 3,
+          title: "Tuition Fee",
+          date: "20 July 2022",
+          total: 100.0,
+        },
+        {
+          id: 4,
+          title: "Tuition Fee",
+          date: "20 July 2022",
+          total: 100.0,
+        },
+        {
+          id: 5,
+          title: "Tuition Fee",
+          date: "20 July 2022",
+          total: 100.0,
+        },
+        {
+          id: 6,
+          title: "Tuition Fee",
+          date: "20 July 2022",
+          total: 100.0,
+        },
+        {
+          id: 7,
+          title: "Tuition Fee",
+          date: "20 July 2022",
+          total: 100.0,
+        },
+        {
+          id: 8,
+          title: "Tuition Fee",
+          date: "20 July 2022",
+          total: 100.0,
+        },
       ],
     },
     {
@@ -144,7 +186,7 @@ const History = ({ navigation }) => {
       id: 5,
       name: "Beauty & Care",
       icon: "fast-food",
-      color: COLORS.SECONDARY,
+      color: COLORS.LIGHTGREY,
       history: [
         {
           id: 4,
@@ -158,7 +200,7 @@ const History = ({ navigation }) => {
       id: 6,
       name: "Beauty & Care",
       icon: "fast-food",
-      color: COLORS.SECONDARY,
+      color: COLORS.FACEBOOK,
       history: [
         {
           id: 5,
@@ -172,7 +214,7 @@ const History = ({ navigation }) => {
       id: 7,
       name: "Education",
       icon: "fast-food",
-      color: COLORS.GREEN,
+      color: COLORS.BOTTOMBAR,
       history: [
         {
           id: 6,
@@ -188,12 +230,12 @@ const History = ({ navigation }) => {
     new Animated.Value(windowHeight * 0.17)
   ).current;
 
-  const [categories, setCategories] = React.useState(categoriesData);
-  const [viewMode, setViewMode] = React.useState("chart");
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
-  const [showMoreToggle, setShowMoreToggle] = React.useState(false);
+  const [categories, setCategories] = useState(categoriesData);
+  const [viewMode, setViewMode] = useState("chart");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showMoreToggle, setShowMoreToggle] = useState(false);
 
-  function renderCategoryList() {
+  const renderCategoryList = () => {
     const renderItem = ({ item }) => (
       <TouchableOpacity
         onPress={() => setSelectedCategory(item)}
@@ -221,10 +263,7 @@ const History = ({ navigation }) => {
         />
         <Text
           style={{
-            marginLeft: SIZES.BASE,
-            color: COLORS.PRIMARY,
-            fontWeight: "bold",
-            fontSize: SIZES.BASE * 2.5,
+            ...historyStyle.textButtonCategory,
           }}
         >
           {item.name}
@@ -240,15 +279,12 @@ const History = ({ navigation }) => {
             renderItem={renderItem}
             keyExtractor={(item) => `${item.id}`}
             numColumns={3}
+            showsVerticalScrollIndicator={false}
           />
         </Animated.View>
 
         <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            marginVertical: SIZES.BASE,
-            justifyContent: "center",
-          }}
+          style={historyStyle.moreLessButton}
           onPress={() => {
             if (showMoreToggle) {
               Animated.timing(heightAnimationValue, {
@@ -270,14 +306,12 @@ const History = ({ navigation }) => {
           <Text>{showMoreToggle ? "LESS" : "MORE"}</Text>
           <Ionicons
             name={showMoreToggle ? "arrow-up" : "arrow-down"}
-            style={{
-              fontSize: 22,
-            }}
+            size={22}
           />
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
   const renderCategoryHeaderSection = () => {
     return (
@@ -352,31 +386,77 @@ const History = ({ navigation }) => {
 
   const renderHistoryTitleCategory = () => {
     return (
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Ionicons name="grid" size={SIZES.BASE * 4.5} />
-        <Text
-          style={{
-            color: COLORS.PRIMARY,
-            fontSize: SIZES.TITLE,
-            fontWeight: "bold",
-            marginLeft: SIZES.BASE,
-          }}
-        >
-          CATEGORIES
-        </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <Ionicons name="briefcase" size={SIZES.BASE * 4.5} />
+          <Text
+            style={{
+              color: COLORS.PRIMARY,
+              fontSize: SIZES.TITLE,
+              fontWeight: "bold",
+              marginLeft: SIZES.BASE,
+            }}
+          >
+            HISTORY
+          </Text>
+        </View>
+        <View>
+          <Text>No Item Selected</Text>
+        </View>
       </View>
     );
   };
 
   const renderHistoryCategory = () => {
     let allHistory = selectedCategory ? selectedCategory.history : [];
-
+    console.log(selectedCategory);
+    console.log("this is the list of history ", allHistory);
+    const renderHistoryItem = () => {
+      return (
+        <View>
+          <Text>Hahaha</Text>
+        </View>
+      );
+    };
     return (
-      <View>
+      <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
-        <Text>This is the history of each category</Text>
-        {allHistory.length > 0 && <FlatList />}
-        {allHistory.length == 0 && <Text>No Result For The Moment</Text>}
+        {allHistory.length > 0 && (
+          <View
+            style={{
+              marginTop: SIZES.BASE * 2,
+              borderWidth: 0.1,
+              backgroundColor: COLORS.LIGHTGREY,
+              padding: 20,
+              flex: 1,
+            }}
+          >
+            <FlatList
+              data={allHistory}
+              keyExtractor={(item) => `${item.id}`}
+              showsVerticalScrollIndicator={true}
+              renderItem={renderHistoryItem}
+            />
+          </View>
+        )}
+        {allHistory.length == 0 && (
+          <View>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+            <Text>No Results for the moment</Text>
+          </View>
+        )}
       </View>
     );
   };
@@ -385,7 +465,8 @@ const History = ({ navigation }) => {
 
   const renderChartRectangle = () => {
     return (
-      <View
+      <TouchableOpacity
+        onPress={() => navigation.navigate("charts", categoriesData)}
         style={{
           flexDirection: "row",
           justifyContent: "center",
@@ -402,7 +483,7 @@ const History = ({ navigation }) => {
         <Text style={historyStyle.moreDetailsText}>
           Click Here To See More Chart Details
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -441,7 +522,15 @@ const History = ({ navigation }) => {
         {renderCalendarRectangle()}
         {renderThreeCirclesIncomesBudgetAndSpendings()}
         {renderCategoryHeaderSection()}
-        {viewMode == "list" ? renderCategoryList() : renderChartRectangle()}
+        <ScrollView>
+          {viewMode == "list" && (
+            <View>
+              {renderCategoryList()}
+              {renderHistoryCategory()}
+            </View>
+          )}
+          {viewMode == "chart" && renderChartRectangle()}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

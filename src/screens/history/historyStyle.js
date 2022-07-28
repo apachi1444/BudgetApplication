@@ -97,4 +97,22 @@ export const historyStyle = StyleSheet.create({
     shadowRadius: 20,
     elevation: 5,
   },
+  textButtonCategory: {
+    marginLeft: SIZES.BASE,
+    color: COLORS.PRIMARY,
+    fontWeight: "bold",
+    fontSize: SIZES.BASE * 2.5,
+  },
+  moreLessButton: {
+    flexDirection: "row",
+    marginVertical: SIZES.BASE,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.LIGHTGREY,
+    padding: SIZES.BASE * 2,
+    alignSelf: "center",
+    borderRadius: SIZES.BASE * 3.5,
+    borderColor: COLORS.PRIMARY,
+    borderWidth: 2,
+  },
 });
