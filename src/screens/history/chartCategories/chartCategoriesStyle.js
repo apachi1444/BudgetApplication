@@ -52,12 +52,14 @@ export const chartCategoriesStyle = StyleSheet.create({
   containerButtonSwitch: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    right: "45%",
-    width: windowWidth * 0.5,
+    alignItems: "flex-end",
+    width: "80%",
     borderWidth: 4,
-    position: "absolute",
   },
-  circleInsideContainerButtonSwitch: {},
+  circleInsideContainerButtonSwitch: {
+    borderWidth: 3,
+    borderColor: COLORS.PRIMARY,
+  },
   iconInsideCircleInsideContainerButtonSwitch: {
     fontSize: 30,
   },

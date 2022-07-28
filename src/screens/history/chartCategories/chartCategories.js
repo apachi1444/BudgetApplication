@@ -139,14 +139,27 @@ const ChartCategories = ({ navigation, route }) => {
             : setVisualisationMode("PIE");
         }}
       >
-        <View style={chartCategoriesStyle.circleInsideContainerButtonSwitch}>
-          <Ionicons
-            name="add-circle"
-            style={
-              chartCategoriesStyle.iconInsideCircleInsideContainerButtonSwitch
-            }
-          />
-        </View>
+        {visualisationMode == "PIE" && (
+          <View style={chartCategoriesStyle.circleInsideContainerButtonSwitch}>
+            <Ionicons
+              name="add-circle"
+              style={
+                chartCategoriesStyle.iconInsideCircleInsideContainerButtonSwitch
+              }
+            />
+          </View>
+        )}
+        {console.log(visualisationMode)}
+        {visualisationMode == "HISTO" && (
+          <View style={chartCategoriesStyle.circleInsideContainerButtonSwitch}>
+            <Ionicons
+              name="add"
+              style={
+                chartCategoriesStyle.iconInsideCircleInsideContainerButtonSwitch
+              }
+            />
+          </View>
+        )}
       </TouchableOpacity>
     );
   };
@@ -263,7 +276,7 @@ const ChartCategories = ({ navigation, route }) => {
         {renderChart()}
       </View>
 
-      <View>{renderSwitchButton()}</View>
+      {renderSwitchButton()}
 
       <View>{renderExpenseSummary()}</View>
 
