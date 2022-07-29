@@ -102,12 +102,14 @@ const History = ({ navigation }) => {
           title: "Tuition Fee",
           date: "20 July 2022",
           total: 100.0,
+          type: "Income",
         },
         {
           id: 2,
           title: "Tuition Fee",
           date: "20 July 2022",
           total: 100.0,
+          type: "Spending",
         },
         {
           id: 3,
@@ -186,7 +188,7 @@ const History = ({ navigation }) => {
       id: 5,
       name: "Beauty & Care",
       icon: "fast-food",
-      color: COLORS.LIGHTGREY,
+      color: COLORS.THIRD,
       history: [
         {
           id: 4,
@@ -446,15 +448,9 @@ const History = ({ navigation }) => {
         )}
         {allHistory.length == 0 && (
           <View>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
-            <Text>No Results for the moment</Text>
+            <Text style={{ alignSelf: "center" }}>
+              No Results for the moment
+            </Text>
           </View>
         )}
       </View>

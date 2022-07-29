@@ -1,18 +1,14 @@
 import { StyleSheet } from "react-native";
-import { windowHeight } from "../../utils/dimensions";
+import { windowHeight, windowWidth } from "../../utils/dimensions";
 import COLORS from "./../../consts/color";
 import { SIZESS } from "./../../consts/theme";
-
 export const plannedPaymentsStyle = StyleSheet.create({
   container: {
     flex: 1,
     margin: "4%",
-    borderWidth: 4,
   },
 
   containerItem: {
-    borderWidth: 2,
-    borderColor: "red",
     padding: "2%",
   },
 
@@ -31,9 +27,8 @@ export const plannedPaymentsStyle = StyleSheet.create({
   },
 
   containerDetails: {
-    backgroundColor: COLORS.GREEN,
-    borderWidth: 3,
-    marginTop: SIZESS.base * 2,
+    backgroundColor: COLORS.LIGHTGREY,
+    marginVertical: SIZESS.base * 1.5,
     borderRadius: SIZESS.body1 / 1.5,
     paddingHorizontal: SIZESS.base,
   },
@@ -56,9 +51,9 @@ export const plannedPaymentsStyle = StyleSheet.create({
 
   deleteButton: {
     backgroundColor: COLORS.GOOGLE,
-    margin: "2%",
     borderRadius: SIZESS.body1 / 1.5,
     padding: "3%",
+    marginVertical: "3%",
   },
 
   textDeleteAll: {
@@ -66,14 +61,24 @@ export const plannedPaymentsStyle = StyleSheet.create({
   },
 
   divider: {
-    borderWidth: 3,
+    borderWidth: 0.3,
+    fontWeight: "200",
+    width: windowWidth * 0.5,
+    alignSelf: "center",
     backgroundColor: COLORS.BLACK,
+    marginVertical: SIZESS.base / 1.8,
+  },
+
+  iconStyle: {
+    fontSize: 18,
+    marginHorizontal: SIZESS.base / 1.8,
   },
 
   containerEditAndDeleteButtons: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: SIZESS.base,
   },
 
   containerCheckboxAndImageAndTitle: {
@@ -84,5 +89,21 @@ export const plannedPaymentsStyle = StyleSheet.create({
   containerEachLine: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: SIZESS.base / 2,
+  },
+
+  timeRemaining: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: "red",
+  },
+
+  containerCalendarAndTimeRemaining: {
+    alignItems: "flex-end",
+  },
+
+  containerDetailsEachLine: {
+    alignItems: "space-between",
   },
 });

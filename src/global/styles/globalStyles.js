@@ -111,6 +111,13 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: "white",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+
+  primaryColor: {
+    color: COLORS.PRIMARY,
+    fontWeight: "bold",
+    fontSize: 15,
+    marginLeft: 5,
+  },
 });
 
 // export const images = {

@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Avatar } from "react-native-paper";
-import { SIZESS } from "../../consts/theme";
+import { SIZES, SIZESS } from "../../consts/theme";
 import { plannedPaymentsStyle } from "./plannedPaymentsStyle";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
 import CheckBox from "expo-checkbox";
+import { globalStyles } from "../../global/styles/globalStyles";
+
 const PlannedPayments = () => {
   const [isSelected, setSelection] = useState(false);
   const arrayPlannedPayments = [
@@ -54,6 +56,8 @@ const PlannedPayments = () => {
     },
   ];
 
+  const numberPages = [1, 2, 3, 4];
+
   const renderItem = ({ item }) => {
     console.log(item);
     const { id, title, price, elements } = item;
@@ -74,7 +78,12 @@ const PlannedPayments = () => {
       return (
         <View style={plannedPaymentsStyle.priceAndDeleteButton}>
           <View style={plannedPaymentsStyle.iconAndPriceContainer}>
-            <FontAwesome name="home" color={COLORS.PRIMARY} size={20} />
+            <Ionicons
+              name="cash"
+              color={COLORS.PRIMARY}
+              size={25}
+              style={{ marginRight: SIZES.BASE * 1.5 }}
+            />
             <Text style={plannedPaymentsStyle.price}>{price}</Text>
           </View>
 
@@ -111,11 +120,52 @@ const PlannedPayments = () => {
         const renderPriceAndPeriod = () => {
           return (
             <View>
-              <Text> {element.price} </Text>
+              <Text style={globalStyles.primaryColor}> {element.price} </Text>
             </View>
           );
         };
-        const renderDateAndTimeRemaining = () => {};
+        const renderDateAndTimeRemaining = () => {
+          const renderDate = () => {
+            return (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={globalStyles.primaryColor}>
+                  {element.datePayment}
+                </Text>
+                <Ionicons
+                  name="calendar-outline"
+                  style={globalStyles.primaryColor}
+                />
+              </View>
+            );
+          };
+
+          const renderTimeRemaining = () => {
+            console.log(element.datePayment);
+            console.log(new Date());
+            const calculateTimeRemaining = () => {};
+            return (
+              <View>
+                <Text style={plannedPaymentsStyle.timeRemaining}>
+                  1 year Remaining
+                </Text>
+              </View>
+            );
+          };
+
+          return (
+            <View
+              style={plannedPaymentsStyle.containerCalendarAndTimeRemaining}
+            >
+              <View>{renderDate()}</View>
+              <View>{renderTimeRemaining()}</View>
+            </View>
+          );
+        };
         return (
           <View style={plannedPaymentsStyle.containerEachLine}>
             {renderImageAndTitle()}
@@ -128,8 +178,8 @@ const PlannedPayments = () => {
       const renderDeleteAndEditButtons = () => {
         return (
           <View style={plannedPaymentsStyle.containerEditAndDeleteButtons}>
-            <Ionicons name="trash-bin-outline" />
-            <Ionicons name="home" />
+            <Ionicons style={plannedPaymentsStyle.iconStyle} name="trash-bin" />
+            <Ionicons name="create" style={plannedPaymentsStyle.iconStyle} />
           </View>
         );
       };
@@ -155,7 +205,7 @@ const PlannedPayments = () => {
               <View>
                 {renderLineDetailEachItem(element)}
                 {console.log(elements.length, index == elements.length - 1)}
-                {index == elements.length - 1
+                {index != elements.length - 1
                   ? renderDividerBetweenItems()
                   : null}
               </View>
@@ -172,9 +222,21 @@ const PlannedPayments = () => {
       </View>
     );
   };
+
+  const renderPagination = () => {
+    return (
+      <View>
+        {console.log(numberPages)}
+        {numberPages.map((page) => {
+          <View>{page}</View>;
+        })}
+      </View>
+    );
+  };
   return (
     <View style={plannedPaymentsStyle.container}>
       <FlatList data={arrayPlannedPayments} renderItem={renderItem} />
+      {renderPagination()}
     </View>
   );
 };
