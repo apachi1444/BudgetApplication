@@ -168,7 +168,10 @@ export default function Settings({ navigation }) {
           </View>
           {/* // this is for the each line of profile Details */}
 
-          <View style={profileStyles.profileDetailLine}>
+          <View
+            style={profileStyles.profileDetailLine}
+            onStartShouldSetResponder={toggleSwitch}
+          >
             <Ionicons
               name="bulb"
               color={COLORS.PRIMARY}
@@ -183,10 +186,7 @@ export default function Settings({ navigation }) {
                 profileStyles.toggleSetting,
               ]}
             >
-              <View
-                style={profileStyles.circleInsideToggleSetting}
-                onStartShouldSetResponder={toggleSwitch}
-              ></View>
+              <View style={profileStyles.circleInsideToggleSetting}></View>
             </View>
           </View>
 

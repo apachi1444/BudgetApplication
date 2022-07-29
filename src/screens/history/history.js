@@ -522,15 +522,13 @@ const History = ({ navigation }) => {
         {renderCalendarRectangle()}
         {renderThreeCirclesIncomesBudgetAndSpendings()}
         {renderCategoryHeaderSection()}
-        <ScrollView>
-          {viewMode == "list" && (
-            <View>
-              {renderCategoryList()}
-              {renderHistoryCategory()}
-            </View>
-          )}
-          {viewMode == "chart" && renderChartRectangle()}
-        </ScrollView>
+        {viewMode == "list" && (
+          <View>
+            {renderCategoryList()}
+            {renderHistoryCategory()}
+          </View>
+        )}
+        {viewMode == "chart" && renderChartRectangle()}
       </View>
     </SafeAreaView>
   );
