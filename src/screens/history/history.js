@@ -10,13 +10,15 @@ import {
   ScrollView,
 } from "react-native";
 
-import DatePicker from "react-native-date-picker";
+import DatePicker from "react-native-datepicker";
+
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { Avatar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
 import COLORS from "../../consts/color";
-import { SIZES } from "./../../consts/theme";
+import { SIZES, SIZESS } from "./../../consts/theme";
 
 import { globalStyles } from "../../global/styles/globalStyles";
 import { historyStyle } from "./historyStyle";
@@ -101,51 +103,57 @@ const History = ({ navigation }) => {
           id: 1,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: +100.0,
           type: "Income",
         },
         {
           id: 2,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: -100.0,
           type: "Spending",
         },
         {
           id: 3,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: -100.0,
+          type: "Spending",
         },
         {
           id: 4,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: -100.0,
+          type: "Spending",
         },
         {
           id: 5,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: +100.0,
+          type: "Income",
         },
         {
           id: 6,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: +100.0,
+          type: "Income",
         },
         {
           id: 7,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: +100.0,
+          type: "Income",
         },
         {
           id: 8,
           title: "Tuition Fee",
           date: "20 July 2022",
-          total: 100.0,
+          total: -100.0,
+          type: "Spending",
         },
       ],
     },
@@ -166,7 +174,8 @@ const History = ({ navigation }) => {
           id: 2,
           title: "Pampers",
           date: "20 July 2022",
-          total: 100.0,
+          total: -100.0,
+          type: "Spending",
         },
       ],
     },
@@ -180,7 +189,8 @@ const History = ({ navigation }) => {
           id: 3,
           title: "Face Mask",
           date: "20 July 2022",
-          total: 50.0,
+          total: -50.0,
+          type: "Income",
         },
       ],
     },
@@ -194,7 +204,8 @@ const History = ({ navigation }) => {
           id: 4,
           title: "Sunscreen cream",
           date: "20 July 2022",
-          total: 50.0,
+          total: -50.0,
+          type: "Spending",
         },
       ],
     },
@@ -208,7 +219,8 @@ const History = ({ navigation }) => {
           id: 5,
           title: "Face Mask",
           date: "20 July 2022",
-          total: 50.0,
+          total: -50.0,
+          type: "Spending",
         },
       ],
     },
@@ -223,6 +235,7 @@ const History = ({ navigation }) => {
           title: "Tuition Fee",
           date: "20 July 2022",
           total: 100.0,
+          type: "Spending",
         },
       ],
     },
@@ -416,12 +429,97 @@ const History = ({ navigation }) => {
 
   const renderHistoryCategory = () => {
     let allHistory = selectedCategory ? selectedCategory.history : [];
-    console.log(selectedCategory);
-    console.log("this is the list of history ", allHistory);
-    const renderHistoryItem = () => {
+    const renderHistoryItem = ({ item }) => {
+      console.log(item);
+      const { type } = item;
+      console.log(type);
+      const renderTitleAndPrice = () => {
+        const renderImageAndTitle = () => {
+          return (
+            <View style={historyStyle.containerCheckboxAndImageAndTitle}>
+              <Avatar.Image
+                source={require("../../assets/images/elon_musk.jpg")}
+                size={SIZESS.body1 * 1.2}
+                style={{
+                  marginRight: 4,
+                }}
+              />
+              <Text
+                style={{
+                  color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                  fontWeight: "bold",
+                  fontSize: SIZES.BASE * 2.5,
+                }}
+              >
+                {item.title}
+              </Text>
+            </View>
+          );
+        };
+        const renderPrice = () => {
+          return (
+            <View>
+              <Text
+                style={{
+                  color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                  fontWeight: "bold",
+                  fontSize: SIZES.BASE * 3,
+                }}
+              >
+                {item.total} DH
+              </Text>
+            </View>
+          );
+        };
+        const renderDate = () => {
+          const renderDate = () => {
+            return (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                    fontWeight: "bold",
+                    fontSize: SIZES.BASE * 2.2,
+                  }}
+                >
+                  {item.date}
+                </Text>
+                <Ionicons
+                  name="calendar-outline"
+                  style={{
+                    color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                    fontWeight: "bold",
+                    fontSize: SIZES.BASE * 2.5,
+                    marginLeft: SIZES.BASE,
+                  }}
+                />
+              </View>
+            );
+          };
+
+          return (
+            <View style={historyStyle.containerCalendarAndTimeRemaining}>
+              <View>{renderDate()}</View>
+            </View>
+          );
+        };
+        return (
+          <View style={historyStyle.containerEachLine}>
+            {renderImageAndTitle()}
+            {renderPrice()}
+            {renderDate()}
+          </View>
+        );
+      };
+
       return (
         <View>
-          <Text>Hahaha</Text>
+          <View>{renderTitleAndPrice()}</View>
         </View>
       );
     };
@@ -435,7 +533,6 @@ const History = ({ navigation }) => {
               borderWidth: 0.1,
               backgroundColor: COLORS.LIGHTGREY,
               padding: 20,
-              flex: 1,
             }}
           >
             <FlatList
@@ -493,17 +590,16 @@ const History = ({ navigation }) => {
         onPress={() => setOpen(true)}
       >
         <Ionicons name="filter" />
-        <Text>All Time</Text>
-        <DatePicker
-          modal
-          open={open}
-          date={date}
-          onConfirm={(date) => {
-            setOpen(false);
-            setDate(date);
-          }}
-          onCancel={() => {
-            setOpen(false);
+        <Text>{date.toString()}</Text>
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={"date"}
+          is24Hour={true}
+          display="inline"
+          onChange={(value) => {
+            console.log(value);
+            setDate(new Date(value.nativeEvent.timestamp));
           }}
         />
         <Ionicons name="calendar-outline" />

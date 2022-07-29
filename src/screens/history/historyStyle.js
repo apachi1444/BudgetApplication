@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import COLORS from "../../consts/color";
 import { windowHeight, windowWidth } from "../../utils/dimensions";
-import { SIZES } from "./../../consts/theme";
+import { SIZES, SIZESS } from "./../../consts/theme";
 
 export const historyStyle = StyleSheet.create({
   wholeContainer: {
@@ -114,5 +114,19 @@ export const historyStyle = StyleSheet.create({
     borderRadius: SIZES.BASE * 3.5,
     borderColor: COLORS.PRIMARY,
     borderWidth: 2,
+  },
+  containerCheckboxAndImageAndTitle: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  containerEachLine: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: SIZESS.base,
+  },
+  containerCalendarAndTimeRemaining: {
+    alignItems: "flex-end",
   },
 });
