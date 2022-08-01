@@ -10,10 +10,6 @@ import {
   ScrollView,
 } from "react-native";
 
-import DatePicker from "react-native-datepicker";
-
-import DateTimePicker from "@react-native-community/datetimepicker";
-
 import { Avatar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -23,6 +19,8 @@ import { SIZES, SIZESS } from "./../../consts/theme";
 import { globalStyles } from "../../global/styles/globalStyles";
 import { historyStyle } from "./historyStyle";
 import { windowHeight, windowWidth } from "../../utils/dimensions";
+
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const renderProfileInformations = () => {
   return (
@@ -244,9 +242,6 @@ const History = ({ navigation }) => {
   const heightAnimationValue = useRef(
     new Animated.Value(windowHeight * 0.17)
   ).current;
-  const heightAnimationHistoryValue = useRef(
-    new Animated.Value(windowHeight * 0.5)
-  ).current;
 
   const [categories, setCategories] = useState(categoriesData);
   const [viewMode, setViewMode] = useState("chart");
@@ -256,7 +251,11 @@ const History = ({ navigation }) => {
   const renderCategoryList = () => {
     const renderItem = ({ item }) => (
       <TouchableOpacity
-        onPress={() => setSelectedCategory(item)}
+        onPress={() => {
+          console.log("sdlkqfjklqsdfj", item);
+          setSelectedCategory(item);
+          setSelectedTitle(item.name);
+        }}
         style={{
           flex: 1,
           flexDirection: "row",
@@ -297,7 +296,7 @@ const History = ({ navigation }) => {
             renderItem={renderItem}
             keyExtractor={(item) => `${item.id}`}
             numColumns={3}
-            showsVerticalScrollIndicator={true}
+            showsVerticalScrollIndicator={false}
           />
         </Animated.View>
 
@@ -424,7 +423,15 @@ const History = ({ navigation }) => {
           </Text>
         </View>
         <View>
-          <Text>No Item Selected</Text>
+          <Text
+            style={{
+              color: COLORS.PRIMARY,
+              fontSize: SIZES.BASE * 3.2,
+              fontWeight: "bold",
+            }}
+          >
+            {title}
+          </Text>
         </View>
       </View>
     );
@@ -432,7 +439,7 @@ const History = ({ navigation }) => {
 
   const renderHistoryCategory = () => {
     let allHistory = selectedCategory ? selectedCategory.history : [];
-    const renderHistoryItem = ({ item }) => {
+    const renderHistoryItem = (item) => {
       const { type } = item;
       const renderTitleAndPrice = () => {
         const renderImageAndTitle = () => {
@@ -528,9 +535,8 @@ const History = ({ navigation }) => {
       <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
         {allHistory.length > 0 && (
-          <Animated.View
+          <View
             style={{
-              height: heightAnimationHistoryValue,
               marginTop: SIZES.BASE * 2,
               borderWidth: 0.1,
               backgroundColor: COLORS.LIGHTGREY,
@@ -538,13 +544,16 @@ const History = ({ navigation }) => {
               flex: 1,
             }}
           >
-            <FlatList
+            {/* <FlatList
               data={allHistory}
               keyExtractor={(item) => `${item.id}`}
               showsVerticalScrollIndicator={true}
               renderItem={renderHistoryItem}
-            />
-          </Animated.View>
+            /> */}
+            {allHistory.map((item, index) => {
+              return renderHistoryItem(item);
+            })}
+          </View>
         )}
         {allHistory.length == 0 && (
           <View>
@@ -586,14 +595,34 @@ const History = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
+  const [title, setSelectedTitle] = useState("Nutrition");
+
   const renderCalendarRectangle = () => {
     return (
       <TouchableOpacity
         style={globalStyles.inputContainerHistoryPage}
         onPress={() => setOpen(true)}
       >
-        <Ionicons name="filter" />
+        <Ionicons
+          name="filter"
+          size={SIZES.BASE * 3.7}
+          color={COLORS.PRIMARY}
+        />
         <Text>{date.toString()}</Text>
+        {open ? (
+          <DateTimePicker
+            value={date}
+            mode="default"
+            display="default"
+            onChange={(date) => {
+              let newDate = new Date(date.nativeEvent.timestamp);
+              setDate(newDate);
+              setOpen(false);
+              onClose();
+            }}
+          />
+        ) : null}
+
         {/* <DateTimePicker
           testID="dateTimePicker"
           value={date}
@@ -605,26 +634,33 @@ const History = ({ navigation }) => {
             setDate(new Date(value.nativeEvent.timestamp));
           }}
         /> */}
-        <Ionicons name="calendar-outline" />
+        <Ionicons
+          name="calendar-outline"
+          size={SIZES.BASE * 3.7}
+          color={COLORS.PRIMARY}
+          style={{ fontWeight: "bold" }}
+        />
       </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
-      <View style={historyStyle.wholeContainer}>
-        {renderProfileInformations()}
-        {renderCalendarRectangle()}
-        {renderThreeCirclesIncomesBudgetAndSpendings()}
-        {renderCategoryHeaderSection()}
-        {viewMode == "list" && (
-          <View>
-            {renderCategoryList()}
-            {renderHistoryCategory()}
-          </View>
-        )}
-        {viewMode == "chart" && renderChartRectangle()}
-      </View>
+      <ScrollView>
+        <View style={historyStyle.wholeContainer}>
+          {renderProfileInformations()}
+          {renderCalendarRectangle()}
+          {renderThreeCirclesIncomesBudgetAndSpendings()}
+          {renderCategoryHeaderSection()}
+          {viewMode == "list" && (
+            <View>
+              {renderCategoryList()}
+              {renderHistoryCategory()}
+            </View>
+          )}
+          {viewMode == "chart" && renderChartRectangle()}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

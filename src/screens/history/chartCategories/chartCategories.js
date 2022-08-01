@@ -12,10 +12,10 @@ const ChartCategories = ({ navigation, route }) => {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [modeSelected, setModeSelected] = useState("Spendings");
-  function setSelectCategoryByName(name) {
-    let category = categories.filter((a) => a.name == name);
-    setSelectedCategory(category[0]);
-  }
+  // function setSelectCategoryByName(name) {
+  //   let category = categories.filter((a) => a.name == name);
+  //   setSelectedCategory(category[0]);
+  // }
 
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status

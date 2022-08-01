@@ -47,22 +47,8 @@ export default EditProfile = ({ navigation }) => {
   const [city, setCity] = useState("");
   const [email, setEmail] = useState("");
 
-  const sheetRef = React.useRef(null);
-
   // the percentage of the screen that we want to take
   // const snapPoints = ["10%", "60%"];
-
-  const renderContent = () => (
-    <View
-      style={{
-        backgroundColor: "white",
-        padding: 16,
-        height: 450,
-      }}
-    >
-      <Text>Swipe down to close</Text>
-    </View>
-  );
 
   const renderInputs = () => {
     return (
@@ -85,9 +71,9 @@ export default EditProfile = ({ navigation }) => {
             style={editProfileStyle.imageProfile}
           />
           <TouchableOpacity
-            // onPress={handlePresentModalPress}
-            // onPress={onShowPopUp}
-            onPress={() => sheetRef.current.snapTo(0)}
+          // onPress={handlePresentModalPress}
+          // onPress={onShowPopUp}
+          // onPress={() => sheetRef.current.snapTo(0)}
           >
             <FontAwesome name="camera" size={22} />
           </TouchableOpacity>
@@ -173,12 +159,12 @@ export default EditProfile = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <BottomSheet
+        {/* <BottomSheet
           ref={sheetRef}
           snapPoints={[450, 300, 0]}
           borderRadius={10}
           renderContent={renderContent}
-        />
+        /> */}
       </SafeAreaView>
     );
   };
