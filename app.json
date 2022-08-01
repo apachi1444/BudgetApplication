@@ -9,12 +9,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {}
+      "adaptiveIcon": {},
+      "versionCode": 1,
+      "package": "com.yessinejaoua.budgetproject"
     },
     "web": {}
   }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, Modal } from "react-native";
 
-const BottomPopUp = () => {
+const BottomPopUp = ({ innerRef }) => {
   const [show, setShow] = useState(false);
 
   const open = () => {
@@ -11,13 +11,23 @@ const BottomPopUp = () => {
   const close = () => {
     setShow(false);
   };
+  console.log(innerRef);
   return (
     <Modal
       onRequestClose={close}
       visible={show}
-      animationType="fade"
+      animationType={"fade"}
       transparent={true}
-    />
+    >
+      <View
+        style={{
+          backgroundColor: "red",
+          height: "50%",
+          borderWidth: 3,
+          borderColor: "blue",
+        }}
+      ></View>
+    </Modal>
   );
 };
 

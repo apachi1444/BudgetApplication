@@ -1,6 +1,13 @@
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
-import React, { useState, useCallback, createRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  createRef,
+  useRef,
+  forwardRef,
+} from "react";
 import {
   Text,
   TextInput,
@@ -8,6 +15,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  Button,
 } from "react-native";
 
 import { windowHeight, windowWidth } from "../../utils/dimensions";
@@ -17,7 +25,13 @@ import { Avatar } from "react-native-paper";
 import BottomSheet from "reanimated-bottom-sheet";
 import Animated from "react-native-reanimated";
 
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
+
 import BottomPopUp from "../../components/bottomPopUp/bottomPopUp";
+import AnimatedBottomSheet from "../../components/animatedBottomSheet/animatedBottomSheet";
 
 const SIZES = {
   BASE: 6,
@@ -36,12 +50,7 @@ export default EditProfile = ({ navigation }) => {
   const sheetRef = React.useRef(null);
 
   // the percentage of the screen that we want to take
-  const snapPoints = ["10%", "60%"];
-
-  const [isOpen, setIsOpen] = useState(true);
-  const fall = new Animated.Value(1);
-
-  let popupRef = createRef();
+  // const snapPoints = ["10%", "60%"];
 
   const renderContent = () => (
     <View
@@ -54,19 +63,6 @@ export default EditProfile = ({ navigation }) => {
       <Text>Swipe down to close</Text>
     </View>
   );
-
-  const renderHeader = () => {
-    <View>
-      <View>
-        <Text>Haha</Text>
-      </View>
-    </View>;
-  };
-
-  const onShowPopUp = () => {
-    console.log(popupRef);
-    popupRef.open();
-  };
 
   const renderInputs = () => {
     return (
@@ -89,13 +85,15 @@ export default EditProfile = ({ navigation }) => {
             style={editProfileStyle.imageProfile}
           />
           <TouchableOpacity
-            onPress={onShowPopUp}
-            // onPress={() => sheetRef.current.snapTo(1)}
-            style={editProfileStyle.cameraIcon}
+            // onPress={handlePresentModalPress}
+            // onPress={onShowPopUp}
+            onPress={() => sheetRef.current.snapTo(0)}
           >
             <FontAwesome name="camera" size={22} />
           </TouchableOpacity>
-          <BottomPopUp ref={(target) => (popupRef = target)} />
+          {/* <BottomPopUp innerRef={console.log("jkhjk", popupRef.current)} /> */}
+          {/* <BottomPopUp innerRef={(target) => (popupRef = target)} /> */}
+          {/* <Button onPress={handleBottomPopUp} title="handleBottomPopUp" /> */}
         </View>
         <View>
           {/* this is for the username */}
@@ -175,12 +173,32 @@ export default EditProfile = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
+        <BottomSheet
+          ref={sheetRef}
+          snapPoints={[450, 300, 0]}
+          borderRadius={10}
+          renderContent={renderContent}
+        />
       </SafeAreaView>
     );
   };
 
   return <View style={editProfileStyle.container}>{renderInputs()}</View>;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 24,
+    justifyContent: "center",
+    backgroundColor: "red",
+  },
+  contentContainer: {
+    alignItems: "center",
+    backgroundColor: "red",
+    flex: 1,
+    height: 500,
+  },
+});
 
 const editProfileStyle = StyleSheet.create({
   imageContainer: {

@@ -244,6 +244,9 @@ const History = ({ navigation }) => {
   const heightAnimationValue = useRef(
     new Animated.Value(windowHeight * 0.17)
   ).current;
+  const heightAnimationHistoryValue = useRef(
+    new Animated.Value(windowHeight * 0.5)
+  ).current;
 
   const [categories, setCategories] = useState(categoriesData);
   const [viewMode, setViewMode] = useState("chart");
@@ -294,7 +297,7 @@ const History = ({ navigation }) => {
             renderItem={renderItem}
             keyExtractor={(item) => `${item.id}`}
             numColumns={3}
-            showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={true}
           />
         </Animated.View>
 
@@ -430,9 +433,7 @@ const History = ({ navigation }) => {
   const renderHistoryCategory = () => {
     let allHistory = selectedCategory ? selectedCategory.history : [];
     const renderHistoryItem = ({ item }) => {
-      console.log(item);
       const { type } = item;
-      console.log(type);
       const renderTitleAndPrice = () => {
         const renderImageAndTitle = () => {
           return (
@@ -527,12 +528,14 @@ const History = ({ navigation }) => {
       <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
         {allHistory.length > 0 && (
-          <View
+          <Animated.View
             style={{
+              height: heightAnimationHistoryValue,
               marginTop: SIZES.BASE * 2,
               borderWidth: 0.1,
               backgroundColor: COLORS.LIGHTGREY,
               padding: 20,
+              flex: 1,
             }}
           >
             <FlatList
@@ -541,7 +544,7 @@ const History = ({ navigation }) => {
               showsVerticalScrollIndicator={true}
               renderItem={renderHistoryItem}
             />
-          </View>
+          </Animated.View>
         )}
         {allHistory.length == 0 && (
           <View>
@@ -591,7 +594,7 @@ const History = ({ navigation }) => {
       >
         <Ionicons name="filter" />
         <Text>{date.toString()}</Text>
-        <DateTimePicker
+        {/* <DateTimePicker
           testID="dateTimePicker"
           value={date}
           mode={"date"}
@@ -601,7 +604,7 @@ const History = ({ navigation }) => {
             console.log(value);
             setDate(new Date(value.nativeEvent.timestamp));
           }}
-        />
+        /> */}
         <Ionicons name="calendar-outline" />
       </TouchableOpacity>
     );
