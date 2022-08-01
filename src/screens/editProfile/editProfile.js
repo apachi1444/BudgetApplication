@@ -1,23 +1,23 @@
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, createRef } from "react";
 import {
   Text,
   TextInput,
   View,
   StyleSheet,
   TouchableOpacity,
-  Button,
   SafeAreaView,
 } from "react-native";
 
 import { windowHeight, windowWidth } from "../../utils/dimensions";
 
 import COLORS from "../../consts/color";
-// import editProfileStyles from "./loginStyle";
 import { Avatar } from "react-native-paper";
 import BottomSheet from "reanimated-bottom-sheet";
 import Animated from "react-native-reanimated";
+
+import BottomPopUp from "../../components/bottomPopUp/bottomPopUp";
 
 const SIZES = {
   BASE: 6,
@@ -41,6 +41,8 @@ export default EditProfile = ({ navigation }) => {
   const [isOpen, setIsOpen] = useState(true);
   const fall = new Animated.Value(1);
 
+  let popupRef = createRef();
+
   const renderContent = () => (
     <View
       style={{
@@ -61,10 +63,15 @@ export default EditProfile = ({ navigation }) => {
     </View>;
   };
 
+  const onShowPopUp = () => {
+    console.log(popupRef);
+    popupRef.open();
+  };
+
   const renderInputs = () => {
     return (
       <SafeAreaView>
-        <BottomSheet
+        {/* <BottomSheet
           ref={sheetRef}
           snapPoints={snapPoints}
           borderRadius={10}
@@ -73,25 +80,23 @@ export default EditProfile = ({ navigation }) => {
           enabledBottomInitialAnimation={true}
           enabledManualSnapping={true}
           onCloseEnd={() => setIsOpen(false)}
-        />
-        <Animated.View
-          style={[
-            editProfileStyle.imageContainer,
-            { opacity: Animated.add(0.2, Animated.multiply(fall, 1)) },
-          ]}
-        >
+        /> */}
+
+        <View style={[editProfileStyle.imageContainer]}>
           <Avatar.Image
             source={require("../../assets/images/facebook.png")}
             size={130}
             style={editProfileStyle.imageProfile}
           />
           <TouchableOpacity
-            onPress={() => sheetRef.current.snapTo(1)}
+            onPress={onShowPopUp}
+            // onPress={() => sheetRef.current.snapTo(1)}
             style={editProfileStyle.cameraIcon}
           >
             <FontAwesome name="camera" size={22} />
           </TouchableOpacity>
-        </Animated.View>
+          <BottomPopUp ref={(target) => (popupRef = target)} />
+        </View>
         <View>
           {/* this is for the username */}
 
