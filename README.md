@@ -14,4 +14,4 @@ https://docs.google.com/spreadsheets/d/1IbXkPZyXB9pozgjWm7wmfyBzu3rPJM8I/edit?us
 
 **Here's the link of the apk**
 
-https://expo.dev/artifacts/3faaa7a6-07da-4d8e-9e63-c5015346aee7
+https://expo.dev/artifacts/eas/jZ82rCsBDSScTTdaqk9iwv.apk

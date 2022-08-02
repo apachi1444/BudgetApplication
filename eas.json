@@ -2,6 +2,7 @@
   "cli": {
     "version": ">= 0.56.0"
   },
+
   "build": {
     "preview": {
       "android": {
@@ -16,7 +17,11 @@
     "preview3": {
       "developmentClient": true
     },
-    "production": {}
+    "production": {
+      "android": {
+        "buildType": "apk"
+      }
+    }
   },
   "submit": {
     "production": {}
