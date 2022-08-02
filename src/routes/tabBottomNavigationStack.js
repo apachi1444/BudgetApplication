@@ -12,7 +12,6 @@ import Guide_50_30_20_Stack from "./guide_50_30_20_Stack";
 import CustomTabBar from "../components/customTabBar";
 import ProfileUser from "../screens/profile/profile";
 import Settings from "../screens/settings/settings";
-import HistoryIncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
 import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import HistoryStack from "./historyStack";
 const TabArr = [

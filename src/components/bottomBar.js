@@ -71,7 +71,7 @@ const TabButton = (props) => {
       <View style={styles.container}>
         <View style={styles.buttonAdd}>
           <View style={styles.circle} />
-          <Icon type={item.type} name={item.icon} color={COLORS.WHITE} />
+          <Icon type={item.type} name={item.icon} color={COLORS.BLACK} />
         </View>
         <Text style={styles.text}>{item.label}</Text>
       </View>
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.SECONDARY,
     borderRadius: 25,
   },
   icon: {

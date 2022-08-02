@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { VictoryPie } from "victory-native";
 import { Svg } from "react-native-svg";
 import { chartCategoriesStyle } from "./chartCategoriesStyle";
@@ -20,29 +26,75 @@ const ChartCategories = ({ navigation, route }) => {
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status
     let chartData = categories.map((item) => {
-      var total = item.history.reduce((a, b) => a + (b.total || 0), 0);
+      let totalIncomes = 0;
+      let totalExpenses = 0;
+      item.history.map((item) => {
+        item.type == "Income"
+          ? (totalIncomes += item.total)
+          : (totalExpenses += item.total);
+      });
+
+      // let totalSpendings = listSpendings.reduce(
+      //   (a, b) => a + (b.total || 0),
+      //   0
+      // );
 
       return {
         name: item.name,
-        y: total,
-        expenseCount: item.history.length,
+        expenseCount: totalExpenses,
+        incomeCount: totalIncomes,
         color: item.color,
         id: item.id,
       };
     });
 
     // filter out categories with no data/expenses
-    let filterChartData = chartData.filter((a) => a.y > 0);
+    let filterChartDataExpenses = chartData.filter((a) => {
+      return a.expenseCount < 0;
+    });
 
     // Calculate the total expenses
-    let totalExpense = filterChartData.reduce((a, b) => a + (b.y || 0), 0);
+    let totalExpense = filterChartDataExpenses.reduce(
+      (a, b) => a + (b.expenseCount || 0),
+      0
+    );
 
+    let categoriesExpenses = filterChartDataExpenses.reduce((a, b) => a + 1, 0);
+    // filter out categories with no data/expenses
+    let filterChartDataIncomes = chartData.filter((a) => {
+      return a.incomeCount > 0;
+    });
+
+    // Calculate the total expenses
+    let totalIncome = filterChartDataIncomes.reduce(
+      (a, b) => a + (b.incomeCount || 0),
+      0
+    );
+
+    let categoriesIncomes = filterChartDataIncomes.reduce((a, b) => a + 1, 0);
     // Calculate percentage and repopulate chart data
-    let finalChartData = filterChartData.map((item) => {
-      let percentage = ((item.y / totalExpense) * 100).toFixed(0);
+    let finalChartDataIncome = filterChartDataIncomes.map((item) => {
+      let percentageIncome = ((item.incomeCount / totalIncome) * 100).toFixed(
+        0
+      );
       return {
-        label: `${percentage}%`,
-        y: Number(item.y),
+        labelIncome: `${percentageIncome}%`,
+        y: Number(item.incomeCount),
+        incomeCount: item.incomeCount,
+        color: item.color,
+        name: item.name,
+        id: item.id,
+      };
+    });
+
+    let finalChartDataExpense = filterChartDataExpenses.map((item) => {
+      let percentageExpense = (
+        (item.expenseCount / totalExpense) *
+        100
+      ).toFixed(0);
+      return {
+        labelExpense: `${percentageExpense}%`,
+        y: Number(item.expenseCount),
         expenseCount: item.expenseCount,
         color: item.color,
         name: item.name,
@@ -50,29 +102,27 @@ const ChartCategories = ({ navigation, route }) => {
       };
     });
 
-    return finalChartData;
+    return {
+      finalChartDataIncome,
+      finalChartDataExpense,
+      categoriesExpenses,
+      categoriesIncomes,
+    };
   };
 
-  const renderChart = () => {
-    let chartData = processCategoryDataToDisplay();
-    let colorScales = chartData.map((item) => item.color);
-    let totalExpenseCount = chartData.reduce(
-      (a, b) => a + (b.expenseCount || 0),
-      0
-    );
-    console.log(chartData);
-    // let totalCategories = chartData.sum();
-    // console.log(totalCategories);
-    let totalCategories = 0;
-    totalCategories = chartData.reduce((a, b) => a + 1, totalCategories);
-    console.log(totalCategories);
+  const renderChartExpense = () => {
+    let { finalChartDataExpense, categoriesExpenses, finalChartDataIncome } =
+      processCategoryDataToDisplay();
 
-    // Android workaround by wrapping VictoryPie with SVG
+    let colorScales = finalChartDataExpense.map((item) => item.color);
+
     return (
       <View style={{ alignItems: "center", justifyContent: "center" }}>
         <VictoryPie
-          data={chartData}
-          labels={(datum) => `${datum.y}`}
+          data={finalChartDataExpense}
+          labels={(datum) => {
+            return datum.datum.labelExpense;
+          }}
           radius={SIZESS.width * 0.4}
           innerRadius={70}
           labelRadius={({ innerRadius }) =>
@@ -91,6 +141,7 @@ const ChartCategories = ({ navigation, route }) => {
           }}
           colorScale={colorScales}
         />
+
         <View
           style={{
             position: "absolute",
@@ -102,7 +153,62 @@ const ChartCategories = ({ navigation, route }) => {
           <Text
             style={{ textAlign: "center", fontWeight: "bold", fontSize: 25 }}
           >
-            {totalCategories}
+            {categoriesExpenses}
+          </Text>
+          <Text
+            style={{ textAlign: "center", fontWeight: "400", fontSize: 20 }}
+          >
+            Categories
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderChartIncome = () => {
+    let { finalChartDataIncome, categoriesIncomes } =
+      processCategoryDataToDisplay();
+
+    let colorScales = finalChartDataIncome.map((item) => item.color);
+
+    return (
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <VictoryPie
+          data={finalChartDataIncome}
+          labels={(datum) => {
+            return datum.datum.labelIncome;
+          }}
+          radius={SIZESS.width * 0.4}
+          innerRadius={70}
+          labelRadius={({ innerRadius }) =>
+            (SIZESS.width * 0.4 + innerRadius) / 2
+          }
+          style={{
+            labels: {
+              fill: "black",
+              ...FONTS.body3,
+              fontWeight: "bold",
+              fontSize: SIZESS.body1 / 1.6,
+            },
+            parent: {
+              ...chartCategoriesStyle.shadow,
+            },
+          }}
+          colorScale={colorScales}
+        />
+
+        <View
+          style={{
+            position: "absolute",
+            top: "42%",
+            left: "39%",
+            alignSelf: "center",
+          }}
+        >
+          <Text
+            style={{ textAlign: "center", fontWeight: "bold", fontSize: 25 }}
+          >
+            {categoriesIncomes}
           </Text>
           <Text
             style={{ textAlign: "center", fontWeight: "400", fontSize: 20 }}
@@ -136,7 +242,6 @@ const ChartCategories = ({ navigation, route }) => {
             />
           </View>
         )}
-        {console.log(visualisationMode)}
         {visualisationMode == "HISTO" && (
           <View style={chartCategoriesStyle.circleInsideContainerButtonSwitch}>
             <Ionicons
@@ -153,7 +258,8 @@ const ChartCategories = ({ navigation, route }) => {
 
   const renderNavigationToTheDetailsCategoryChoosen = () => {};
   const renderExpenseSummary = () => {
-    let data = processCategoryDataToDisplay();
+    let { finalChartDataExpense, categoriesExpenses, categoriesIncomes } =
+      processCategoryDataToDisplay();
 
     const renderItem = ({ item }) => (
       <TouchableOpacity
@@ -201,7 +307,7 @@ const ChartCategories = ({ navigation, route }) => {
               fontSize: SIZESS.base * 1.7,
             }}
           >
-            {item.y} DH - {item.label}
+            {item.expenseCount} DH - {item.labelExpense}
           </Text>
         </View>
       </TouchableOpacity>
@@ -211,7 +317,7 @@ const ChartCategories = ({ navigation, route }) => {
       <View style={{ padding: SIZESS.padding / 2 }}>
         <View style={{ flexGrow: 1 }}>
           <FlatList
-            data={data}
+            data={finalChartDataExpense}
             renderItem={(item) => renderItem(item)}
             keyExtractor={(item) => `${item.id}`}
             showsVerticalScrollIndicator={true}
@@ -220,56 +326,134 @@ const ChartCategories = ({ navigation, route }) => {
       </View>
     );
   };
-  return (
-    <View style={chartCategoriesStyle.container}>
-      {/* // this is for the spending and incomes titles 000 */}
+  const renderIncomeSummary = () => {
+    let { finalChartDataIncome } = processCategoryDataToDisplay();
 
-      <View style={chartCategoriesStyle.containerIncomesAndSpendingsTitle}>
-        <TouchableOpacity
-          style={[
-            chartCategoriesStyle.containerTitle,
-            {
-              backgroundColor:
-                modeSelected == "Spendings" ? COLORS.PRIMARY : "white",
-            },
-          ]}
-          onPress={() => {
-            setModeSelected("Spendings");
-          }}
-        >
-          <Text style={chartCategoriesStyle.title}>Spendings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            chartCategoriesStyle.containerTitle,
-            {
-              backgroundColor:
-                modeSelected == "Incomes" ? COLORS.PRIMARY : "white",
-            },
-          ]}
-          onPress={() => {
-            setModeSelected("Incomes");
-          }}
-        >
-          <Text style={chartCategoriesStyle.title}>Incomes</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={chartCategoriesStyle.chartImageContainer}>
-        {renderChart()}
-      </View>
-
-      {/* {renderSwitchButton()} */}
-
-      <View>{renderExpenseSummary()}</View>
-
-      {/* <Button
-        title="Go To Food Category"
-        onPress={() => {
-          navigation.navigate("food-category");
+    const renderItem = ({ item }) => (
+      <TouchableOpacity
+        style={{
+          flexDirection: "row",
+          height: 40,
+          paddingHorizontal: SIZESS.radius,
+          borderRadius: 10,
+          backgroundColor: COLORS.BOTTOMBAR,
+          marginBottom: SIZESS.base * 2,
         }}
-      ></Button> */}
-    </View>
+        onPress={() => {
+          renderNavigationToTheDetailsCategoryChoosen();
+        }}
+      >
+        {/* Name/Category */}
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+          <View
+            style={{
+              width: 20,
+              height: 20,
+              backgroundColor: item.color,
+              borderRadius: 5,
+            }}
+          />
+
+          <Text
+            style={{
+              marginLeft: SIZESS.base,
+              color: COLORS.PRIMARY,
+              fontWeight: "bold",
+              fontSize: SIZESS.base * 2,
+            }}
+          >
+            {item.name}
+          </Text>
+        </View>
+
+        {/* Expenses */}
+        <View style={{ justifyContent: "center" }}>
+          <Text
+            style={{
+              color: COLORS.PRIMARY,
+              fontWeight: "bold",
+              fontSize: SIZESS.base * 1.7,
+            }}
+          >
+            +{item.incomeCount} DH - {item.labelIncome}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+
+    return (
+      <View style={{ padding: SIZESS.padding / 2 }}>
+        <View style={{ flexGrow: 1 }}>
+          <FlatList
+            data={finalChartDataIncome}
+            renderItem={(item) => renderItem(item)}
+            keyExtractor={(item) => `${item.id}`}
+            showsVerticalScrollIndicator={true}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <ScrollView>
+      <View style={chartCategoriesStyle.container}>
+        {/* // this is for the spending and incomes titles 000 */}
+
+        <View style={chartCategoriesStyle.containerIncomesAndSpendingsTitle}>
+          <TouchableOpacity
+            style={[
+              chartCategoriesStyle.containerTitle,
+              {
+                backgroundColor:
+                  modeSelected == "Spendings" ? COLORS.PRIMARY : "white",
+              },
+            ]}
+            onPress={() => {
+              setModeSelected("Spendings");
+            }}
+          >
+            <Text style={chartCategoriesStyle.title}>Spendings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              chartCategoriesStyle.containerTitle,
+              {
+                backgroundColor:
+                  modeSelected == "Incomes" ? COLORS.PRIMARY : "white",
+              },
+            ]}
+            onPress={() => {
+              setModeSelected("Incomes");
+            }}
+          >
+            <Text style={chartCategoriesStyle.title}>Incomes</Text>
+          </TouchableOpacity>
+        </View>
+
+        {modeSelected == "Spendings" && (
+          <View>
+            <View style={chartCategoriesStyle.chartImageContainer}>
+              {renderChartExpense()}
+            </View>
+
+            {/* {renderSwitchButton()} */}
+
+            <View>{renderExpenseSummary()}</View>
+          </View>
+        )}
+
+        {modeSelected == "Incomes" && (
+          <View>
+            <View style={chartCategoriesStyle.chartImageContainer}>
+              {renderChartIncome()}
+            </View>
+
+            <View>{renderIncomeSummary()}</View>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

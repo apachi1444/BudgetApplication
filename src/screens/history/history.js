@@ -21,6 +21,7 @@ import { historyStyle } from "./historyStyle";
 import { windowHeight, windowWidth } from "../../utils/dimensions";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { categoriesData } from "../../consts/categoriesData";
 
 const renderProfileInformations = () => {
   return (
@@ -90,211 +91,6 @@ const renderThreeCirclesIncomesBudgetAndSpendings = () => {
 };
 
 const History = ({ navigation }) => {
-  let categoriesData = [
-    {
-      id: 1,
-      name: "Education",
-      icon: "fast-food",
-      color: COLORS.GREEN,
-      history: [
-        {
-          id: 1,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 2,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-        {
-          id: 3,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-        {
-          id: 4,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-        {
-          id: 5,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 6,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 7,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 8,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Nutrition",
-      icon: "fast-food",
-      color: COLORS.BLACK,
-      history: [],
-    },
-    {
-      id: 3,
-      name: "Child",
-      icon: "fast-food",
-      color: COLORS.DELETEBUTTONRED,
-      history: [
-        {
-          id: 2,
-          title: "Pampers",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-        {
-          id: 2,
-          title: "Pampers",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Beauty & Care",
-      icon: "fast-food",
-      color: COLORS.SECONDARY,
-      history: [
-        {
-          id: 3,
-          title: "Face Mask",
-          date: "20 July 2022",
-          total: 50.0,
-          type: "Income",
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "Beauty & Care",
-      icon: "fast-food",
-      color: COLORS.THIRD,
-      history: [
-        {
-          id: 4,
-          title: "Sunscreen cream",
-          date: "20 July 2022",
-          total: -50.0,
-          type: "Spending",
-        },
-      ],
-    },
-    {
-      id: 6,
-      name: "Beauty & Care",
-      icon: "fast-food",
-      color: COLORS.FACEBOOK,
-      history: [
-        {
-          id: 5,
-          title: "Face Mask",
-          date: "20 July 2022",
-          total: -50.0,
-          type: "Spending",
-        },
-      ],
-    },
-    {
-      id: 7,
-      name: "Education",
-      icon: "fast-food",
-      color: COLORS.GREEN,
-      history: [
-        {
-          id: 1,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 2,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-        {
-          id: 3,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-        {
-          id: 4,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-        {
-          id: 5,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 6,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 7,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: 100.0,
-          type: "Income",
-        },
-        {
-          id: 8,
-          title: "Tuition Fee",
-          date: "20 July 2022",
-          total: -100.0,
-          type: "Spending",
-        },
-      ],
-    },
-  ];
-
   const heightAnimationValue = useRef(
     new Animated.Value(windowHeight * 0.17)
   ).current;
@@ -308,7 +104,6 @@ const History = ({ navigation }) => {
     const renderItem = ({ item }) => (
       <TouchableOpacity
         onPress={() => {
-          console.log("sdlkqfjklqsdfj", item);
           setSelectedCategory(item);
           setSelectedTitle(item.name);
         }}
@@ -497,7 +292,91 @@ const History = ({ navigation }) => {
     let allHistory = selectedCategory ? selectedCategory.history : [];
     const renderHistoryItem = (item) => {
       const { type } = item;
-      const renderTitleAndPrice = () => {
+      // const renderTitleAndPrice = () => {
+      //   const renderImageAndTitle = () => {
+      //     return (
+      //       <View style={historyStyle.containerCheckboxAndImageAndTitle}>
+      //         <Avatar.Image
+      //           source={require("../../assets/images/elon_musk.jpg")}
+      //           size={SIZESS.body1 * 1.2}
+      //           style={{
+      //             marginRight: 4,
+      //           }}
+      //         />
+      //         <Text
+      //           style={{
+      //             color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+      //             fontWeight: "bold",
+      //             fontSize: SIZES.BASE * 2.5,
+      //           }}
+      //         >
+      //           {item.title}
+      //         </Text>
+      //       </View>
+      //     );
+      //   };
+      //   const renderPrice = () => {
+      //     return (
+      //       <View>
+      //         <Text
+      //           style={{
+      //             color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+      //             fontWeight: "bold",
+      //             fontSize: SIZES.BASE * 3,
+      //           }}
+      //         >
+      //           {item.total} DH
+      //         </Text>
+      //       </View>
+      //     );
+      //   };
+      //   const renderDate = () => {
+      //     const renderDate = () => {
+      //       return (
+      //         <View
+      //           style={{
+      //             flexDirection: "row",
+      //             alignItems: "center",
+      //           }}
+      //         >
+      //           <Text
+      //             style={{
+      //               color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+      //               fontWeight: "bold",
+      //               fontSize: SIZES.BASE * 2.2,
+      //             }}
+      //           >
+      //             {item.date}
+      //           </Text>
+      //           <Ionicons
+      //             name="calendar-outline"
+      //             style={{
+      //               color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+      //               fontWeight: "bold",
+      //               fontSize: SIZES.BASE * 2.5,
+      //               marginLeft: SIZES.BASE,
+      //             }}
+      //           />
+      //         </View>
+      //       );
+      //     };
+
+      //     return (
+      //       <View style={historyStyle.containerCalendarAndTimeRemaining}>
+      //         <View>{renderDate()}</View>
+      //       </View>
+      //     );
+      //   };
+      //   return (
+      //     <View style={historyStyle.containerEachLine}>
+      //       {renderImageAndTitle()}
+      //       {renderPrice()}
+      //       {renderDate()}
+      //     </View>
+      //   );
+      // };
+
+      const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
           return (
             <View style={historyStyle.containerCheckboxAndImageAndTitle}>
@@ -510,7 +389,7 @@ const History = ({ navigation }) => {
               />
               <Text
                 style={{
-                  color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                  // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                   fontWeight: "bold",
                   fontSize: SIZES.BASE * 2.5,
                 }}
@@ -546,7 +425,7 @@ const History = ({ navigation }) => {
               >
                 <Text
                   style={{
-                    color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                    // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                     fontWeight: "bold",
                     fontSize: SIZES.BASE * 2.2,
                   }}
@@ -556,7 +435,7 @@ const History = ({ navigation }) => {
                 <Ionicons
                   name="calendar-outline"
                   style={{
-                    color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                    // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                     fontWeight: "bold",
                     fontSize: SIZES.BASE * 2.5,
                     marginLeft: SIZES.BASE,
@@ -572,18 +451,51 @@ const History = ({ navigation }) => {
             </View>
           );
         };
+        const renderEditAndDeleteButton = () => {
+          return (
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                bottom: -5,
+                right: 0,
+              }}
+            >
+              <View>
+                <Ionicons name="trash" />
+              </View>
+              <View>
+                <Ionicons name="trash" />
+              </View>
+            </View>
+          );
+        };
         return (
-          <View style={historyStyle.containerEachLine}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              margin: SIZES.BASE * 1,
+              backgroundColor: COLORS.BOTTOMBAR,
+              padding: SIZES.BASE * 1,
+            }}
+          >
+            <View>
+              <Ionicons
+                name="arrow-up-circle"
+                color={type == "Spending" ? COLORS.RED : COLORS.GREEN}
+              />
+            </View>
             {renderImageAndTitle()}
             {renderPrice()}
             {renderDate()}
+            {renderEditAndDeleteButton()}
           </View>
         );
       };
-
       return (
         <View>
-          <View>{renderTitleAndPrice()}</View>
+          <View>{renderArrowAndImageAndTitleAndPriceAndDate()}</View>
         </View>
       );
     };
@@ -595,7 +507,6 @@ const History = ({ navigation }) => {
             style={{
               marginTop: SIZES.BASE * 2,
               borderWidth: 0.1,
-              backgroundColor: COLORS.LIGHTGREY,
               padding: 20,
               flex: 1,
             }}
@@ -619,6 +530,7 @@ const History = ({ navigation }) => {
                 marginTop: SIZES.BASE * 2,
                 fontWeight: "bold",
                 fontSize: SIZES.BASE * 3,
+                marginBottom: SIZES.BASE * 6,
               }}
             >
               No Results for the moment
