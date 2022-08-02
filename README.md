@@ -4,7 +4,7 @@
 
 It's a budget application to organize people's money
 
-**Here's the link of the figma **
+**Here's the link of the figma**
 
 https://www.figma.com/file/Q7YlYBDL3bUwvz3e8EtHmE/Figma-Basics?node-id=0%3A286 ( you can get acces directly from your email )
 

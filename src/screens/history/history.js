@@ -300,7 +300,7 @@ const History = ({ navigation }) => {
   ).current;
 
   const [categories, setCategories] = useState(categoriesData);
-  const [viewMode, setViewMode] = useState("chart");
+  const [viewMode, setViewMode] = useState("list");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showMoreToggle, setShowMoreToggle] = useState(false);
 
@@ -613,7 +613,14 @@ const History = ({ navigation }) => {
         )}
         {allHistory.length == 0 && (
           <View>
-            <Text style={{ alignSelf: "center" }}>
+            <Text
+              style={{
+                alignSelf: "center",
+                marginTop: SIZES.BASE * 2,
+                fontWeight: "bold",
+                fontSize: SIZES.BASE * 3,
+              }}
+            >
               No Results for the moment
             </Text>
           </View>
