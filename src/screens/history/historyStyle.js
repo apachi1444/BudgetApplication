@@ -134,4 +134,14 @@ export const historyStyle = StyleSheet.create({
   containerCalendarAndTimeRemaining: {
     alignItems: "flex-end",
   },
+  containerChartFigure: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 12,
+    alignSelf: "center",
+    height: windowHeight * 0.25,
+    width: windowWidth * 0.8,
+    backgroundColor: COLORS.LIGHTGREY,
+  },
 });

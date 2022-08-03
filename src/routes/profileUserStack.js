@@ -6,6 +6,7 @@ import ProfileUser from "../screens/profile/profile";
 import HistoryIncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
 // import { TabBottomNavigation } from "./tabBottomNavigationStack";
 import BottomBar from "./../components/bottomBar";
+import { DrawerNavigator } from "./drawerNavigationStack";
 const ProfileUserStack = createNativeStackNavigator();
 
 export default function () {
@@ -35,7 +36,7 @@ export default function () {
           headerStyle: { backgroundColor: "#eee" },
         }}
       />
-      <ProfileUserStack.Screen
+      {/* <ProfileUserStack.Screen
         name="HistoryBottomBar"
         // here we must do the stack because we don't want to show only the page of the history but also the navigation bottomBar
 
@@ -44,7 +45,7 @@ export default function () {
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
-      />
+      /> */}
       <ProfileUserStack.Screen
         name="PlannedPayments"
         component={PlannedPayments}

@@ -11,6 +11,7 @@ import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import Guide_50_30_20_Summary from "../screens/50-30-20/summary/guide_50_30_20_Summary";
 import { SIZES } from "../consts/theme";
 import HistoryStack from "../routes/historyStack";
+import Guide_Stack from "../routes/guide_50_30_20_Stack";
 
 const TabArr = [
   {
@@ -39,7 +40,7 @@ const TabArr = [
     label: "Guide",
     type: Icons.MaterialCommunityIcons,
     icon: "google-assistant",
-    component: Guide_50_30_20_Summary,
+    component: Guide_Stack,
   },
   {
     route: "Settings",

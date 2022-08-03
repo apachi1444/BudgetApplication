@@ -5,6 +5,7 @@ import Login from "./../screens/login/login";
 import SignUp from "./../screens/signup/signup";
 import ProfileUserStack from "./profileUserStack";
 import { TabBottomNavigation } from "./tabBottomNavigationStack";
+import { DrawerNavigator } from "./drawerNavigationStack";
 const AuthStack = createNativeStackNavigator();
 
 export default function () {
@@ -27,7 +28,7 @@ export default function () {
       />
       <AuthStack.Screen
         name="UserProfile"
-        component={ProfileUserStack}
+        component={DrawerNavigator}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },

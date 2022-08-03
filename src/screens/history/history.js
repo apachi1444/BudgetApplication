@@ -114,7 +114,7 @@ const History = ({ navigation }) => {
           paddingVertical: SIZES.BASE * 2,
           paddingHorizontal: SIZES.PADDING * 1,
           borderRadius: 5,
-          backgroundColor: COLORS.WHITE,
+          backgroundColor: title == item.name ? COLORS.SECONDARY : COLORS.WHITE,
           borderWidth: 1,
           borderColor: COLORS.PRIMARY,
           ...historyStyle.shadow,
@@ -294,92 +294,9 @@ const History = ({ navigation }) => {
 
   const renderHistoryCategory = () => {
     let allHistory = selectedCategory ? selectedCategory.history : [];
-    const [historyItems, setHistoryItems] = useState([allHistory]);
+    // const [historyItems, setHistoryItems] = useState([allHistory]);
     const renderHistoryItem = (item) => {
       const { type } = item;
-      // const renderTitleAndPrice = () => {
-      //   const renderImageAndTitle = () => {
-      //     return (
-      //       <View style={historyStyle.containerCheckboxAndImageAndTitle}>
-      //         <Avatar.Image
-      //           source={require("../../assets/images/elon_musk.jpg")}
-      //           size={SIZESS.body1 * 1.2}
-      //           style={{
-      //             marginRight: 4,
-      //           }}
-      //         />
-      //         <Text
-      //           style={{
-      //             color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-      //             fontWeight: "bold",
-      //             fontSize: SIZES.BASE * 2.5,
-      //           }}
-      //         >
-      //           {item.title}
-      //         </Text>
-      //       </View>
-      //     );
-      //   };
-      //   const renderPrice = () => {
-      //     return (
-      //       <View>
-      //         <Text
-      //           style={{
-      //             color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-      //             fontWeight: "bold",
-      //             fontSize: SIZES.BASE * 3,
-      //           }}
-      //         >
-      //           {item.total} DH
-      //         </Text>
-      //       </View>
-      //     );
-      //   };
-      //   const renderDate = () => {
-      //     const renderDate = () => {
-      //       return (
-      //         <View
-      //           style={{
-      //             flexDirection: "row",
-      //             alignItems: "center",
-      //           }}
-      //         >
-      //           <Text
-      //             style={{
-      //               color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-      //               fontWeight: "bold",
-      //               fontSize: SIZES.BASE * 2.2,
-      //             }}
-      //           >
-      //             {item.date}
-      //           </Text>
-      //           <Ionicons
-      //             name="calendar-outline"
-      //             style={{
-      //               color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-      //               fontWeight: "bold",
-      //               fontSize: SIZES.BASE * 2.5,
-      //               marginLeft: SIZES.BASE,
-      //             }}
-      //           />
-      //         </View>
-      //       );
-      //     };
-
-      //     return (
-      //       <View style={historyStyle.containerCalendarAndTimeRemaining}>
-      //         <View>{renderDate()}</View>
-      //       </View>
-      //     );
-      //   };
-      //   return (
-      //     <View style={historyStyle.containerEachLine}>
-      //       {renderImageAndTitle()}
-      //       {renderPrice()}
-      //       {renderDate()}
-      //     </View>
-      //   );
-      // };
 
       const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
@@ -557,7 +474,6 @@ const History = ({ navigation }) => {
               showsVerticalScrollIndicator={true}
               renderItem={renderHistoryItem}
             /> */}
-            {console.log(historyItems)}
             {allHistory.map((item, index) => {
               return renderHistoryItem(item);
             })}
@@ -588,17 +504,7 @@ const History = ({ navigation }) => {
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate("charts", categoriesData)}
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 12,
-          alignSelf: "center",
-          height: windowHeight * 0.25,
-          width: windowWidth * 0.8,
-          backgroundColor: COLORS.LIGHTGREY,
-          ...historyStyle.shadow,
-        }}
+        style={historyStyle.containerChartFigure}
       >
         <Ionicons name="add-circle-sharp" style={historyStyle.categoryIcon} />
         <Text style={historyStyle.moreDetailsText}>

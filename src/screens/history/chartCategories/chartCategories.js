@@ -29,9 +29,9 @@ const ChartCategories = ({ navigation, route }) => {
       let totalIncomes = 0;
       let totalExpenses = 0;
       item.history.map((item) => {
-        item.type == "Income"
-          ? (totalIncomes += item.total)
-          : (totalExpenses += item.total);
+        item.type == "Spending"
+          ? (totalExpenses += item.total)
+          : (totalIncomes += item.total);
       });
 
       // let totalSpendings = listSpendings.reduce(
@@ -50,7 +50,7 @@ const ChartCategories = ({ navigation, route }) => {
 
     // filter out categories with no data/expenses
     let filterChartDataExpenses = chartData.filter((a) => {
-      return a.expenseCount < 0;
+      return a.expenseCount > 0;
     });
 
     // Calculate the total expenses
@@ -115,7 +115,7 @@ const ChartCategories = ({ navigation, route }) => {
       processCategoryDataToDisplay();
 
     let colorScales = finalChartDataExpense.map((item) => item.color);
-
+    console.log(finalChartDataExpense);
     return (
       <View style={{ alignItems: "center", justifyContent: "center" }}>
         <VictoryPie
@@ -307,7 +307,7 @@ const ChartCategories = ({ navigation, route }) => {
               fontSize: SIZESS.base * 1.7,
             }}
           >
-            {item.expenseCount} DH - {item.labelExpense}
+            - {item.expenseCount} DH - {item.labelExpense}
           </Text>
         </View>
       </TouchableOpacity>
