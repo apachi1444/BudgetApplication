@@ -202,4 +202,79 @@ export const categoriesData = [
       },
     ],
   },
+  {
+    id: 8,
+    name: "Beauty & Care",
+    icon: "fast-food",
+    color: COLORS.THIRD,
+    history: [
+      {
+        id: 4,
+        title: "Sunscreen cream",
+        date: "20 July 2022",
+        total: -50.0,
+        type: "Spending",
+      },
+    ],
+  },
+  {
+    id: 9,
+    name: "Beauty & Care",
+    icon: "fast-food",
+    color: COLORS.THIRD,
+    history: [
+      {
+        id: 4,
+        title: "Sunscreen cream",
+        date: "20 July 2022",
+        total: -50.0,
+        type: "Spending",
+      },
+    ],
+  },
+  {
+    id: 10,
+    name: "Beauty & Care",
+    icon: "fast-food",
+    color: COLORS.THIRD,
+    history: [
+      {
+        id: 4,
+        title: "Sunscreen cream",
+        date: "20 July 2022",
+        total: -50.0,
+        type: "Spending",
+      },
+    ],
+  },
+  {
+    id: 11,
+    name: "Beauty & Care",
+    icon: "fast-food",
+    color: COLORS.THIRD,
+    history: [
+      {
+        id: 4,
+        title: "Sunscreen cream",
+        date: "20 July 2022",
+        total: -50.0,
+        type: "Spending",
+      },
+    ],
+  },
+  {
+    id: 12,
+    name: "Beauty & Care",
+    icon: "fast-food",
+    color: COLORS.THIRD,
+    history: [
+      {
+        id: 4,
+        title: "Sunscreen cream",
+        date: "20 July 2022",
+        total: -50.0,
+        type: "Spending",
+      },
+    ],
+  },
 ];

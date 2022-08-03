@@ -90,12 +90,17 @@ export const historyStyle = StyleSheet.create({
   shadow: {
     shadowColor: "#aaa",
     shadowOffset: {
-      width: 10,
+      width: 50,
       height: 2,
     },
     shadowOpacity: 0.8,
     shadowRadius: 20,
     elevation: 5,
+  },
+  shadowProp: {
+    shadowColor: "#0F0",
+    shadowOffset: { width: -50, height: 20 },
+    shadowRadius: 20,
   },
   textButtonCategory: {
     marginLeft: SIZES.BASE,

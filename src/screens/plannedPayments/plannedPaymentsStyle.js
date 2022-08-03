@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { windowHeight, windowWidth } from "../../utils/dimensions";
 import COLORS from "./../../consts/color";
-import { SIZESS } from "./../../consts/theme";
+import { SIZES, SIZESS } from "./../../consts/theme";
 export const plannedPaymentsStyle = StyleSheet.create({
   container: {
     flex: 1,
@@ -17,7 +17,6 @@ export const plannedPaymentsStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: COLORS.GREY,
     height: windowHeight * 0.08,
   },
   title: {
@@ -27,7 +26,6 @@ export const plannedPaymentsStyle = StyleSheet.create({
   },
 
   containerDetails: {
-    backgroundColor: COLORS.LIGHTGREY,
     marginVertical: SIZESS.base * 1.5,
     borderRadius: SIZESS.body1 / 1.5,
     paddingHorizontal: SIZESS.base,
@@ -90,13 +88,41 @@ export const plannedPaymentsStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: SIZESS.base / 2,
+    backgroundColor: COLORS.LIGHTGREY,
+    borderRadius: SIZESS.base * 1.5,
+    padding: SIZESS.base * 1.7,
+    paddingHorizontal: SIZESS.base,
+    marginHorizontal: 0,
+    marginVertical: SIZES.BASE * 2.5,
+  },
+
+  button: {
+    backgroundColor: COLORS.PRIMARY,
+    borderRadius: SIZES.BASE * 4,
+    padding: SIZES.BASE * 0.7,
+    marginHorizontal: windowHeight * 0.005,
+  },
+
+  containerDeleteAndEditButtons: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: "-41%",
+    alignSelf: "center",
+    right: "4%",
   },
 
   timeRemaining: {
-    fontSize: 10,
+    fontSize: 13,
     fontWeight: "bold",
-    color: "red",
+    color: "white",
+  },
+
+  containerRemainingTime: {
+    backgroundColor: COLORS.RED,
+    padding: SIZES.BASE * 0.6,
+    paddingHorizontal: SIZES.BASE * 1.3,
+    borderRadius: SIZES.BASE * 1,
+    marginVertical: SIZES.BASE * 0.6,
   },
 
   containerCalendarAndTimeRemaining: {

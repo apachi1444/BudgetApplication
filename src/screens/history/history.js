@@ -139,6 +139,26 @@ const History = ({ navigation }) => {
       </TouchableOpacity>
     );
 
+    const onPressMoreAndLessButton = () => {
+      let aa = Math.ceil((categoriesData.length - 6) / 3);
+      console.log(aa);
+      if (showMoreToggle) {
+        // when we click on the less button
+        Animated.timing(heightAnimationValue, {
+          toValue: windowHeight * 0.165,
+          duration: 500,
+          useNativeDriver: false,
+        }).start();
+      } else {
+        Animated.timing(heightAnimationValue, {
+          toValue: windowHeight * (0.24 + 0.053 * aa),
+          duration: 500,
+          useNativeDriver: false,
+        }).start();
+      }
+
+      setShowMoreToggle(!showMoreToggle);
+    };
     return (
       <View>
         <Animated.View style={{ height: heightAnimationValue }}>
@@ -153,23 +173,7 @@ const History = ({ navigation }) => {
 
         <TouchableOpacity
           style={historyStyle.moreLessButton}
-          onPress={() => {
-            if (showMoreToggle) {
-              Animated.timing(heightAnimationValue, {
-                toValue: windowHeight * 0.165,
-                duration: 500,
-                useNativeDriver: false,
-              }).start();
-            } else {
-              Animated.timing(heightAnimationValue, {
-                toValue: windowHeight * 0.24,
-                duration: 500,
-                useNativeDriver: false,
-              }).start();
-            }
-
-            setShowMoreToggle(!showMoreToggle);
-          }}
+          onPress={onPressMoreAndLessButton}
         >
           <Text>{showMoreToggle ? "LESS" : "MORE"}</Text>
           <Ionicons
@@ -290,6 +294,7 @@ const History = ({ navigation }) => {
 
   const renderHistoryCategory = () => {
     let allHistory = selectedCategory ? selectedCategory.history : [];
+    const [historyItems, setHistoryItems] = useState([allHistory]);
     const renderHistoryItem = (item) => {
       const { type } = item;
       // const renderTitleAndPrice = () => {
@@ -380,18 +385,19 @@ const History = ({ navigation }) => {
         const renderImageAndTitle = () => {
           return (
             <View style={historyStyle.containerCheckboxAndImageAndTitle}>
-              <Avatar.Image
+              {/* <Avatar.Image
                 source={require("../../assets/images/elon_musk.jpg")}
-                size={SIZESS.body1 * 1.2}
+                size={SIZESS.body1 * 2}
                 style={{
                   marginRight: 4,
                 }}
-              />
+              /> */}
               <Text
                 style={{
                   // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                   fontWeight: "bold",
                   fontSize: SIZES.BASE * 2.5,
+                  marginRight: "8%",
                 }}
               >
                 {item.title}
@@ -421,13 +427,15 @@ const History = ({ navigation }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
+                  marginLeft: "3.5%",
                 }}
               >
                 <Text
                   style={{
                     // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                     fontWeight: "bold",
-                    fontSize: SIZES.BASE * 2.2,
+                    fontSize: SIZES.BASE * 2.4,
+                    fontWeight: "bold",
                   }}
                 >
                   {item.date}
@@ -452,21 +460,48 @@ const History = ({ navigation }) => {
           );
         };
         const renderEditAndDeleteButton = () => {
+          const deleteItem = () => {
+            const id = item.id;
+            console.log(item.id);
+            console.log(selectedCategory);
+            selectedCategory.history.filter((item) => {
+              console.log(item);
+              item.id === id;
+            });
+          };
+          const updateItem = () => {};
+          const renderIcon = (name) => {
+            return (
+              <TouchableOpacity
+                style={{
+                  backgroundColor:
+                    type == "Spending" ? COLORS.RED : COLORS.GREEN,
+                  borderRadius: SIZES.BASE * 4,
+                  padding: SIZES.BASE * 1.5,
+                  marginHorizontal: windowHeight * 0.005,
+                }}
+                onPress={name == "trash" ? deleteItem : updateItem}
+              >
+                <Ionicons
+                  name={name}
+                  size={SIZES.BASE * 3}
+                  color={COLORS.WHITE}
+                />
+              </TouchableOpacity>
+            );
+          };
           return (
             <View
               style={{
                 flexDirection: "row",
                 position: "absolute",
-                bottom: -5,
-                right: 0,
+                bottom: "-41%",
+                alignSelf: "center",
+                right: "4%",
               }}
             >
-              <View>
-                <Ionicons name="trash" />
-              </View>
-              <View>
-                <Ionicons name="trash" />
-              </View>
+              {renderIcon("trash")}
+              {renderIcon("pencil-outline")}
             </View>
           );
         };
@@ -475,15 +510,21 @@ const History = ({ navigation }) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              margin: SIZES.BASE * 1,
+              marginVertical: SIZES.BASE * 2,
+              marginHorizontal: 0,
               backgroundColor: COLORS.BOTTOMBAR,
-              padding: SIZES.BASE * 1,
+              padding: SIZES.BASE * 2.5,
+              borderRadius: SIZES.BASE * 3.5,
+              ...historyStyle.shadowProp,
             }}
           >
             <View>
               <Ionicons
-                name="arrow-up-circle"
+                name={
+                  type == "Income" ? "arrow-up-circle" : "arrow-down-circle"
+                }
                 color={type == "Spending" ? COLORS.RED : COLORS.GREEN}
+                size={SIZES.BASE * 7}
               />
             </View>
             {renderImageAndTitle()}
@@ -505,18 +546,18 @@ const History = ({ navigation }) => {
         {allHistory.length > 0 && (
           <View
             style={{
-              marginTop: SIZES.BASE * 2,
               borderWidth: 0.1,
-              padding: 20,
+              padding: SIZES.BASE * 1.4,
               flex: 1,
             }}
           >
             {/* <FlatList
-              data={allHistory}
+              data={historyItems}
               keyExtractor={(item) => `${item.id}`}
               showsVerticalScrollIndicator={true}
               renderItem={renderHistoryItem}
             /> */}
+            {console.log(historyItems)}
             {allHistory.map((item, index) => {
               return renderHistoryItem(item);
             })}
@@ -572,6 +613,9 @@ const History = ({ navigation }) => {
 
   const [title, setSelectedTitle] = useState("Nutrition");
 
+  let finalStringDate =
+    date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
+
   const renderCalendarRectangle = () => {
     return (
       <TouchableOpacity
@@ -583,7 +627,14 @@ const History = ({ navigation }) => {
           size={SIZES.BASE * 3.7}
           color={COLORS.PRIMARY}
         />
-        <Text>{date.toString()}</Text>
+        <Text
+          style={{
+            fontSize: SIZES.BASE * 3,
+            fontWeight: "bold",
+          }}
+        >
+          {finalStringDate}
+        </Text>
         {open ? (
           <DateTimePicker
             value={date}
@@ -593,7 +644,6 @@ const History = ({ navigation }) => {
               let newDate = new Date(date.nativeEvent.timestamp);
               setDate(newDate);
               setOpen(false);
-              onClose();
             }}
           />
         ) : null}

@@ -9,52 +9,10 @@ import COLORS from "../../consts/color";
 import CheckBox from "expo-checkbox";
 import { globalStyles } from "../../global/styles/globalStyles";
 
+import { arrayPlannedPayments } from "../../consts/plannedPayments";
+import { windowHeight } from "../../utils/dimensions";
 const PlannedPayments = () => {
   const [isSelected, setSelection] = useState(false);
-  const arrayPlannedPayments = [
-    {
-      id: 1,
-      title: "Insurance",
-      price: 250,
-      elements: [
-        {
-          id: 1,
-          title: "Vehicule",
-          price: 250,
-          period: "Yearly",
-          datePayment: "12/08/2023",
-        },
-        {
-          id: 2,
-          title: "Work",
-          price: 150,
-          period: "Monthly",
-          datePayment: "10/07/2023",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Insurance",
-      price: 250,
-      elements: [
-        {
-          id: 1,
-          title: "Vehicule",
-          price: 250,
-          period: "Yearly",
-          datePayment: "12/08/2023",
-        },
-        {
-          id: 2,
-          title: "Work",
-          price: 150,
-          period: "Monthly",
-          datePayment: "10/07/2023",
-        },
-      ],
-    },
-  ];
 
   const numberPages = [1, 2, 3, 4];
 
@@ -62,21 +20,25 @@ const PlannedPayments = () => {
     console.log(item);
     const { id, title, price, elements } = item;
 
-    const renderTitleAndImage = () => {
+    const renderTitleAndImageAndPriceHeader = () => {
       return (
-        <View style={plannedPaymentsStyle.imageAndTitle}>
-          <Avatar.Image
-            source={require("../../assets/images/elon_musk.jpg")}
-            size={SIZESS.body1 * 1.5}
-          />
-          <Text style={plannedPaymentsStyle.title}>{title}</Text>
-        </View>
-      );
-    };
-
-    const renderPriceAndDeleteButton = () => {
-      return (
-        <View style={plannedPaymentsStyle.priceAndDeleteButton}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            padding: SIZES.BASE * 1.5,
+            backgroundColor: COLORS.SECONDARY,
+            borderRadius: SIZES.BASE * 4,
+            paddingHorizontal: SIZES.BASE * 3.5,
+          }}
+        >
+          <View style={plannedPaymentsStyle.imageAndTitle}>
+            <Avatar.Image
+              source={require("../../assets/images/elon_musk.jpg")}
+              size={SIZESS.body1 * 1.2}
+            />
+            <Text style={plannedPaymentsStyle.title}>{title}</Text>
+          </View>
           <View style={plannedPaymentsStyle.iconAndPriceContainer}>
             <Ionicons
               name="cash"
@@ -86,10 +48,6 @@ const PlannedPayments = () => {
             />
             <Text style={plannedPaymentsStyle.price}>{price}</Text>
           </View>
-
-          <TouchableOpacity style={plannedPaymentsStyle.deleteButton}>
-            <Text style={plannedPaymentsStyle.textDeleteAll}>Delete All</Text>
-          </TouchableOpacity>
         </View>
       );
     };
@@ -108,22 +66,47 @@ const PlannedPayments = () => {
               />
               <Avatar.Image
                 source={require("../../assets/images/elon_musk.jpg")}
-                size={SIZESS.body1 * 1.2}
+                size={SIZESS.body1 * 1.4}
                 style={{
                   marginHorizontal: 10,
                 }}
               />
-              <Text>{element.title}</Text>
+              <View>
+                <Text
+                  style={{ fontSize: SIZESS.body1 / 1.7, fontWeight: "bold" }}
+                >
+                  {element.title}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    color: COLORS.PRIMARY,
+                  }}
+                >
+                  <Ionicons
+                    name="cash"
+                    style={{
+                      color: COLORS.PRIMARY,
+                      fontSize: 20,
+                      marginRight: "4%",
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      color: COLORS.PRIMARY,
+                      fontSize: SIZES.BASE * 2.8,
+                    }}
+                  >
+                    {element.price} ( {element.period} )
+                  </Text>
+                </View>
+              </View>
             </View>
           );
         };
-        const renderPriceAndPeriod = () => {
-          return (
-            <View>
-              <Text style={globalStyles.primaryColor}> {element.price} </Text>
-            </View>
-          );
-        };
+
         const renderDateAndTimeRemaining = () => {
           const renderDate = () => {
             return (
@@ -149,7 +132,7 @@ const PlannedPayments = () => {
             console.log(new Date());
             const calculateTimeRemaining = () => {};
             return (
-              <View>
+              <View style={plannedPaymentsStyle.containerRemainingTime}>
                 <Text style={plannedPaymentsStyle.timeRemaining}>
                   1 year Remaining
                 </Text>
@@ -169,17 +152,32 @@ const PlannedPayments = () => {
         return (
           <View style={plannedPaymentsStyle.containerEachLine}>
             {renderImageAndTitle()}
-            {renderPriceAndPeriod()}
             {renderDateAndTimeRemaining()}
           </View>
         );
       };
 
       const renderDeleteAndEditButtons = () => {
+        const deleteItem = () => {};
+        const updateItem = () => {};
+        const renderIcon = (name) => {
+          return (
+            <TouchableOpacity
+              style={plannedPaymentsStyle.button}
+              onPress={name == "trash" ? deleteItem : updateItem}
+            >
+              <Ionicons
+                name={name}
+                size={SIZES.BASE * 3}
+                color={COLORS.WHITE}
+              />
+            </TouchableOpacity>
+          );
+        };
         return (
-          <View style={plannedPaymentsStyle.containerEditAndDeleteButtons}>
-            <Ionicons style={plannedPaymentsStyle.iconStyle} name="trash-bin" />
-            <Ionicons name="create" style={plannedPaymentsStyle.iconStyle} />
+          <View style={plannedPaymentsStyle.containerDeleteAndEditButtons}>
+            {renderIcon("trash")}
+            {renderIcon("pencil-outline")}
           </View>
         );
       };
@@ -192,24 +190,11 @@ const PlannedPayments = () => {
       );
     };
 
-    const renderDividerBetweenItems = () => {
-      return <View style={plannedPaymentsStyle.divider}></View>;
-    };
-
     const renderContainerDetails = () => {
       return (
         <View style={plannedPaymentsStyle.containerDetails}>
-          {renderPriceAndDeleteButton()}
           {elements.map((element, index) => {
-            return (
-              <View>
-                {renderLineDetailEachItem(element)}
-                {console.log(elements.length, index == elements.length - 1)}
-                {index != elements.length - 1
-                  ? renderDividerBetweenItems()
-                  : null}
-              </View>
-            );
+            return <View>{renderLineDetailEachItem(element)}</View>;
           })}
         </View>
       );
@@ -217,7 +202,7 @@ const PlannedPayments = () => {
 
     return (
       <View style={plannedPaymentsStyle.containerItem}>
-        {renderTitleAndImage()}
+        {renderTitleAndImageAndPriceHeader()}
         {renderContainerDetails()}
       </View>
     );
@@ -226,7 +211,6 @@ const PlannedPayments = () => {
   const renderPagination = () => {
     return (
       <View>
-        {console.log(numberPages)}
         {numberPages.map((page) => {
           <View>{page}</View>;
         })}
