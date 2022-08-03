@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, ImageBackground, Image } from "react-native";
+import {
+  View,
+  Text,
+  ImageBackground,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -7,7 +13,7 @@ import {
 import COLORS from "../consts/color";
 import { SIZES } from "../consts/theme";
 import { windowHeight, windowWidth } from "../utils/dimensions";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 const CustomDrawer = (props) => {
   return (
     <View style={{ flex: 1 }}>
@@ -61,8 +67,103 @@ const CustomDrawer = (props) => {
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
-      <View>
-        <Text>HAHAH</Text>
+      <View
+        style={{
+          padding: SIZES.BASE * 6,
+          borderTopWidth: 1,
+          borderTopColor: "black",
+        }}
+      >
+        <TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 5,
+              marginBottom: 10,
+            }}
+          >
+            <Ionicons name="bulb" size={30} />
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginLeft: 20,
+                }}
+              >
+                Dark Mode
+              </Text>
+              <View
+                style={{
+                  marginLeft: 15,
+                  borderRadius: 40,
+                  height: 26,
+                  width: 40,
+                  backgroundColor: COLORS.PRIMARY,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    borderRadius: 20,
+                    height: 18,
+                    width: 18,
+                    backgroundColor: COLORS.WHITE,
+                  }}
+                ></View>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 5,
+            }}
+          >
+            <Ionicons name="language" size={30} />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginHorizontal: 10,
+                  marginLeft: 20,
+                }}
+              >
+                English
+              </Text>
+              <FontAwesome5 name="arrow-right" />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 5,
+              marginTop: 10,
+            }}
+          >
+            <Ionicons name="log-out-outline" size={30} />
+            <Text
+              style={{
+                fontSize: 18,
+                marginLeft: 20,
+              }}
+            >
+              Log Out
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

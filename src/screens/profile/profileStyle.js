@@ -20,8 +20,7 @@ export const profileStyles = StyleSheet.create({
     marginTop: "-9%",
   },
   container: {
-    paddingVertical: "26%",
-    flex: 1,
+    paddingVertical: "24%",
   },
   containerInformationsUser: {
     alignItems: "center",

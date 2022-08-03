@@ -22,14 +22,16 @@ export default function ProfileUser({ navigation }) {
     navigation.navigate("PlannedPayments");
   };
 
-  const renderLogOutIcon = () => {
+  const renderLogOutIconAndDrawer = () => {
     return (
-      <View onStartShouldSetResponder={logOut}>
-        <Ionicons
-          name="log-out-outline"
-          style={profileStyles.logoutIcon}
-          size={SIZES.BASE * 6}
-        />
+      <View>
+        <View onStartShouldSetResponder={logOut}>
+          <Ionicons
+            name="log-out-outline"
+            style={profileStyles.logoutIcon}
+            size={SIZES.BASE * 7}
+          />
+        </View>
       </View>
     );
   };
@@ -221,7 +223,7 @@ export default function ProfileUser({ navigation }) {
   return (
     <>
       <View style={profileStyles.container}>
-        {renderLogOutIcon()}
+        {renderLogOutIconAndDrawer()}
 
         <View style={profileStyles.containerInformationsUser}>
           {renderImageUserAndNamUser()}
