@@ -2,24 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   Text,
   View,
-  Button,
   SafeAreaView,
-  Alert,
   Animated,
   Image,
-  ImageBackground,
   TouchableOpacity,
-  StyleSheet,
+  FlatList,
 } from "react-native";
 import { VictoryPie } from "victory-native";
 
 import { globalStyles } from "../../../global/styles/globalStyles";
-import Modal from "react-native-modal";
-import { Ionicons, Entypo } from "@expo/vector-icons";
 import { guideData } from "./../../../consts/guideData";
 import COLORS from "../../../consts/color";
 import { guideStyle as styles } from "./guide_50_30_20_summaryStyle";
 import { SIZES, SIZESS } from "../../../consts/theme";
+import { ScrollView } from "react-native-gesture-handler";
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
   useEffect(() => {
@@ -65,15 +61,42 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         count: totalNeeds,
       },
     ];
+    let finalGuideDataExpensesSummary = [
+      {
+        id: 1,
+        name: "Wants",
+        count: totalWants,
+        y: `${percentageWant}%`,
+        color: COLORS.PRIMARY,
+      },
+      {
+        id: 2,
+        name: "Saves",
+        count: totalSaves,
+        y: `${percentageSave}%`,
+        color: COLORS.SECONDARY,
+      },
+      {
+        id: 3,
+        name: "Needs",
+        y: `${percentageNeed}%`,
+        count: totalNeeds,
+        color: COLORS.RED,
+      },
+    ];
 
     return {
       finalGuideDataExpenses,
+      finalGuideDataExpensesSummary,
     };
   };
 
-  const renderGuideExpensesSummary = () => {
-    let { finalGuideDataExpenses } = processCategoryDataToDisplay();
+  const renderNavigationToTheDetailsCategoryChoosen = (name) => {
+    navigation.navigate("Details", { names: name });
+  };
 
+  const renderGuideExpensesSummary = () => {
+    let { finalGuideDataExpensesSummary } = processCategoryDataToDisplay();
     const renderItem = ({ item }) => (
       <TouchableOpacity
         style={{
@@ -85,7 +108,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           marginBottom: SIZESS.base * 2,
         }}
         onPress={() => {
-          renderNavigationToTheDetailsCategoryChoosen();
+          renderNavigationToTheDetailsCategoryChoosen(item.name);
         }}
       >
         {/* Name/Category */}
@@ -98,7 +121,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
               borderRadius: 5,
             }}
           />
-
+          {console.log(item.name, "klsdqjf")}
           <Text
             style={{
               marginLeft: SIZESS.base,
@@ -120,17 +143,17 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
               fontSize: SIZESS.base * 1.7,
             }}
           >
-            +{item.incomeCount} DH - {item.labelIncome}
+            +{item.count} DH - {item.y}
           </Text>
         </View>
       </TouchableOpacity>
     );
 
     return (
-      <View style={{ padding: SIZESS.padding / 2 }}>
-        <View style={{ flexGrow: 1 }}>
+      <View>
+        <View>
           <FlatList
-            data={finalGuideDataExpenses}
+            data={finalGuideDataExpensesSummary}
             renderItem={(item) => renderItem(item)}
             keyExtractor={(item) => `${item.id}`}
             showsVerticalScrollIndicator={true}
@@ -151,7 +174,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           navigation.navigate("Wants");
         }}
       ></Button> */}
-      <View style={styles.page}>
+      <ScrollView style={styles.page}>
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Guide 50_30_20</Text>
           <Image
@@ -165,32 +188,40 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           <Text style={styles.bottomText}>Let's Learn About Finance </Text>
         </View>
         <View style={styles.mainContainer}>
-          <Text style={styles.summaryText}>Your Summary</Text>
-          <VictoryPie
-            data={finalGuideDataExpenses}
-            labels={(datum) => {
-              console.log(datum.datum);
-              return datum.datum.y;
-            }}
-            radius={SIZESS.width * 0.06}
-            innerRadius={60}
-            labelRadius={({ innerRadius }) =>
-              (SIZESS.width * 0.01 + innerRadius) / 2
-            }
+          <View
             style={{
-              labels: {
-                fill: "black",
-                fontWeight: "bold",
-                fontSize: SIZES.BASE * 2,
-              },
-              parent: {
-                // ...chartCategoriesStyle.shadow,
-              },
+              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
             }}
-            colorScale={colorScales}
-          />
+          >
+            <Text style={styles.summaryText}>Your Summary</Text>
+            <VictoryPie
+              data={finalGuideDataExpenses}
+              labels={(datum) => {
+                return datum.datum.y;
+              }}
+              radius={SIZES.BASE * 4}
+              innerRadius={60}
+              labelRadius={({ innerRadius }) =>
+                (SIZES.BASE * 4 + innerRadius) / 2.5
+              }
+              style={{
+                labels: {
+                  fill: "black",
+                  fontWeight: "bold",
+                  fontSize: SIZES.BASE * 2,
+                },
+                parent: {
+                  // ...chartCategoriesStyle.shadow,
+                },
+              }}
+              colorScale={colorScales}
+            />
+          </View>
+          {renderGuideExpensesSummary()}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

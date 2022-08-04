@@ -4,6 +4,7 @@ import Guide_50_30_20_Summary from "../screens/50-30-20/summary/guide_50_30_20_s
 import Guide_50_30_20_Wants from "../screens/50-30-20/wants/50_30_20_wants";
 import authStack from "./authStack";
 import welcomePageStack from "./welcomePageStack";
+import Details from "./../screens/50-30-20/details/details";
 
 const Guide_50_30_20_Stack = createNativeStackNavigator();
 
@@ -20,8 +21,8 @@ export default function () {
         }}
       />
       <Guide_50_30_20_Stack.Screen
-        name="Wants"
-        component={Guide_50_30_20_Wants}
+        name="Details"
+        component={Details}
         options={{
           headerStyle: { backgroundColor: "#eee" },
         }}
