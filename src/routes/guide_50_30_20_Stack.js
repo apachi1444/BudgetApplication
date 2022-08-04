@@ -24,6 +24,7 @@ export default function () {
         name="Details"
         component={Details}
         options={{
+          headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
       />

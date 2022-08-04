@@ -16,6 +16,7 @@ const COLORS = {
   RED: "#F00",
   BOTTOMBAR: "#F0F0F0",
   LIGHTGREY: "#DBDBDB",
+  ORANGE: "#ED8E00",
 };
 
 export default COLORS;

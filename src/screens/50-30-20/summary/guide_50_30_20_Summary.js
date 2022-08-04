@@ -49,39 +49,48 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
     let finalGuideDataExpenses = [
       {
-        count: totalWants,
-        y: `${percentageWant}%`,
+        y: totalWants,
+        color: COLORS.PRIMARY,
+        label: `${percentageWant}%`,
       },
       {
-        count: totalSaves,
-        y: `${percentageSave}%`,
+        y: totalSaves,
+        color: COLORS.SECONDARY,
+        label: `${percentageSave}%`,
       },
       {
-        y: `${percentageNeed}%`,
-        count: totalNeeds,
+        color: COLORS.RED,
+        y: totalNeeds,
+        label: `${percentageNeed}%`,
       },
     ];
     let finalGuideDataExpensesSummary = [
       {
         id: 1,
         name: "Wants",
-        count: totalWants,
-        y: `${percentageWant}%`,
+        y: totalWants,
+        label: `${percentageWant}%`,
         color: COLORS.PRIMARY,
+        normal: 50,
+        difference: `${50 - percentageWant}`,
       },
       {
         id: 2,
         name: "Saves",
-        count: totalSaves,
-        y: `${percentageSave}%`,
+        y: totalSaves,
+        label: `${percentageSave}%`,
         color: COLORS.SECONDARY,
+        normal: 20,
+        difference: `${20 - percentageSave}`,
       },
       {
         id: 3,
         name: "Needs",
-        y: `${percentageNeed}%`,
-        count: totalNeeds,
+        label: `${percentageNeed}%`,
+        y: totalNeeds,
         color: COLORS.RED,
+        normal: 30,
+        difference: `${30 - percentageNeed}`,
       },
     ];
 
@@ -97,57 +106,77 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const renderGuideExpensesSummary = () => {
     let { finalGuideDataExpensesSummary } = processCategoryDataToDisplay();
-    const renderItem = ({ item }) => (
-      <TouchableOpacity
-        style={{
-          flexDirection: "row",
-          height: 40,
-          paddingHorizontal: SIZESS.radius,
-          borderRadius: 10,
-          backgroundColor: COLORS.BOTTOMBAR,
-          marginBottom: SIZESS.base * 2,
-        }}
-        onPress={() => {
-          renderNavigationToTheDetailsCategoryChoosen(item.name);
-        }}
-      >
-        {/* Name/Category */}
-        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+    const renderItem = ({ item }) => {
+      let difference = item.difference;
+      let colorAppropriate;
+      let text;
+      if (difference < 0) {
+        colorAppropriate = COLORS.RED;
+        difference = difference * -1;
+        text = "Overpassed";
+      } else {
+        colorAppropriate = COLORS.GREEN;
+        text = "Remaining";
+      }
+      return (
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            height: 40,
+            paddingHorizontal: SIZESS.radius,
+            borderRadius: 10,
+            backgroundColor: COLORS.BOTTOMBAR,
+            marginBottom: SIZESS.base * 2,
+            borderColor: colorAppropriate,
+            borderWidth: 2,
+          }}
+          onPress={() => {
+            renderNavigationToTheDetailsCategoryChoosen(item.name);
+          }}
+        >
+          {/* Name/Category */}
+          <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+            <View
+              style={{
+                width: 20,
+                height: 20,
+                backgroundColor: item.color,
+                borderRadius: 5,
+              }}
+            />
+            <Text
+              style={{
+                marginLeft: SIZESS.base,
+                color: COLORS.PRIMARY,
+                fontWeight: "bold",
+                fontSize: SIZESS.base * 2,
+              }}
+            >
+              {item.name}
+            </Text>
+          </View>
+
+          {/* Expenses */}
           <View
             style={{
-              width: 20,
-              height: 20,
-              backgroundColor: item.color,
-              borderRadius: 5,
-            }}
-          />
-          {console.log(item.name, "klsdqjf")}
-          <Text
-            style={{
-              marginLeft: SIZESS.base,
-              color: COLORS.PRIMARY,
-              fontWeight: "bold",
-              fontSize: SIZESS.base * 2,
+              justifyContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
-            {item.name}
-          </Text>
-        </View>
-
-        {/* Expenses */}
-        <View style={{ justifyContent: "center" }}>
-          <Text
-            style={{
-              color: COLORS.PRIMARY,
-              fontWeight: "bold",
-              fontSize: SIZESS.base * 1.7,
-            }}
-          >
-            +{item.count} DH - {item.y}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
+            <Text
+              style={{
+                color: colorAppropriate,
+                fontWeight: "bold",
+                fontSize: SIZESS.base * 1.85,
+              }}
+            >
+              {item.yName} DH - {difference} {text}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    };
 
     return (
       <View>
@@ -164,7 +193,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   };
 
   let { finalGuideDataExpenses } = processCategoryDataToDisplay();
-  let colorScales = [COLORS.PRIMARY, COLORS.SECONDARY, COLORS.RED];
+  let colorScales = finalGuideDataExpenses.map((item) => item.color);
 
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
@@ -199,18 +228,19 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
             <VictoryPie
               data={finalGuideDataExpenses}
               labels={(datum) => {
-                return datum.datum.y;
+                console.log(datum);
+                return datum.datum.yName;
               }}
-              radius={SIZES.BASE * 4}
+              radius={SIZES.BASE * 25}
               innerRadius={60}
               labelRadius={({ innerRadius }) =>
-                (SIZES.BASE * 4 + innerRadius) / 2.5
+                (SIZES.BASE * 30 + innerRadius) / 2.5
               }
               style={{
                 labels: {
                   fill: "black",
                   fontWeight: "bold",
-                  fontSize: SIZES.BASE * 2,
+                  fontSize: SIZES.BASE * 3.5,
                 },
                 parent: {
                   // ...chartCategoriesStyle.shadow,
