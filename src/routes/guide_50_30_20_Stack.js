@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import Guide_50_30_20_Summary from "../screens/50-30-20/summary/guide_50_30_20_Summary";
+import Guide_50_30_20_Summary from "../screens/50-30-20/summary/guide_50_30_20_summary";
 import Guide_50_30_20_Wants from "../screens/50-30-20/wants/50_30_20_wants";
 import authStack from "./authStack";
 import welcomePageStack from "./welcomePageStack";
