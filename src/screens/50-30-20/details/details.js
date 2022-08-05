@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { VictoryPie } from "victory-native";
-import { windowWidth, windowHeight } from "../../../utils/dimensions";
 
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { SIZES, SIZESS } from "../../../consts/theme";
@@ -21,6 +20,7 @@ import { guideData } from "../../../consts/guideData";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
+  const [show, setShow] = useState(true);
 
   const renderHeader = () => {
     return (
@@ -271,13 +271,24 @@ const Details = ({ navigation, route }) => {
               <Ionicons name="briefcase" style={detailsStyle.iconBriefcase} />
               <Text style={detailsStyle.historyTitle}>History</Text>
             </View>
-            <View>
+            <TouchableOpacity onPress={() => setShow(!show)}>
+              <Ionicons
+                name={
+                  show == false
+                    ? "arrow-down-circle-outline"
+                    : "arrow-up-circle-outline"
+                }
+                size={30}
+                color={COLORS.PRIMARY}
+              />
+            </TouchableOpacity>
+          </View>
+          {show && (
+            <View style={detailsStyle.containerChoosenDate}>
+              <Text style={detailsStyle.textDateChoosen}>12/07/2022</Text>
               <Ionicons name="filter" size={25} color={COLORS.PRIMARY} />
             </View>
-          </View>
-          <View style={detailsStyle.containerChoosenDate}>
-            <Text style={detailsStyle.textDateChoosen}>12/07/2022</Text>
-          </View>
+          )}
         </>
       );
     };
@@ -285,10 +296,12 @@ const Details = ({ navigation, route }) => {
       <>
         {renderTitleHistoryAndFilter()}
 
-        <View style={detailsStyle.containerHistoryDetails}>
-          {renderHistoryItem()}
-          {renderHistoryItem()}
-        </View>
+        {show && (
+          <View style={detailsStyle.containerHistoryDetails}>
+            {renderHistoryItem()}
+            {renderHistoryItem()}
+          </View>
+        )}
       </>
     );
   };

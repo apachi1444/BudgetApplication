@@ -143,11 +143,13 @@ export const detailsStyle = StyleSheet.create({
     marginHorizontal: SIZES.BASE * 4,
     marginVertical: -SIZES.BASE * 3,
     padding: SIZES.BASE * 1,
-    alignItems: "flex-end",
+    justifyContent: "flex-end",
+    flexDirection: "row",
   },
   textDateChoosen: {
     fontSize: 20,
     fontWeight: "bold ",
     color: COLORS.PRIMARY,
+    marginRight: "4%",
   },
 });
