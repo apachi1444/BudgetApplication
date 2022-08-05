@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { VictoryPie } from "victory-native";
+import { windowWidth, windowHeight } from "../../../utils/dimensions";
 
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { SIZES, SIZESS } from "../../../consts/theme";
@@ -20,7 +21,6 @@ import { guideData } from "../../../consts/guideData";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
-  const [mode, setMode] = useState("chart");
 
   const renderHeader = () => {
     return (
@@ -39,233 +39,12 @@ const Details = ({ navigation, route }) => {
     );
   };
 
-  const renderHistoryCategory = () => {
-    let allHistory = selectedCategory ? selectedCategory.history : [];
-    // const [historyItems, setHistoryItems] = useState([allHistory]);
-    const renderHistoryItem = (item) => {
-      const { type } = item;
-
-      const renderArrowAndImageAndTitleAndPriceAndDate = () => {
-        const renderImageAndTitle = () => {
-          return (
-            <View style={historyStyle.containerCheckboxAndImageAndTitle}>
-              {/* <Avatar.Image
-                source={require("../../assets/images/elon_musk.jpg")}
-                size={SIZESS.body1 * 2}
-                style={{
-                  marginRight: 4,
-                }}
-              /> */}
-              <Text
-                style={{
-                  // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-                  fontWeight: "bold",
-                  fontSize: SIZES.BASE * 2.5,
-                  marginRight: "4%",
-                }}
-              >
-                {item.title}
-              </Text>
-            </View>
-          );
-        };
-        const renderPrice = () => {
-          return (
-            <View>
-              <Text
-                style={{
-                  color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-                  fontWeight: "bold",
-                  fontSize: SIZES.BASE * 3,
-                }}
-              >
-                {item.total} DH
-              </Text>
-            </View>
-          );
-        };
-        const renderDate = () => {
-          const renderDate = () => {
-            return (
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginLeft: "2%",
-                }}
-              >
-                <Text
-                  style={{
-                    // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-                    fontWeight: "bold",
-                    fontSize: SIZES.BASE * 2.4,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {item.date}
-                </Text>
-                <Ionicons
-                  name="calendar-outline"
-                  style={{
-                    // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
-                    fontWeight: "bold",
-                    fontSize: SIZES.BASE * 2.5,
-                    marginLeft: SIZES.BASE,
-                  }}
-                />
-              </View>
-            );
-          };
-
-          return (
-            <View style={historyStyle.containerCalendarAndTimeRemaining}>
-              <View>{renderDate()}</View>
-            </View>
-          );
-        };
-        const renderEditAndDeleteButton = () => {
-          const deleteItem = () => {
-            const id = item.id;
-            console.log(item.id);
-            console.log(selectedCategory);
-            selectedCategory.history.filter((item) => {
-              console.log(item);
-              item.id === id;
-            });
-          };
-          const updateItem = () => {};
-          const renderIcon = (name) => {
-            return (
-              <TouchableOpacity
-                style={{
-                  backgroundColor:
-                    type == "Spending" ? COLORS.RED : COLORS.GREEN,
-                  borderRadius: SIZES.BASE * 4,
-                  padding: SIZES.BASE * 1.5,
-                  marginHorizontal: windowHeight * 0.005,
-                }}
-                onPress={name == "trash" ? deleteItem : updateItem}
-              >
-                <Ionicons
-                  name={name}
-                  size={SIZES.BASE * 3}
-                  color={COLORS.WHITE}
-                />
-              </TouchableOpacity>
-            );
-          };
-          return (
-            <View
-              style={{
-                flexDirection: "row",
-                position: "absolute",
-                bottom: "-41%",
-                alignSelf: "center",
-                right: "4%",
-              }}
-            >
-              {renderIcon("trash")}
-              {renderIcon("pencil-outline")}
-            </View>
-          );
-        };
-        return (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginVertical: SIZES.BASE * 2,
-              backgroundColor: COLORS.BOTTOMBAR,
-              padding: SIZES.BASE * 2.5,
-              borderRadius: SIZES.BASE * 3.5,
-              // ...historyStyle.shadowProp,
-            }}
-          >
-            <View>
-              <Ionicons
-                name={
-                  type == "Income" ? "arrow-up-circle" : "arrow-down-circle"
-                }
-                color={type == "Spending" ? COLORS.RED : COLORS.GREEN}
-                size={SIZES.BASE * 7}
-              />
-            </View>
-            {renderImageAndTitle()}
-            {renderPrice()}
-            {renderDate()}
-            {renderEditAndDeleteButton()}
-          </View>
-        );
-      };
-      return (
-        <View>
-          <View>{renderArrowAndImageAndTitleAndPriceAndDate()}</View>
-        </View>
-      );
-    };
-    return (
-      <View style={{ padding: SIZES.PADDING }}>
-        {renderHistoryTitleCategory()}
-        {allHistory.length > 0 && (
-          <View
-            style={{
-              borderWidth: 0.1,
-            }}
-          >
-            {allHistory.map((item, index) => {
-              return renderHistoryItem(item);
-            })}
-          </View>
-        )}
-        {allHistory.length == 0 && (
-          <View>
-            <Text
-              style={{
-                alignSelf: "center",
-                marginTop: SIZES.BASE * 2,
-                fontWeight: "bold",
-                fontSize: SIZES.BASE * 3,
-                marginBottom: SIZES.BASE * 6,
-              }}
-            >
-              No Results for the moment
-            </Text>
-          </View>
-        )}
-      </View>
-    );
-  };
-
   const renderRectangleDetailsChart = () => {
     const renderTitleAndIcon = () => {
       return (
         <View style={detailsStyle.titleAndIcon}>
           <Entypo name="dots-three-vertical" size={26} />
           <Text style={detailsStyle.title}>Details</Text>
-          <View style={detailsStyle.containerSwitch}>
-            <TouchableOpacity
-              onPress={() => {
-                setMode("chart");
-              }}
-              style={detailsStyle.containerButtonSwitch(
-                mode == "chart" ? COLORS.PRIMARY : COLORS.WHITE
-              )}
-            >
-              <Text style={detailsStyle.textButtonSwitch}>Chart</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                console.log(mode);
-                setMode("list");
-              }}
-              style={detailsStyle.containerButtonSwitch(
-                mode == "list" ? COLORS.PRIMARY : COLORS.WHITE
-              )}
-            >
-              <Text style={detailsStyle.textButtonSwitch}>List</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       );
     };
@@ -389,16 +168,14 @@ const Details = ({ navigation, route }) => {
       };
 
       return (
-        <View>
-          <View>
-            <FlatList
-              data={data}
-              renderItem={(item) => renderItem(item)}
-              keyExtractor={(item) => `${item.id}`}
-              showsVerticalScrollIndicator={true}
-              // numColumns={2}
-            />
-          </View>
+        <View style={detailsStyle.containerSummary}>
+          <FlatList
+            data={data}
+            renderItem={(item) => renderItem(item)}
+            keyExtractor={(item) => `${item.id}`}
+            showsVerticalScrollIndicator={true}
+            // numColumns={2}
+          />
         </View>
       );
     };
@@ -412,10 +189,107 @@ const Details = ({ navigation, route }) => {
   };
 
   const renderRectangleDetailsList = () => {
+    const renderHistoryItem = (item) => {
+      const renderTitleAndPriceAndDate = () => {
+        const renderImageAndTitle = () => {
+          return (
+            <View style={detailsStyle.containerCheckboxAndImageAndTitle}>
+              <Text style={detailsStyle.titleHistoryItem}>haha</Text>
+            </View>
+          );
+        };
+        const renderPrice = () => {
+          return (
+            <View>
+              <Text style={detailsStyle.priceHistoryItem}> 500 DH</Text>
+            </View>
+          );
+        };
+        const renderDate = () => {
+          return (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginLeft: "2%",
+              }}
+            >
+              <Text style={detailsStyle.dateHistoryItem}>12/08/2023</Text>
+              <Ionicons
+                name="calendar-outline"
+                style={detailsStyle.iconDateHistoryItem}
+              />
+            </View>
+          );
+        };
+        const renderEditAndDeleteButton = () => {
+          const deleteItem = () => {};
+          const updateItem = () => {};
+          const renderIcon = (name) => {
+            return (
+              <TouchableOpacity
+                style={detailsStyle.containerIcon}
+                onPress={name == "trash" ? deleteItem : updateItem}
+              >
+                <Ionicons
+                  name={name}
+                  size={SIZES.BASE * 3}
+                  color={COLORS.WHITE}
+                />
+              </TouchableOpacity>
+            );
+          };
+          return (
+            <View style={detailsStyle.containerEditDeleteButtonHistoryItem}>
+              {renderIcon("trash")}
+              {renderIcon("pencil-outline")}
+            </View>
+          );
+        };
+        return (
+          <View style={detailsStyle.containerHistoryItemWithButtons}>
+            <View style={detailsStyle.containerHistoryItem}>
+              {renderImageAndTitle()}
+              {renderPrice()}
+              {renderDate()}
+            </View>
+            {renderEditAndDeleteButton()}
+          </View>
+        );
+      };
+      return (
+        <View>
+          <View>{renderTitleAndPriceAndDate()}</View>
+        </View>
+      );
+    };
+    const renderTitleHistoryAndFilter = () => {
+      return (
+        <>
+          <View style={detailsStyle.containerHistoryTitleAndFilterIcon}>
+            <View style={detailsStyle.containerHistoryTitle}>
+              <Ionicons name="briefcase" style={detailsStyle.iconBriefcase} />
+              <Text style={detailsStyle.historyTitle}>History</Text>
+            </View>
+            <View>
+              <Ionicons name="filter" size={25} color={COLORS.PRIMARY} />
+            </View>
+          </View>
+          <View style={detailsStyle.containerChoosenDate}>
+            <Text style={detailsStyle.textDateChoosen}>12/07/2022</Text>
+          </View>
+        </>
+      );
+    };
     return (
-      <View>
-        <Text>Hahahah</Text>
-      </View>
+      <>
+        {renderTitleHistoryAndFilter()}
+
+        <View style={detailsStyle.containerHistoryDetails}>
+          {renderHistoryItem()}
+          {renderHistoryItem()}
+        </View>
+      </>
     );
   };
 
@@ -423,8 +297,8 @@ const Details = ({ navigation, route }) => {
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
       <ScrollView>
         {renderHeader()}
-        {mode == "chart" && <View>{renderRectangleDetailsChart()}</View>}
-        {mode == "list" && <View>{renderRectangleDetailsList()}</View>}
+        {renderRectangleDetailsChart()}
+        {renderRectangleDetailsList()}
       </ScrollView>
     </SafeAreaView>
   );
