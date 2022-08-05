@@ -314,7 +314,7 @@ const History = ({ navigation }) => {
                   // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                   fontWeight: "bold",
                   fontSize: SIZES.BASE * 2.5,
-                  marginRight: "8%",
+                  marginRight: "4%",
                 }}
               >
                 {item.title}
@@ -344,7 +344,7 @@ const History = ({ navigation }) => {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginLeft: "3.5%",
+                  marginLeft: "2%",
                 }}
               >
                 <Text
@@ -427,12 +427,12 @@ const History = ({ navigation }) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
+              justifyContent: "space-between",
               marginVertical: SIZES.BASE * 2,
-              marginHorizontal: 0,
               backgroundColor: COLORS.BOTTOMBAR,
               padding: SIZES.BASE * 2.5,
               borderRadius: SIZES.BASE * 3.5,
-              ...historyStyle.shadowProp,
+              // ...historyStyle.shadowProp,
             }}
           >
             <View>
@@ -464,8 +464,7 @@ const History = ({ navigation }) => {
           <View
             style={{
               borderWidth: 0.1,
-              padding: SIZES.BASE * 1.4,
-              flex: 1,
+              // padding: SIZES.BASE * 1.4,
             }}
           >
             {/* <FlatList

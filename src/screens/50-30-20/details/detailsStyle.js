@@ -34,4 +34,27 @@ export const detailsStyle = StyleSheet.create({
     height: windowHeight * 0.06,
     width: windowWidth * 0.12,
   },
+
+  containerSwitch: {
+    flexDirection: "row",
+    alignItems: "center",
+    right: "-27%",
+    position: "absolute",
+    top: "240%",
+    transform: [{ rotate: "90deg" }],
+  },
+
+  containerButtonSwitch: (color) => {
+    return {
+      backgroundColor: color,
+      padding: SIZES.BASE * 2,
+      paddingHorizontal: SIZES.BASE * 4.5,
+      borderRadius: SIZES.BASE * 4,
+      marginHorizontal: SIZES.BASE,
+    };
+  },
+  textButtonSwitch: {
+    fontSize: SIZES.BASE * 2.5,
+    fontWeight: "bold",
+  },
 });
