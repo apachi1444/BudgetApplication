@@ -73,12 +73,14 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         color: COLORS.PRIMARY,
         normal: 50,
         difference: `${50 - percentageWant}`,
+        actual: percentageWant,
       },
       {
         id: 2,
         name: "Saves",
         y: totalSaves,
         label: `${percentageSave}%`,
+        actual: percentageSave,
         color: COLORS.SECONDARY,
         normal: 20,
         difference: `${20 - percentageSave}`,
@@ -86,6 +88,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
       {
         id: 3,
         name: "Needs",
+        actual: percentageNeed,
         label: `${percentageNeed}%`,
         y: totalNeeds,
         color: COLORS.RED,
@@ -100,8 +103,8 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
     };
   };
 
-  const renderNavigationToTheDetailsCategoryChoosen = (name) => {
-    navigation.navigate("Details", { names: name });
+  const renderNavigationToTheDetailsCategoryChoosen = (item) => {
+    navigation.navigate("Details", { item });
   };
 
   const renderGuideExpensesSummary = () => {
@@ -131,7 +134,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
             borderWidth: 2,
           }}
           onPress={() => {
-            renderNavigationToTheDetailsCategoryChoosen(item.name);
+            renderNavigationToTheDetailsCategoryChoosen(item);
           }}
         >
           {/* Name/Category */}

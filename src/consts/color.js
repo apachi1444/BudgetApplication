@@ -17,6 +17,7 @@ const COLORS = {
   BOTTOMBAR: "#F0F0F0",
   LIGHTGREY: "#DBDBDB",
   ORANGE: "#ED8E00",
+  MEDUIMGREY: "#BFC3B1",
 };
 
 export default COLORS;
