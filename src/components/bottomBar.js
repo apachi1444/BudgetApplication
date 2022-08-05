@@ -2,16 +2,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon, { Icons } from "./icon";
-import * as Animatable from "react-native-animatable";
 import Settings from "../screens/settings/settings";
 import COLORS from "./../consts/color";
 import ProfileUser from "../screens/profile/profile";
-import History from "../screens/history/history";
-import PlannedPayments from "../screens/plannedPayments/plannedPayments";
-import Guide_50_30_20_Summary from "../screens/50-30-20/summary/guide_50_30_20_summary";
 import { SIZES } from "../consts/theme";
 import HistoryStack from "../routes/historyStack";
 import Guide_Stack from "../routes/guide_50_30_20_Stack";
+import Add from "./add/add";
 
 const TabArr = [
   {
@@ -19,7 +16,7 @@ const TabArr = [
     label: "Home",
     type: Icons.MaterialCommunityIcons,
     icon: "home",
-    component: ProfileUser,
+    component: Add,
   },
   {
     route: "History",
@@ -33,7 +30,7 @@ const TabArr = [
     label: "Add",
     type: Icons.Feather,
     icon: "plus",
-    component: PlannedPayments,
+    component: Add,
   },
   {
     route: "guide",

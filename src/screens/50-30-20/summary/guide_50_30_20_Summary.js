@@ -174,7 +174,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                 fontSize: SIZESS.base * 1.85,
               }}
             >
-              {item.yName} DH - {difference} {text}
+              {item.y} DH - {difference} {text}
             </Text>
           </View>
         </TouchableOpacity>

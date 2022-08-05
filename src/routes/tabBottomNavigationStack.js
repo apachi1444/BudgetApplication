@@ -14,6 +14,7 @@ import ProfileUser from "../screens/profile/profile";
 import Settings from "../screens/settings/settings";
 import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import HistoryStack from "./historyStack";
+import Add from "../components/add/add";
 const TabArr = [
   {
     route: "Home",
@@ -21,7 +22,7 @@ const TabArr = [
     type: Icons.Ionicons,
     activeIcon: "grid",
     inActiveIcon: "grid-outline",
-    component: ProfileUser,
+    component: Add,
   },
   {
     route: "HistoryBottomBar",
@@ -37,7 +38,7 @@ const TabArr = [
     type: Icons.MaterialCommunityIcons,
     activeIcon: "heart-plus",
     inActiveIcon: "heart-plus-outline",
-    component: PlannedPayments,
+    component: Add,
   },
   {
     route: "Guide",
