@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect, useRef } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Button, Text, TouchableOpacity, View } from "react-native";
 import Icon, { Icons } from "./icon";
 import Settings from "../screens/settings/settings";
 import COLORS from "./../consts/color";
@@ -9,6 +9,7 @@ import { SIZES } from "../consts/theme";
 import HistoryStack from "../routes/historyStack";
 import Guide_Stack from "../routes/guide_50_30_20_Stack";
 import Add from "./add/add";
+import Modal from "react-native-modal";
 
 const TabArr = [
   {
@@ -16,7 +17,7 @@ const TabArr = [
     label: "Home",
     type: Icons.MaterialCommunityIcons,
     icon: "home",
-    component: Add,
+    component: ProfileUser,
   },
   {
     route: "History",
@@ -54,6 +55,9 @@ const TabButton = (props) => {
   const { item, accessibilityState } = props;
   const focused = accessibilityState.selected;
 
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+
+  const handleModal = () => setIsModalVisible(() => !isModalVisible);
   useEffect(() => {
     if (focused) {
       // here we will do the animation of the three buttons to add a spending or an income
@@ -62,13 +66,33 @@ const TabButton = (props) => {
   }, [focused]);
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleModal}>
       <View style={styles.container}>
+        <View style={{ backgroundColor: COLORS.DELETEBUTTONRED }}>
+          <Modal
+            presentationStyle="overFullScreen"
+            isVisible={isModalVisible}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                width: "100%",
+                backgroundColor: "transparent",
+                flex: 1,
+              }}
+            >
+              <Add />
+              <Button title="Hide modal" onPress={handleModal} />
+            </View>
+          </Modal>
+        </View>
         <View style={styles.buttonAdd}>
           <View style={styles.circle} />
           <Icon type={item.type} name={item.icon} color={COLORS.BLACK} />
         </View>
-        <Text style={styles.text}>{item.label}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -76,7 +100,6 @@ const TabButton = (props) => {
 
 const TabIcon = (props) => {
   const { item, focused } = props;
-
   return (
     <View style={styles.iconAndLabelView}>
       <Icon
