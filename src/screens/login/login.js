@@ -36,7 +36,6 @@ export default ({ navigation }) => {
   const inputRef = useRef(null);
 
   const count = useSelector((state) => {
-    console.log(state);
     return state.user.count;
   });
 

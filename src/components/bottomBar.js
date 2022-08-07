@@ -1,6 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect, useRef } from "react";
-import { StyleSheet, Button, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Button,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import Icon, { Icons } from "./icon";
 import Settings from "../screens/settings/settings";
 import COLORS from "./../consts/color";
@@ -85,7 +92,7 @@ const TabButton = (props) => {
               }}
             >
               <Add />
-              <Button title="Hide modal" onPress={handleModal} />
+              <Button title="Done" onPress={handleModal} />
             </View>
           </Modal>
         </View>
