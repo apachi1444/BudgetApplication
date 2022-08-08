@@ -1,10 +1,17 @@
-import { StyleSheet, Text, View, Alert, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  SafeAreaView,
+  Button,
+} from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Avatar } from "react-native-paper";
 import { globalStyles } from "../../global/styles/globalStyles";
 import COLORS from "../../consts/color";
 import { windowWidth, windowHeight } from "../../utils/dimensions";
-
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 export default function Settings({ navigation }) {
   const [isEnabledSettings, setIsEnabledSettings] = useState(false);
@@ -12,6 +19,8 @@ export default function Settings({ navigation }) {
   const toggleSwitch = () => {
     setIsEnabledSettings(!isEnabledSettings);
   };
+
+  const { t, i18n } = useTranslation();
 
   const goBack = () => {
     navigation.goBack();
@@ -164,7 +173,7 @@ export default function Settings({ navigation }) {
           <Text style={profileStyles.nameUser}>Yessine Jaoua</Text>
 
           <View style={profileStyles.categorySettings}>
-            <Text>Preferences</Text>
+            <Text>{t("Hello world")}</Text>
           </View>
           {/* // this is for the each line of profile Details */}
 
@@ -172,6 +181,13 @@ export default function Settings({ navigation }) {
             style={profileStyles.profileDetailLine}
             onStartShouldSetResponder={toggleSwitch}
           >
+            <Button
+              title="translate"
+              onPress={() => {
+                // i18n.changeLanguage("ar");
+                console.log(i18n.language);
+              }}
+            />
             <Ionicons
               name="bulb"
               color={COLORS.PRIMARY}

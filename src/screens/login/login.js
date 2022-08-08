@@ -78,7 +78,7 @@ export default ({ navigation }) => {
         </View>
         <Text style={styles.divider}>or </Text>
         {renderActions()}
-        <Text>{count}</Text>
+        {/* <Text>{count}</Text>
         <TouchableOpacity onPress={() => dispatch(increment())}>
           <Text
             style={{
@@ -106,7 +106,7 @@ export default ({ navigation }) => {
           >
             Increment By HAHA
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {renderGoToSignUpPage()}
       </View>
     );
