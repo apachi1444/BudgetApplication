@@ -7,15 +7,18 @@ import {
   Button,
   TouchableHighlight,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import Icon from "@expo/vector-icons/FontAwesome";
 import Modal from "react-native-modal";
 import COLORS from "../consts/color";
 import { SIZES } from "../consts/theme";
 import Add from "./add/add";
 import { windowHeight, windowWidth } from "../utils/dimensions";
-const SIZE = 80;
+
+const SIZE = windowWidth * 0.19;
+
 export const TabButton = (props) => {
-  const { item, accessibilityState } = props;
+  const { accessibilityState } = props;
   const focused = accessibilityState.selected;
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -41,7 +44,7 @@ export const TabButton = (props) => {
   });
   const secondY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -55],
+    outputRange: [0, -60],
   });
   const thirdX = mode.interpolate({
     inputRange: [0, 1],
@@ -59,8 +62,8 @@ export const TabButton = (props) => {
     inputRange: [0, 1],
     outputRange: ["0deg", "45deg"],
   });
-  console.log("this is the mode ", mode);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
+
   useEffect(() => {
     if (focused) {
       // here we will do the animation of the three buttons to add a spending or an income
@@ -80,18 +83,11 @@ export const TabButton = (props) => {
         }}
       >
         <TouchableHighlight
-          onPress={() => {}}
-          style={{
-            position: "absolute",
-            alignItems: "center",
-            justifyContent: "center",
-            width: SIZE / 2,
-            height: SIZE / 2,
-            borderRadius: SIZE / 4,
-            backgroundColor: COLORS.SECONDARY,
-          }}
+          underlayColor="transparent"
+          onPress={handleModal}
+          style={styles.littleCircle}
         >
-          <Icon name={name} size={16} color={COLORS.BLACK} />
+          <Ionicons name={name} size={16} color={COLORS.BLACK} />
         </TouchableHighlight>
       </Animated.View>
     );
@@ -129,9 +125,27 @@ export const TabButton = (props) => {
           </Modal>
         </View>
         <View>
-          <Circle x={firstX} y={firstY} opacity={opacity} name={"archive"} />
-          <Circle x={secondX} y={secondY} opacity={opacity} name={"home"} />
-          <Circle x={thirdX} y={thirdY} opacity={opacity} name={"home"} />
+          <Circle
+            x={firstX}
+            y={firstY}
+            opacity={opacity}
+            name={"arrow-up-circle"}
+            rotatione={rotation}
+          />
+          <Circle
+            x={thirdX}
+            y={thirdY}
+            opacity={opacity}
+            name={"arrow-down-circle"}
+            rotatione={rotation}
+          />
+          <Circle
+            x={secondX}
+            y={secondY}
+            rotatione={rotation}
+            opacity={opacity}
+            name="home"
+          />
 
           <TouchableHighlight
             onPress={toggleView}
@@ -158,27 +172,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  tabBar: {
-    height: SIZES.BASE * 10,
-    backgroundColor: COLORS.BOTTOMBAR,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  buttonAdd: {
-    width: SIZES.BASE * 9,
-    height: SIZES.BASE * 9,
-    borderRadius: SIZES.BASE * 4,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: SIZES.BASE * 8,
-  },
-  circle: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: COLORS.SECONDARY,
-    borderRadius: 25,
-  },
+
   buttonPlus: {
     alignItems: "center",
     justifyContent: "center",
@@ -186,6 +180,16 @@ const styles = StyleSheet.create({
     height: SIZE / 1.05,
     borderRadius: SIZE / 2,
     marginBottom: SIZE / 1.5,
+    backgroundColor: COLORS.SECONDARY,
+  },
+
+  littleCircle: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    width: SIZE / 2,
+    height: SIZE / 2,
+    borderRadius: SIZE / 4,
     backgroundColor: COLORS.SECONDARY,
   },
 });

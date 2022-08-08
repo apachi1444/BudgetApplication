@@ -25,22 +25,14 @@ import { categoriesData } from "../../consts/categoriesData";
 
 const renderProfileInformations = () => {
   return (
-    <View style={historyStyle.containerProfileInformations}>
-      <Avatar.Image
+    <View style={globalStyles.headerContainer}>
+      <Text style={globalStyles.titleHistory}>
+        Spendings And Incomes Dashboard
+      </Text>
+      <Image
+        style={globalStyles.profileImage}
         source={require("../../assets/images/elon_musk.jpg")}
-        size={85}
-        style={historyStyle.imageProfile}
       />
-      <View>
-        <View>
-          <Text style={historyStyle.nameUser}>Yessine Jaoua</Text>
-        </View>
-        <View>
-          <Text style={historyStyle.titleDashboard}>
-            Spendings And Incomes Dashboard
-          </Text>
-        </View>
-      </View>
     </View>
   );
 };

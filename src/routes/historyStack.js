@@ -23,6 +23,7 @@ export default function () {
         name="charts"
         component={ChartCategories}
         options={{
+          headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
       />

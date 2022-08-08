@@ -132,4 +132,16 @@ export const plannedPaymentsStyle = StyleSheet.create({
   containerDetailsEachLine: {
     alignItems: "space-between",
   },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    margin: "5%",
+    marginBottom: "1%",
+    marginTop: "10%",
+  },
+  titleHeader: {
+    fontSize: SIZES.BASE * 3,
+    fontWeight: "350",
+  },
 });

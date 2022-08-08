@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
+  Alert,
   ImageBackground,
   Image,
   TouchableOpacity,
@@ -10,11 +11,41 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import COLORS from "../consts/color";
-import { SIZES } from "../consts/theme";
-import { windowHeight, windowWidth } from "../utils/dimensions";
+import { SIZES } from "../../consts/theme";
+import { windowHeight, windowWidth } from "../../utils/dimensions";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { CustomDrawerStyle } from "./customDrawerStyle";
+import { globalStyles } from "../../global/styles/globalStyles";
+import COLORS from "../../consts/color";
 const CustomDrawer = (props) => {
+  const [isEnabledSettings, setIsEnabledSettings] = useState(false);
+
+  const toggleSwitch = () => {
+    setIsEnabledSettings(!isEnabledSettings);
+  };
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  const showLanguages = () => {
+    Alert.alert(
+      "Change Applicatino Language",
+      "There is only ENGLISH for the moment",
+      [
+        {
+          text: "Try later",
+          onPress: () => console.log("Ask me later pressed"),
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]
+    );
+  };
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -23,7 +54,7 @@ const CustomDrawer = (props) => {
       >
         <ImageBackground style={{ padding: 20 }}>
           <Image
-            source={require("../assets/images/elon_musk.jpg")}
+            source={require("../../assets/images/elon_musk.jpg")}
             style={{
               opacity: 1,
               alignSelf: "center",
@@ -63,7 +94,13 @@ const CustomDrawer = (props) => {
             <Ionicons name="cash" size={25} color={COLORS.WHITE} />
           </View>
         </ImageBackground>
-        <View style={{ backgroundColor: "white", padding: 10, flex: 1 }}>
+        <View
+          style={{
+            backgroundColor: "white",
+            padding: 10,
+            borderColor: COLORS.RED,
+          }}
+        >
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
@@ -74,7 +111,7 @@ const CustomDrawer = (props) => {
           borderTopColor: "black",
         }}
       >
-        <TouchableOpacity>
+        <View>
           <View
             style={{
               flexDirection: "row",
@@ -84,12 +121,7 @@ const CustomDrawer = (props) => {
             }}
           >
             <Ionicons name="bulb" size={30} />
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
+            <View style={globalStyles.flexRowAndAlignCenter}>
               <Text
                 style={{
                   fontSize: 18,
@@ -99,28 +131,28 @@ const CustomDrawer = (props) => {
                 Dark Mode
               </Text>
               <View
-                style={{
-                  marginLeft: 15,
-                  borderRadius: 40,
-                  height: 26,
-                  width: 40,
-                  backgroundColor: COLORS.PRIMARY,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+                style={[
+                  CustomDrawerStyle.toggleSetting,
+                  {
+                    backgroundColor: isEnabledSettings
+                      ? COLORS.GREY
+                      : COLORS.PRIMARY,
+                  },
+                ]}
+                onStartShouldSetResponder={toggleSwitch}
               >
                 <View
-                  style={{
-                    borderRadius: 20,
-                    height: 18,
-                    width: 18,
-                    backgroundColor: COLORS.WHITE,
-                  }}
+                  style={[
+                    CustomDrawerStyle.circleInsideToggleSetting,
+                    {
+                      left: isEnabledSettings ? "10%" : "55%",
+                    },
+                  ]}
                 ></View>
               </View>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
         <TouchableOpacity>
           <View
             style={{
@@ -128,6 +160,7 @@ const CustomDrawer = (props) => {
               alignItems: "center",
               padding: 5,
             }}
+            onStartShouldSetResponder={() => showLanguages()}
           >
             <Ionicons name="language" size={30} />
             <View style={{ flexDirection: "row", alignItems: "center" }}>

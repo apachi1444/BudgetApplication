@@ -3,6 +3,7 @@ import {
   View,
   Text,
   FlatList,
+  Image,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
@@ -12,6 +13,7 @@ import { chartCategoriesStyle } from "./chartCategoriesStyle";
 import { SIZESS, FONTS } from "../../../consts/theme";
 import COLORS from "../../../consts/color";
 import { Ionicons } from "@expo/vector-icons";
+import { globalStyles } from "../../../global/styles/globalStyles";
 
 const ChartCategories = ({ navigation, route }) => {
   const categories = route.params;
@@ -22,6 +24,23 @@ const ChartCategories = ({ navigation, route }) => {
   //   let category = categories.filter((a) => a.name == name);
   //   setSelectedCategory(category[0]);
   // }
+
+  const renderHeader = () => {
+    return (
+      <View style={chartCategoriesStyle.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-undo-circle-outline" size={42} />
+        </TouchableOpacity>
+        <Text style={chartCategoriesStyle.title}>Charts</Text>
+        <TouchableOpacity onPress={() => navigation.open()}>
+          <Image
+            style={globalStyles.profileImage}
+            source={require("../../../assets/images/elon_musk.jpg")}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status
@@ -397,9 +416,9 @@ const ChartCategories = ({ navigation, route }) => {
 
   return (
     <ScrollView>
+      {renderHeader()}
       <View style={chartCategoriesStyle.container}>
         {/* // this is for the spending and incomes titles 000 */}
-
         <View style={chartCategoriesStyle.containerIncomesAndSpendingsTitle}>
           <TouchableOpacity
             style={[

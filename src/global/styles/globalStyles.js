@@ -122,6 +122,33 @@ export const globalStyles = StyleSheet.create({
     fontSize: 15,
     marginLeft: 5,
   },
+
+  flexRowAndAlignCenter: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginVertical: SIZES.BASE * 3,
+  },
+  title: {
+    fontSize: SIZES.BASE * 3,
+    fontWeight: "350",
+    marginRight: "25%",
+  },
+  titleHistory: {
+    fontSize: SIZES.BASE * 3,
+    fontWeight: "350",
+    marginRight: "12%",
+  },
+  profileImage: {
+    width: SIZES.BASE * 8,
+    height: SIZES.BASE * 8,
+    borderRadius: SIZES.BASE * 4,
+  },
 });
 
 // export const images = {

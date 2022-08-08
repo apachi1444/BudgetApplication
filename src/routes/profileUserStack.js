@@ -33,13 +33,16 @@ export default function () {
         name="EditProfile"
         component={editProfile}
         options={{
-          headerStyle: { backgroundColor: "#eee" },
+          headerShown: false,
+          headerStyle: {
+            backgroundColor: "#eee",
+          },
         }}
       />
       {/* <ProfileUserStack.Screen
         name="HistoryBottomBar"
         // here we must do the stack because we don't want to show only the page of the history but also the navigation bottomBar
-
+        
         component={HistoryIncomesAndSpendingsStack}
         options={{
           headerShown: false,
@@ -50,6 +53,7 @@ export default function () {
         name="PlannedPayments"
         component={PlannedPayments}
         options={{
+          headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
       />

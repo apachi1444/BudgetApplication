@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, Image } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Avatar } from "react-native-paper";
 import { SIZES, SIZESS } from "../../consts/theme";
@@ -11,10 +11,27 @@ import { globalStyles } from "../../global/styles/globalStyles";
 
 import { arrayPlannedPayments } from "../../consts/plannedPayments";
 import { windowHeight } from "../../utils/dimensions";
-const PlannedPayments = () => {
+const PlannedPayments = ({ navigation }) => {
   const [isSelected, setSelection] = useState(false);
 
   const numberPages = [1, 2, 3, 4];
+
+  const renderHeader = () => {
+    return (
+      <View style={plannedPaymentsStyle.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-undo-circle-outline" size={42} />
+        </TouchableOpacity>
+        <Text style={plannedPaymentsStyle.titleHeader}>Charts</Text>
+        <TouchableOpacity onPress={() => navigation.open()}>
+          <Image
+            style={globalStyles.profileImage}
+            source={require("../../assets/images/elon_musk.jpg")}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const renderItem = ({ item }) => {
     console.log(item);
@@ -219,6 +236,7 @@ const PlannedPayments = () => {
   };
   return (
     <View style={plannedPaymentsStyle.container}>
+      {renderHeader()}
       <FlatList data={arrayPlannedPayments} renderItem={renderItem} />
       {renderPagination()}
     </View>

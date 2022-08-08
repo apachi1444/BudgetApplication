@@ -4,7 +4,6 @@ import WelcomePage from "../screens/welcomePage/welcomePage";
 import Login from "./../screens/login/login";
 import SignUp from "./../screens/signup/signup";
 import ProfileUserStack from "./profileUserStack";
-import { TabBottomNavigation } from "./tabBottomNavigationStack";
 import { DrawerNavigator } from "./drawerNavigationStack";
 const AuthStack = createNativeStackNavigator();
 

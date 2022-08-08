@@ -3,7 +3,6 @@ import React from "react";
 import ListIncomes from "../screens/listIncomes/listIncomes";
 import ListSpendings from "../screens/listSpendings/listSpendings";
 import ListSpendingsAndIncomes from "../screens/listSpendingsAndIncomes/listSpendingsAndIncomes";
-import { TabBottomNavigation } from "./tabBottomNavigationStack";
 
 const IncomesAndSpendingsStack = createNativeStackNavigator();
 
@@ -32,13 +31,6 @@ export default function () {
           headerStyle: { backgroundColor: "#eee" },
         }}
       />
-      {/* <IncomesAndSpendingsStack.Screen
-        name="Add Spending To The List of Spendings"
-        component={AddSpending}
-        options={{
-          headerStyle: { backgroundColor: "#eee" },
-        }}
-      /> */}
     </IncomesAndSpendingsStack.Navigator>
   );
 }

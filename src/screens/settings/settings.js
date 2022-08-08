@@ -161,10 +161,6 @@ export default function Settings({ navigation }) {
             source={require("../../assets/images/elon_musk.jpg")}
             size={130}
           />
-          {/* <Image
-            style={profileStyles.imageProfile}
-            source={require("../../assets/images/facebook.png")}
-          ></Image> */}
           <Text style={profileStyles.nameUser}>Yessine Jaoua</Text>
 
           <View style={profileStyles.categorySettings}>

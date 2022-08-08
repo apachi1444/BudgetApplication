@@ -63,4 +63,16 @@ export const chartCategoriesStyle = StyleSheet.create({
   iconInsideCircleInsideContainerButtonSwitch: {
     fontSize: 30,
   },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    margin: "5%",
+    marginBottom: "1%",
+    marginTop: "10%",
+  },
+  title: {
+    fontSize: SIZES.BASE * 3,
+    fontWeight: "350",
+  },
 });
