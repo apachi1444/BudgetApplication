@@ -12,10 +12,9 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ActivityIndicator,
   Image,
 } from "react-native";
-
+import { loginStyle as styles } from "./loginStyle";
 import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 
@@ -29,7 +28,6 @@ const SIZES = {
 };
 
 export default ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -78,35 +76,6 @@ export default ({ navigation }) => {
         </View>
         <Text style={styles.divider}>or </Text>
         {renderActions()}
-        {/* <Text>{count}</Text>
-        <TouchableOpacity onPress={() => dispatch(increment())}>
-          <Text
-            style={{
-              fontWeight: "500",
-              letterSpacing: 0.5,
-              color: COLORS.WHITE,
-              backgroundColor: "red",
-            }}
-          >
-            Increment By One
-          </Text>
-        </TouchableOpacity>
-        <TextInput
-          value={incrementAmount}
-          onChangeText={(value) => setIncremenetAmount(value)}
-        />
-        <TouchableOpacity onPress={() => dispatch(incrementByAmount(addValue))}>
-          <Text
-            style={{
-              fontWeight: "500",
-              letterSpacing: 0.5,
-              color: COLORS.WHITE,
-              backgroundColor: "red",
-            }}
-          >
-            Increment By HAHA
-          </Text>
-        </TouchableOpacity> */}
         {renderGoToSignUpPage()}
       </View>
     );
@@ -147,29 +116,26 @@ export default ({ navigation }) => {
     return (
       <>
         {renderSocials()}
-        <TouchableOpacity
+        <View
+          onStartShouldSetResponder={() => {
+            navigation.navigate("UserProfile");
+          }}
           disabled={!isValid}
           style={[styles.button, styles.signin]}
         >
-          {loading ? (
-            <ActivityIndicator size={SIZES.FONT * 1.4} color={COLORS.WHITE} />
-          ) : (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("UserProfile")}
+          <View>
+            <Text
+              style={{
+                fontWeight: "500",
+                letterSpacing: 0.5,
+                color: COLORS.WHITE,
+                backgroundColor: "transparent",
+              }}
             >
-              <Text
-                style={{
-                  fontWeight: "500",
-                  letterSpacing: 0.5,
-                  color: COLORS.WHITE,
-                  backgroundColor: "transparent",
-                }}
-              >
-                Login
-              </Text>
-            </TouchableOpacity>
-          )}
-        </TouchableOpacity>
+              Login
+            </Text>
+          </View>
+        </View>
       </>
     );
   };
@@ -196,54 +162,3 @@ export default ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  loginImage: {
-    width: "97%",
-    height: "28%",
-  },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: SIZES.BASE * 4,
-    height: SIZES.BASE * 8,
-    padding: SIZES.PADDING,
-    marginBottom: SIZES.BASE * 2,
-    backgroundColor: COLORS.PRIMARY,
-    marginVertical: SIZES.BASE * 0.5,
-  },
-  signin: {
-    borderRadius: SIZES.BASE * 2,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "space-evenly",
-    paddingHorizontal: "12%",
-    paddingVertical: SIZES.PADDING * 2,
-  },
-  divider: {
-    color: COLORS.BLACK,
-    fontSize: SIZES.TITLE,
-    marginVertical: SIZES.BASE * 0.003,
-    textAlign: "center",
-  },
-
-  title: {
-    color: COLORS.BLACK,
-    fontSize: SIZES.TITLE,
-    fontWeight: "600",
-    letterSpacing: 1,
-    marginBottom: SIZES.BASE * 0.1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-  },
-  containerGoToSignUpPage: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  textGoToSignUpPage: {
-    color: COLORS.PRIMARY,
-    fontWeight: "bold",
-    marginHorizontal: SIZES.BASE * 1,
-  },
-});

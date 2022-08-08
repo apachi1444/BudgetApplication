@@ -73,16 +73,7 @@ export default function ProfileUser({ navigation }) {
       <View style={profileStyles.boxContainerIncomesAndSpendings}>
         {/* this is the second one */}
 
-        <View
-          style={[
-            profileStyles.simpleBox,
-            {
-              borderRightColor: COLORS.BLACK,
-              borderRightWidth: 1,
-              backgroundColor: COLORS.TOTALINCOMES,
-            },
-          ]}
-        >
+        <View style={[profileStyles.simpleBox]}>
           <View>
             <Ionicons
               name="arrow-up-circle"
@@ -100,8 +91,6 @@ export default function ProfileUser({ navigation }) {
           style={[
             profileStyles.simpleBox,
             {
-              borderRightColor: COLORS.BLACK,
-              borderRightWidth: 1,
               backgroundColor: COLORS.TOTALSPENDINGS,
             },
           ]}
@@ -110,10 +99,11 @@ export default function ProfileUser({ navigation }) {
             <Ionicons
               name="arrow-down-circle"
               size={profileStyles.arrowIcon.size}
+              color="white"
             />
           </View>
           <View style={profileStyles.textsInsideSpecificContainer}>
-            <Title>Total Spendings</Title>
+            <Title style={{ color: "white" }}>Total Spendings</Title>
             <Text style={profileStyles.caption}>650DH</Text>
           </View>
         </View>

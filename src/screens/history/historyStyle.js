@@ -138,7 +138,7 @@ export const historyStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    padding: 12,
+    padding: SIZES.BASE / 2,
     alignSelf: "center",
     height: windowHeight * 0.25,
     width: windowWidth * 0.8,

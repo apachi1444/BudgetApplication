@@ -32,15 +32,15 @@ export const TabButton = (props) => {
   };
   const firstX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [20, -40],
+    outputRange: [SIZE, -SIZE / 2],
   });
   const firstY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -30],
+    outputRange: [0, -SIZE / 2.5],
   });
   const secondX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [20, 20],
+    outputRange: [SIZE / 2, SIZE / 6.5],
   });
   const secondY = mode.interpolate({
     inputRange: [0, 1],
@@ -48,11 +48,11 @@ export const TabButton = (props) => {
   });
   const thirdX = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [20, 80],
+    outputRange: [SIZE / 2, SIZE * 0.82],
   });
   const thirdY = mode.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -30],
+    outputRange: [0, -SIZE / 2.5],
   });
   const opacity = mode.interpolate({
     inputRange: [0, 1],
@@ -157,7 +157,7 @@ export const TabButton = (props) => {
                 transform: [{ rotate: rotation }],
               }}
             >
-              <Icon name="plus" size={24} color={COLORS.BLACK} />
+              <Icon name="plus" size={30} color={COLORS.BLACK} />
             </Animated.View>
           </TouchableHighlight>
         </View>
@@ -176,8 +176,8 @@ const styles = StyleSheet.create({
   buttonPlus: {
     alignItems: "center",
     justifyContent: "center",
-    width: SIZE / 1.05,
-    height: SIZE / 1.05,
+    width: SIZE / 1.25,
+    height: SIZE / 1.25,
     borderRadius: SIZE / 2,
     marginBottom: SIZE / 1.5,
     backgroundColor: COLORS.SECONDARY,

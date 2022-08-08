@@ -47,7 +47,7 @@ export default function Settings({ navigation }) {
 
   const profileStyles = StyleSheet.create({
     container: {
-      paddingVertical: "26%",
+      paddingVertical: "12%",
       flex: 1,
     },
     containerInformationsUser: {
@@ -79,6 +79,7 @@ export default function Settings({ navigation }) {
       justifyContent: "center",
       borderRadius: SIZES.BASE * 2,
       marginVertical: SIZES.BASE * 3,
+      marginTop: SIZES.BASE * 12,
       padding: SIZES.BASE * 3,
     },
     editProfileText: {
@@ -173,7 +174,7 @@ export default function Settings({ navigation }) {
           <Text style={profileStyles.nameUser}>Yessine Jaoua</Text>
 
           <View style={profileStyles.categorySettings}>
-            <Text>{t("Hello world")}</Text>
+            <Text>Preferences</Text>
           </View>
           {/* // this is for the each line of profile Details */}
 
@@ -181,13 +182,13 @@ export default function Settings({ navigation }) {
             style={profileStyles.profileDetailLine}
             onStartShouldSetResponder={toggleSwitch}
           >
-            <Button
+            {/* <Button
               title="translate"
               onPress={() => {
                 // i18n.changeLanguage("ar");
                 console.log(i18n.language);
               }}
-            />
+            /> */}
             <Ionicons
               name="bulb"
               color={COLORS.PRIMARY}

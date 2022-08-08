@@ -70,7 +70,7 @@ export const profileStyles = StyleSheet.create({
   textPriceOfSpecificContainer: { marginTop: SIZES.BASE * 1 },
   caption: {
     marginTop: 1,
-    fontSize: 25,
+    fontSize: 21,
     color: COLORS.PRIMARY,
     fontWeight: "bold",
   },
@@ -106,6 +106,9 @@ export const profileStyles = StyleSheet.create({
     marginBottom: SIZES.BASE * 2,
   },
   simpleBox: {
+    borderRightColor: COLORS.BLACK,
+    borderRightWidth: 1,
+    backgroundColor: COLORS.TOTALINCOMES,
     flexDirection: "row",
     width: "50%",
     height: windowHeight * 0.12,
