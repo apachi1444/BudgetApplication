@@ -1,24 +1,15 @@
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
-import React, { useState, useCallback } from "react";
-import {
-  Alert,
-  Text,
-  TextInput,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  Image,
-} from "react-native";
+import React, { useState } from "react";
+import { Text, View, TouchableOpacity } from "react-native";
 
 import { globalStyles } from "../../global/styles/globalStyles";
-// import styless from "./loginStyle";
 import { signUpStyle as styles } from "./signupStyle";
-
+import { Formik } from "formik";
+import * as yup from "yup";
 import COLORS from "../../consts/color";
+import Input from "../../components/input/input";
 export default SignUp = ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [city, setCity] = useState("");
@@ -26,150 +17,111 @@ export default SignUp = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const SIZES = {
-    BASE: 6,
-    FONT: 12,
-    TITLE: 24,
-    SUBTITLE: 11,
-    LABEL: 12,
-    PADDING: 12,
-  };
-
   const renderInputs = () => {
+    const ReviewSchema = yup.object({
+      title: yup.string().required().min(4),
+      body: yup.string().required().min(8),
+      rating: yup
+        .string()
+        .required()
+        .test("is-num-1-5", "Rating must be a number 1 -5 ", (val) => {
+          return parseInt(val) < 6 && parseInt(val) > 0;
+        }),
+    });
+
     return (
-      <View>
-        {/* this is for the username */}
+      <Formik
+        initialValues={{ title: "", body: "", rating: "" }}
+        validationSchema={ReviewSchema}
+        onSubmit={(values, actions) => {
+          actions.resetForm();
+          // addReview(values);
+        }}
+      >
+        {(props) => (
+          <View>
+            <Input
+              nameIcon="ios-mail"
+              value={email}
+              placeholder="you@email.com"
+              isPassword={false}
+              onChangeText={(value) => setEmail(value)}
+            />
 
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="ios-mail"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            value={email}
-            placeholder="you@email.com"
-            placeholderTextColor={COLORS.GREY}
-            onChangeText={(value) => setEmail(value)}
-          />
-        </View>
+            <Input
+              nameIcon="person"
+              value={username}
+              placeholder="type your username here"
+              isPassword={false}
+              onChangeText={(value) => setUsername(value)}
+            />
 
-        {/* this is for the email */}
+            <Input
+              nameIcon="ios-calendar"
+              value={birthDate}
+              placeholder="type your birthDate Here"
+              isPassword={false}
+              onChangeText={(value) => setBirthDate(value)}
+            />
 
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="person"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            value={username}
-            placeholder="type your userame here"
-            placeholderTextColor={COLORS.GREY}
-            onChangeText={(value) => setEmail(value)}
-          />
-        </View>
+            <Input
+              nameIcon="arrow-forward-circle-sharp"
+              value={city}
+              placeholder="type your city here"
+              isPassword={false}
+              onChangeText={(value) => setCity(value)}
+            />
 
-        {/* this is for the birthDate  */}
+            <Input
+              nameIcon="md-lock-closed"
+              value={password}
+              placeholder="password must contain at least 6 chars"
+              isPassword={true}
+              onChangeText={(value) => setPassword(value)}
+            />
 
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="ios-calendar"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            value={birthDate}
-            placeholder="choose your birthDate"
-            placeholderTextColor={COLORS.GREY}
-            onChangeText={(value) => setBirthDate(value)}
-          />
-        </View>
-
-        {/* this is for the city */}
-
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="arrow-forward-circle-sharp"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            value={city}
-            placeholder="choose your city"
-            placeholderTextColor={COLORS.GREY}
-            onChangeText={(value) => setCity(value)}
-          />
-        </View>
-
-        {/* this is for the password */}
-
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="md-lock-closed"
-            color={COLORS.PRIMARY}
-            size={SIZES.FONT * 1.8}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            secureTextEntry
-            value={password}
-            placeholder="Enter your password..."
-            placeholderTextColor={COLORS.GREY}
-            onChangeText={(value) => setPassword(value)}
-          />
-        </View>
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="md-lock-closed"
-            color={COLORS.PRIMARY}
-            size={SIZES.FONT * 1.8}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            secureTextEntry
-            value={confirmPassword}
-            placeholder="Enter your password again ..."
-            placeholderTextColor={COLORS.GREY}
-            onChangeText={(value) => setConfirmPassword(value)}
-          />
-        </View>
-
-        {renderActions()}
-      </View>
+            <Input
+              nameIcon="md-lock-closed"
+              value={confirmPassword}
+              placeholder="password must contain at least 6 chars"
+              isPassword={true}
+              onChangeText={(value) => setConfirmPassword(value)}
+            />
+          </View>
+        )}
+      </Formik>
     );
   };
 
   // this is for showing the buttons of google and facebook sign up
   const renderSocials = () => {
     return (
-      <View style={globalStyles.social}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={[
-            styles.button,
-            globalStyles.socialButton,
-            globalStyles.facebook,
-          ]}
-        >
-          <FontAwesome size={18} name="facebook" color={COLORS.WHITE} />
-        </TouchableOpacity>
+      <>
+        <Text style={styles.divider}>or</Text>
+        <View style={globalStyles.social}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={[
+              styles.button,
+              globalStyles.socialButton,
+              globalStyles.facebook,
+            ]}
+          >
+            <FontAwesome size={18} name="facebook" color={COLORS.WHITE} />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={[
-            styles.button,
-            globalStyles.socialButton,
-            globalStyles.google,
-          ]}
-        >
-          <FontAwesome name="google" size={18} color={COLORS.WHITE} />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={[
+              styles.button,
+              globalStyles.socialButton,
+              globalStyles.google,
+            ]}
+          >
+            <FontAwesome name="google" size={18} color={COLORS.WHITE} />
+          </TouchableOpacity>
+        </View>
+      </>
     );
   };
 
@@ -180,33 +132,32 @@ export default SignUp = ({ navigation }) => {
       <>
         <TouchableOpacity
           disabled={!isValid}
-          style={[styles.button, styles.signin]}
+          style={[styles.button, styles.signup]}
         >
-          {loading ? (
-            <ActivityIndicator size={SIZES.FONT * 1.4} color={COLORS.WHITE} />
-          ) : (
-            <Text
-              style={{
-                fontWeight: "500",
-                letterSpacing: 0.5,
-                color: COLORS.WHITE,
-                backgroundColor: "transparent",
-              }}
-            >
-              Register
-            </Text>
-          )}
+          <Text style={styles.textButtonSignUp}>Register</Text>
         </TouchableOpacity>
-        <Text style={styles.divider}>or</Text>
-        {renderSocials()}
+        {renderGoToSignInPage()}
       </>
     );
   };
 
+  const renderGoToSignInPage = () => {
+    return (
+      <View style={styles.containerGoToSignInPage}>
+        <Text>Already have an account? </Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.textGoToSignInPage}>Please Sign In Here!</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <Text style={styles.title}>REGISTER NOW</Text>
       {renderInputs()}
+      {renderSocials()}
+      {renderActions()}
     </View>
   );
 };

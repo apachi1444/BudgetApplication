@@ -22,6 +22,7 @@ export default function () {
         name="SignUp"
         component={SignUp}
         options={{
+          headerShown: false,
           headerStyle: { backgroundColor: "#eee" },
         }}
       />

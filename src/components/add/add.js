@@ -16,9 +16,11 @@ import { SIZES } from "../../consts/theme";
 import { listCategories } from "../../consts/categories";
 import { windowHeight, windowWidth } from "../../utils/dimensions";
 import { ScrollView } from "react-native-gesture-handler";
+import Input from "../input/input";
 const Add = () => {
   const [categorySelected, setCategorySelected] = useState(1);
   const [choosenPart, setChoosenPart] = useState(1);
+  const [amount, setAmount] = useState(0);
   const renderIncomesAndSpendingsTitles = () => {
     return (
       <View style={addStyle.containerButtons}>
@@ -69,7 +71,7 @@ const Add = () => {
               { color: choosenPart == 2 ? COLORS.WHITE : COLORS.PRIMARY },
             ]}
           >
-            Spending
+            Income
           </Text>
         </TouchableOpacity>
       </View>
@@ -97,21 +99,13 @@ const Add = () => {
         <Text style={addStyle.subTitle}>
           How much Do you wanna add to your wallet
         </Text>
-        <View style={[globalStyles.inputContainer, addStyle.input]}>
-          <Ionicons
-            name="cash-outline"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            // ref={inputRef}
-            // value={email}
-            placeholder="Set Amount"
-            placeholderTextColor={COLORS.GREY}
-            // onChangeText={(value) => setEmail(value)}
-          />
-        </View>
+        <Input
+          nameIcon="cash-outline"
+          value={amount}
+          placeholder="Set Amount"
+          isPassword={false}
+          onChangeText={(value) => setAmount(value)}
+        />
       </View>
     );
   };

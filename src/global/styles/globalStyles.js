@@ -17,8 +17,9 @@ export const globalStyles = StyleSheet.create({
   },
 
   inputContainer: {
-    padding: SIZES.PADDING * 1.5,
+    padding: SIZES.PADDING * 1.2,
     paddingLeft: SIZES.BASE * 2.5,
+    paddingRight: 0,
     fontSize: SIZES.FONT,
     backgroundColor: COLORS.WHITE, // "rgba(255, 255, 255, 0.5)",
     borderRadius: SIZES.BASE * 2.5,
@@ -37,13 +38,15 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  textInput: {
+    flex: 1,
+  },
   inputIcon: { marginRight: windowWidth * 0.04 },
   inputText: { fontSize: SIZES.BASE * 3, fontWeight: "bold" },
 
   social: {
     flexDirection: "row",
     justifyContent: "center",
-    marginVertical: SIZES.BASE * 3,
   },
   socialButton: {
     height: SIZES.BASE * 8,

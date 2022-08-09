@@ -17,6 +17,7 @@ import {
 import { loginStyle as styles } from "./loginStyle";
 import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
+import Input from "../../components/input/input";
 
 const SIZES = {
   BASE: 6,
@@ -44,39 +45,22 @@ export default ({ navigation }) => {
   const renderInputs = () => {
     return (
       <View>
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="ios-mail"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            ref={inputRef}
-            value={email}
-            placeholder="you@email.com"
-            placeholderTextColor={COLORS.GREY}
-            onChangeText={(value) => setEmail(value)}
-          />
-        </View>
-        <View style={globalStyles.inputContainer}>
-          <Ionicons
-            name="md-lock-closed"
-            color={COLORS.PRIMARY}
-            size={SIZES.FONT * 1.8}
-            style={globalStyles.inputIcon}
-          />
-          <TextInput
-            secureTextEntry
-            value={password}
-            placeholderTextColor={COLORS.GREY}
-            placeholder="password contains minimum 6chars"
-            onChangeText={(value) => setPassword(value)}
-          />
-        </View>
+        <Input
+          nameIcon="ios-mail"
+          value={email}
+          placeholder="you@email.com"
+          isPassword={false}
+          onChangeText={(value) => setEmail(value)}
+        />
+        <Input
+          nameIcon="md-lock-closed"
+          value={password}
+          placeholder="password must contain at least 6 chars"
+          isPassword={true}
+          onChangeText={(value) => setPassword(value)}
+        />
+
         <Text style={styles.divider}>or </Text>
-        {renderActions()}
-        {renderGoToSignUpPage()}
       </View>
     );
   };
@@ -115,7 +99,6 @@ export default ({ navigation }) => {
     const isValid = email && password;
     return (
       <>
-        {renderSocials()}
         <View
           onStartShouldSetResponder={() => {
             navigation.navigate("UserProfile");
@@ -124,16 +107,7 @@ export default ({ navigation }) => {
           style={[styles.button, styles.signin]}
         >
           <View>
-            <Text
-              style={{
-                fontWeight: "500",
-                letterSpacing: 0.5,
-                color: COLORS.WHITE,
-                backgroundColor: "transparent",
-              }}
-            >
-              Login
-            </Text>
+            <Text style={styles.textLoginButton}>Login</Text>
           </View>
         </View>
       </>
@@ -159,6 +133,9 @@ export default ({ navigation }) => {
       />
       <Text style={[styles.title]}>Login </Text>
       {renderInputs()}
+      {renderSocials()}
+      {renderActions()}
+      {renderGoToSignUpPage()}
     </View>
   );
 };

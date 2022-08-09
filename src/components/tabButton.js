@@ -93,6 +93,34 @@ export const TabButton = (props) => {
     );
   };
 
+  const renderThreeCirclesAnimation = () => {
+    return (
+      <>
+        <Circle
+          x={firstX}
+          y={firstY}
+          opacity={opacity}
+          name={"arrow-up-circle"}
+          rotatione={rotation}
+        />
+        <Circle
+          x={thirdX}
+          y={thirdY}
+          opacity={opacity}
+          name={"arrow-down-circle"}
+          rotatione={rotation}
+        />
+        <Circle
+          x={secondX}
+          y={secondY}
+          rotatione={rotation}
+          opacity={opacity}
+          name="home"
+        />
+      </>
+    );
+  };
+
   return (
     <TouchableOpacity style={styles.container} onPress={handleModal}>
       <View style={styles.container}>
@@ -125,30 +153,9 @@ export const TabButton = (props) => {
           </Modal>
         </View>
         <View>
-          <Circle
-            x={firstX}
-            y={firstY}
-            opacity={opacity}
-            name={"arrow-up-circle"}
-            rotatione={rotation}
-          />
-          <Circle
-            x={thirdX}
-            y={thirdY}
-            opacity={opacity}
-            name={"arrow-down-circle"}
-            rotatione={rotation}
-          />
-          <Circle
-            x={secondX}
-            y={secondY}
-            rotatione={rotation}
-            opacity={opacity}
-            name="home"
-          />
-
           <TouchableHighlight
-            onPress={toggleView}
+            // onPress={toggleView}
+            onPress={handleModal}
             underlayColor="transparent"
             style={styles.buttonPlus}
           >

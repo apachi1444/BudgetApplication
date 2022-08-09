@@ -14,10 +14,7 @@ export const loginStyle = StyleSheet.create({
     justifyContent: "center",
     borderRadius: SIZES.BASE * 4,
     height: SIZES.BASE * 8,
-    padding: SIZES.PADDING,
-    marginBottom: SIZES.BASE * 2,
     backgroundColor: COLORS.PRIMARY,
-    marginVertical: SIZES.BASE * 0.5,
   },
   signin: {
     borderRadius: SIZES.BASE * 2,
@@ -47,10 +44,18 @@ export const loginStyle = StyleSheet.create({
   containerGoToSignUpPage: {
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "flex-start",
+    // marginTop: "-8%",
   },
   textGoToSignUpPage: {
     color: COLORS.PRIMARY,
     fontWeight: "bold",
     marginHorizontal: SIZES.BASE * 1,
+  },
+  textLoginButton: {
+    fontWeight: "500",
+    letterSpacing: 0.5,
+    color: COLORS.WHITE,
+    backgroundColor: "transparent",
   },
 });

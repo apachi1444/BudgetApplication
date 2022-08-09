@@ -27,14 +27,12 @@ export const signUpStyle = StyleSheet.create({
   divider: {
     color: COLORS.BLACK,
     fontSize: SIZES.TITLE,
-    marginBottom: SIZES.BASE * 0.1,
     textAlign: "center",
   },
 
-  signin: {
+  signup: {
     borderRadius: SIZES.BASE * 2,
     backgroundColor: COLORS.PRIMARY,
-    marginVertical: SIZES.BASE * 3,
     marginBottom: SIZES.BASE * 2,
   },
 
@@ -43,6 +41,22 @@ export const signUpStyle = StyleSheet.create({
     fontSize: SIZES.TITLE,
     fontWeight: "600",
     letterSpacing: 1,
-    marginBottom: SIZES.BASE * 3,
+  },
+  textButtonSignUp: {
+    fontWeight: "500",
+    letterSpacing: 0.5,
+    color: COLORS.WHITE,
+    backgroundColor: "transparent",
+  },
+  containerGoToSignInPage: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    // marginTop: "-8%",
+  },
+  textGoToSignInPage: {
+    color: COLORS.PRIMARY,
+    fontWeight: "bold",
+    marginHorizontal: SIZES.BASE * 1,
   },
 });
