@@ -60,7 +60,17 @@ export const globalStyles = StyleSheet.create({
   google: {
     backgroundColor: COLORS.GOOGLE,
   },
-
+  containerErrorMessage: {
+    backgroundColor: COLORS.FOCUSEDTAB,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: SIZES.BASE * 3,
+  },
+  errorText: {
+    fontWeight: "bold",
+    color: "white",
+    marginTop: 20,
+  },
   titleText: {
     fontSize: 18,
     color: "#333",
@@ -101,13 +111,17 @@ export const globalStyles = StyleSheet.create({
     marginRight: windowWidth * 0.2,
   },
   containerPriceAndTitle: {},
-
+  containerErrorMessage: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
+    padding: SIZES.BASE * 2,
+    borderRadius: SIZES.BASE * 2,
+  },
   errorText: {
-    color: "crimson",
-    fontWeight: "bold",
-    marginBottom: 20,
-    marginTop: 6,
-    textAlign: "center",
+    color: "white",
+    fontWeight: "900",
+    fontSize: 16,
   },
   AndroidSafeArea: {
     flex: 1,

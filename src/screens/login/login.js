@@ -19,15 +19,6 @@ import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 import Input from "../../components/input/input";
 
-const SIZES = {
-  BASE: 6,
-  FONT: 12,
-  TITLE: 24,
-  SUBTITLE: 11,
-  LABEL: 12,
-  PADDING: 12,
-};
-
 export default ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

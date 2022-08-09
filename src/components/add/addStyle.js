@@ -64,6 +64,7 @@ export const addStyle = StyleSheet.create({
     fontSize: SIZES.BASE * 2.2,
     fontWeight: "300",
     textTransform: "uppercase",
+    marginBottom: SIZES.BASE * 2,
   },
 
   input: {
@@ -104,5 +105,22 @@ export const addStyle = StyleSheet.create({
     fontSize: SIZES.BASE * 3,
     fontWeight: "bold",
     color: COLORS.PRIMARY,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: SIZES.BASE * 4,
+    height: SIZES.BASE * 8,
+    backgroundColor: COLORS.PRIMARY,
+    marginBottom: SIZES.BASE * 4,
+  },
+  done: {
+    borderRadius: SIZES.BASE * 2,
+  },
+  textLoginButton: {
+    fontWeight: "500",
+    letterSpacing: 0.5,
+    color: COLORS.WHITE,
+    backgroundColor: "transparent",
   },
 });

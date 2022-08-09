@@ -140,15 +140,7 @@ export const TabButton = (props) => {
                 flex: 1,
               }}
             >
-              <Add />
-              <View
-                style={{
-                  backgroundColor: COLORS.LIGHTGREY,
-                  height: windowHeight * 0.01,
-                  borderColor: "transparent",
-                }}
-              ></View>
-              <Button title="Done" onPress={handleModal} />
+              <Add handleModal={handleModal} />
             </View>
           </Modal>
         </View>
