@@ -13,7 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Input from "../input/input";
 import { Formik } from "formik";
 import * as yup from "yup";
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 const Add = ({ handleModal }) => {
   const [categorySelected, setCategorySelected] = useState(1);
   const [choosenPart, setChoosenPart] = useState(1);
@@ -22,8 +22,10 @@ const Add = ({ handleModal }) => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
 
-  const ReviewSchema = yup.object({
+  const FormSchema = yup.object({
     title: yup.string().required().min(4),
+    category: yup.string().required(),
+    period: yup.string().required(),
     amount: yup
       .string()
       .required()
@@ -121,12 +123,14 @@ const Add = ({ handleModal }) => {
     );
   };
   const renderSetAmountInput = (props) => {
+    let subtitle =
+      choosenPart == 1
+        ? "How much is your spending"
+        : "How much Do you wanna add to your wallet";
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Amount</Text>
-        <Text style={addStyle.subTitle}>
-          How much Do you wanna add to your wallet
-        </Text>
+        <Text style={addStyle.subTitle}>{subtitle}</Text>
         <Input
           nameIcon="cash-outline"
           placeholder="Set Title"
@@ -141,24 +145,27 @@ const Add = ({ handleModal }) => {
     );
   };
 
-  const renderSetCategoryInput = () => {
+  const renderSetCategoryInput = (props) => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([
-      { label: "Food", value: "apple" },
-      { label: "Street", value: "banana" },
-      { label: "Beauty", value: "beauty" },
+      { label: "Food", value: "Food" },
+      { label: "Street", value: "Street" },
+      { label: "Beauty", value: "Beauty" },
     ]);
+
+    console.log(value);
 
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Category</Text>
         <Text style={addStyle.subTitle}>Choose Your Category</Text>
+
         <View
           style={[
             globalStyles.inputContainer,
             addStyle.input,
-            { zIndex: 5000 },
+            { zIndex: 5000, borderColor: COLORS.FACEBOOK, borderWidth: 3 },
           ]}
         >
           <Ionicons
@@ -177,8 +184,9 @@ const Add = ({ handleModal }) => {
             style={{
               borderRadius: 0,
               borderColor: "transparent",
+              flex: 30000,
+              zIndex: 50000,
             }}
-            zIndex={5000}
             showArrowIcon={true}
             autoScroll={false}
             stickyHeader={true}
@@ -212,6 +220,7 @@ const Add = ({ handleModal }) => {
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Period</Text>
         <Text style={addStyle.subTitle}>Choose Your Period Now !</Text>
+
         <View
           style={[
             globalStyles.inputContainer,
@@ -258,6 +267,7 @@ const Add = ({ handleModal }) => {
   };
 
   const renderClassifySpending = () => {
+    let title = choosenPart == 1 ? "SPENDING" : "INCOME";
     const renderItem = ({ item }) => {
       let color = categorySelected == item.id ? COLORS.SECONDARY : COLORS.GREY;
       return (
@@ -287,7 +297,7 @@ const Add = ({ handleModal }) => {
     };
     return (
       <View style={addStyle.containerInput}>
-        <Text style={addStyle.title}>Classify Your Spending</Text>
+        <Text style={addStyle.title}>Classify Your {title}</Text>
         <View style={addStyle.containerCategories}>
           <FlatList
             data={listCategories}
@@ -301,14 +311,19 @@ const Add = ({ handleModal }) => {
     );
   };
 
+  const Period = () => {
+    return renderSetPeriodInput();
+  };
+
   return (
     <ScrollView style={globalStyles.AndroidSafeAreaWithNoWhiteBackground}>
       <View style={addStyle.container}>
         <Formik
           initialValues={{ title: "", amount: "" }}
-          validationSchema={ReviewSchema}
+          validationSchema={FormSchema}
           onSubmit={(values, actions) => {
             actions.resetForm();
+            console.log(values, "dk", actions);
           }}
         >
           {(props) => {
@@ -318,9 +333,9 @@ const Add = ({ handleModal }) => {
                 {renderCurrentBudget()}
                 {renderSetAmountInput(props)}
                 {renderSetTitleInput(props)}
+                {renderSetCategoryInput(props)}
+                {choosenPart == 1 ? <Period props={props} /> : null}
 
-                {renderSetCategoryInput()}
-                {choosenPart == 1 ? renderSetPeriodInput() : null}
                 {renderClassifySpending()}
                 <View
                   style={{
@@ -330,7 +345,9 @@ const Add = ({ handleModal }) => {
                   }}
                 ></View>
                 <View
-                  onStartShouldSetResponder={handleModal}
+                  onStartShouldSetResponder={() => {
+                    handleModal();
+                  }}
                   style={[addStyle.button, addStyle.done]}
                 >
                   <View>

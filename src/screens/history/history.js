@@ -9,8 +9,6 @@ import {
   Animated,
   ScrollView,
 } from "react-native";
-
-import { Avatar } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
 import COLORS from "../../consts/color";
@@ -18,10 +16,12 @@ import { SIZES, SIZESS } from "./../../consts/theme";
 
 import { globalStyles } from "../../global/styles/globalStyles";
 import { historyStyle } from "./historyStyle";
-import { windowHeight, windowWidth } from "../../utils/dimensions";
+import { windowHeight } from "../../utils/dimensions";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { categoriesData } from "../../consts/categoriesData";
+
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const renderProfileInformations = () => {
   return (
@@ -505,64 +505,252 @@ const History = ({ navigation }) => {
     );
   };
 
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
+  const [firstDate, setFirstDate] = useState(new Date());
+  const [finalDate, setFinalDate] = useState(new Date());
+  const [singleDate, setSingleDate] = useState(new Date());
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isFinalDatePickerVisible, setFinalDatePickerVisibility] =
+    useState(false);
 
-  const [title, setSelectedTitle] = useState("Nutrition");
+  const [isSingleDatePickerVisible, setSingleDatePickerVisibility] =
+    useState(false);
+
+  const [timeOptionSelected, setTimeOptionSelected] = useState(2);
+
+  let finalStringSingleDate =
+    singleDate.getFullYear() +
+    " - " +
+    (singleDate.getMonth() + 1) +
+    " - " +
+    singleDate.getDate();
 
   let finalStringDate =
-    date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
+    firstDate.getFullYear() +
+    " - " +
+    (firstDate.getMonth() + 1) +
+    " - " +
+    firstDate.getDate();
 
-  const renderCalendarRectangle = () => {
-    return (
-      <TouchableOpacity
-        style={globalStyles.inputContainerHistoryPage}
-        onPress={() => setOpen(true)}
-      >
-        <Ionicons
-          name="filter"
-          size={SIZES.BASE * 3.7}
-          color={COLORS.PRIMARY}
-        />
-        <Text
+  let finalStringFinalDate =
+    finalDate.getFullYear() +
+    " - " +
+    (finalDate.getMonth() + 1) +
+    " - " +
+    finalDate.getDate();
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setFirstDate(date);
+    hideDatePicker();
+  };
+
+  const showSingleDatePicker = () => {
+    setSingleDatePickerVisibility(true);
+  };
+
+  const hideSingleDatePicker = () => {
+    setSingleDatePickerVisibility(false);
+  };
+
+  const handleConfirmSingle = (date) => {
+    setSingleDate(date);
+    hideSingleDatePicker();
+  };
+
+  const showFinalDatePicker = () => {
+    setFinalDatePickerVisibility(true);
+  };
+
+  const hideFinalDatePicker = () => {
+    setFinalDatePickerVisibility(false);
+  };
+
+  const handleConfirmFinal = (date) => {
+    setFinalDate(date);
+    hideFinalDatePicker();
+  };
+
+  const [title, setSelectedTitle] = useState("Nutrition");
+  const renderSwitchTimeIntervals = () => {
+    const renderOneTime = (number, text) => {
+      return (
+        <View
+          onStartShouldSetResponder={() => {
+            setTimeOptionSelected(number);
+          }}
           style={{
-            fontSize: SIZES.BASE * 3,
-            fontWeight: "bold",
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            borderColor: "black",
+            padding: SIZES.BASE * 4,
+            borderLeftWidth: number == 2 ? 1 : 0,
+            backgroundColor:
+              number == timeOptionSelected
+                ? COLORS.SECONDARY
+                : COLORS.LIGHTGREY,
+            borderRightWidth: number == 2 ? 1 : 0,
           }}
         >
-          {finalStringDate}
-        </Text>
-        {open ? (
-          <DateTimePicker
-            value={date}
-            mode="default"
-            display="default"
-            onChange={(date) => {
-              let newDate = new Date(date.nativeEvent.timestamp);
-              setDate(newDate);
-              setOpen(false);
-            }}
+          <Ionicons
+            name="calendar-outline"
+            size={SIZES.BASE * 3.7}
+            color={COLORS.PRIMARY}
+            style={{ fontWeight: "bold", marginHorizontal: "9%" }}
           />
-        ) : null}
+          <Text>{text}</Text>
+        </View>
+      );
+    };
+    return (
+      <View
+        style={{
+          marginBottom: SIZES.PADDING * 0.6,
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        {renderOneTime(1, "All Time")}
+        {renderOneTime(2, "Interval")}
+        {renderOneTime(3, "Single Day")}
+      </View>
+    );
+  };
 
-        {/* <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={"date"}
-          is24Hour={true}
-          display="inline"
-          onChange={(value) => {
-            console.log(value);
-            setDate(new Date(value.nativeEvent.timestamp));
-          }}
-        /> */}
-        <Ionicons
-          name="calendar-outline"
-          size={SIZES.BASE * 3.7}
-          color={COLORS.PRIMARY}
-          style={{ fontWeight: "bold" }}
-        />
-      </TouchableOpacity>
+  const renderCalendarRectangle = () => {
+    const renderDateInputsInterval = () => {
+      return (
+        <View style={historyStyle.inputContainerHistoryPage}>
+          <View
+            onStartShouldSetResponder={() => {
+              showDatePicker();
+            }}
+            style={historyStyle.containerDateItem}
+          >
+            <Ionicons
+              name="calendar-outline"
+              size={SIZES.BASE * 3.7}
+              color={COLORS.PRIMARY}
+              style={{ fontWeight: "bold" }}
+            />
+            <Text
+              style={{
+                fontSize: SIZES.BASE * 3,
+                fontWeight: "bold",
+              }}
+            >
+              {finalStringDate}
+            </Text>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+          </View>
+          <View
+            onStartShouldSetResponder={() => {
+              console.log(finalStringDate);
+              let aa = new Date(
+                firstDate.getFullYear(),
+                firstDate.getMonth() + 1,
+                firstDate.getDate()
+              );
+              console.log(aa);
+              showFinalDatePicker();
+            }}
+            style={historyStyle.containerDateItem}
+          >
+            <Ionicons
+              name="calendar-outline"
+              size={SIZES.BASE * 3.7}
+              color={COLORS.PRIMARY}
+              style={{ fontWeight: "bold" }}
+            />
+            <Text
+              style={{
+                fontSize: SIZES.BASE * 3,
+                fontWeight: "bold",
+              }}
+            >
+              {finalStringFinalDate}
+            </Text>
+            <DateTimePickerModal
+              isVisible={isFinalDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirmFinal}
+              onCancel={hideFinalDatePicker}
+              minimumDate={
+                new Date(
+                  firstDate.getFullYear(),
+                  firstDate.getMonth(),
+                  firstDate.getDate()
+                )
+              }
+              // minimumDate={new Date(finalStringDate)}
+            />
+          </View>
+        </View>
+      );
+    };
+    const renderDateInputsSingleDay = () => {
+      return (
+        <View style={historyStyle.inputContainerHistoryPage}>
+          <View
+            onStartShouldSetResponder={() => {
+              showSingleDatePicker();
+            }}
+            style={[
+              historyStyle.containerDateItem,
+              {
+                marginHorizontal: "26%",
+                flex: 1,
+              },
+            ]}
+          >
+            <Ionicons
+              name="calendar-outline"
+              size={SIZES.BASE * 3.7}
+              color={COLORS.PRIMARY}
+              style={{ fontWeight: "bold" }}
+            />
+            <Text
+              style={{
+                fontSize: SIZES.BASE * 3,
+                fontWeight: "bold",
+              }}
+            >
+              {finalStringSingleDate}
+            </Text>
+          </View>
+
+          <DateTimePickerModal
+            isVisible={isSingleDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirmSingle}
+            s
+            onCancel={hideSingleDatePicker}
+          />
+        </View>
+      );
+    };
+    return (
+      <>
+        {renderSwitchTimeIntervals()}
+        {timeOptionSelected == 1
+          ? null
+          : timeOptionSelected == 2
+          ? renderDateInputsInterval()
+          : renderDateInputsSingleDay()}
+      </>
     );
   };
 

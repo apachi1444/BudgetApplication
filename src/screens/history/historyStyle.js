@@ -144,4 +144,21 @@ export const historyStyle = StyleSheet.create({
     width: windowWidth * 0.8,
     backgroundColor: COLORS.LIGHTGREY,
   },
+  containerDateItem: {
+    backgroundColor: COLORS.LIGHTGREY,
+    padding: SIZESS.body1 / 1.5,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: SIZES.BASE * 1,
+    marginTop: SIZES.BASE * 2,
+    justifyContent: "space-between",
+    borderRadius: SIZES.BASE * 4,
+  },
+  inputContainerHistoryPage: {
+    padding: SIZES.PADDING * 0.6,
+    marginBottom: SIZES.PADDING * 0.8,
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });

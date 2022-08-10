@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { VictoryPie } from "victory-native";
 
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { SIZES, SIZESS } from "../../../consts/theme";
 import { Ionicons, Entypo } from "@expo/vector-icons";
@@ -20,7 +22,26 @@ import { guideData } from "../../../consts/guideData";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
+  const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(true);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  let finalStringDate =
+    date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.warn("A date has been picked: ", date);
+    setDate(date);
+    hideDatePicker();
+  };
 
   const renderHeader = () => {
     return (
@@ -284,9 +305,20 @@ const Details = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
           {show && (
-            <View style={detailsStyle.containerChoosenDate}>
-              <Text style={detailsStyle.textDateChoosen}>12/07/2022</Text>
+            <View
+              style={detailsStyle.containerChoosenDate}
+              onStartShouldSetResponder={() => showDatePicker()}
+            >
+              <Text style={detailsStyle.textDateChoosen}>
+                {finalStringDate}
+              </Text>
               <Ionicons name="filter" size={25} color={COLORS.PRIMARY} />
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
             </View>
           )}
         </>
