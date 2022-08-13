@@ -7,7 +7,7 @@ import { addStyle } from "./addStyle";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
-import { listCategories } from "../../consts/categories";
+import { listCategories } from "../../consts/spendingCategories";
 import { windowHeight } from "../../utils/dimensions";
 import { ScrollView } from "react-native-gesture-handler";
 import Input from "../input/input";
@@ -29,13 +29,13 @@ const Add = ({ handleModal }) => {
   const FormSchema = yup.object({
     title: yup.string().required().min(4),
     category: yup.string().required(),
-    period: yup.string().required(),
     amount: yup
       .string()
       .required()
       .test("is-num", "Amount Must Be Number ", (val) => {
         return parseInt(val) > 0;
       }),
+    period: yup.string().required(),
   });
   const renderIncomesAndSpendingsTitles = () => {
     return (
@@ -137,7 +137,7 @@ const Add = ({ handleModal }) => {
         <Text style={addStyle.subTitle}>{subtitle}</Text>
         <Input
           nameIcon="cash-outline"
-          placeholder="Set Title"
+          placeholder="Set Amount"
           isPassword={false}
           onChangeText={props.handleChange("amount")}
           value={props.values.amount}
@@ -213,7 +213,7 @@ const Add = ({ handleModal }) => {
     );
   };
 
-  const renderSetPeriodInput = () => {
+  const renderSetPeriodInput = (props) => {
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState(periodSpendingLabels);
     return (
@@ -232,39 +232,41 @@ const Add = ({ handleModal }) => {
             },
           ]}
         >
-          <Ionicons
-            name="cash-outline"
-            size={SIZES.FONT * 1.5}
-            color={COLORS.PRIMARY}
-            style={globalStyles.inputIcon}
-          />
-          <DropDownPicker
-            open={open}
-            value={valuePeriod}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValuePeriod}
-            setItems={setItems}
-            style={{
-              borderRadius: 0,
-              borderColor: "transparent",
-            }}
-            zIndex={5000}
-            showArrowIcon={true}
-            autoScroll={false}
-            stickyHeader={true}
-            labelStyle={{
-              fontWeight: "bold",
-              fontSize: SIZES.BASE * 3,
-              textAlign: "center",
-            }}
-            containerStyle={{
-              flex: 1,
-              height: windowHeight * 0.05,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          />
+          <>
+            <Ionicons
+              name="cash-outline"
+              size={SIZES.FONT * 1.5}
+              color={COLORS.PRIMARY}
+              style={globalStyles.inputIcon}
+            />
+            <DropDownPicker
+              open={open}
+              value={valuePeriod}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValuePeriod}
+              setItems={setItems}
+              style={{
+                borderRadius: 0,
+                borderColor: "transparent",
+              }}
+              zIndex={5000}
+              showArrowIcon={true}
+              autoScroll={true}
+              stickyHeader={true}
+              labelStyle={{
+                fontWeight: "bold",
+                fontSize: SIZES.BASE * 3,
+                textAlign: "center",
+              }}
+              containerStyle={{
+                flex: 1,
+                height: windowHeight * 0.05,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
+          </>
         </View>
       </View>
     );
@@ -315,8 +317,8 @@ const Add = ({ handleModal }) => {
     );
   };
 
-  const Period = () => {
-    return renderSetPeriodInput();
+  const Period = (props) => {
+    return renderSetPeriodInput(props);
   };
 
   const formikRef = useRef(null);
@@ -372,7 +374,7 @@ const Add = ({ handleModal }) => {
       <View style={addStyle.container}>
         <Formik
           innerRef={formikRef}
-          initialValues={{ title: "", amount: "" }}
+          initialValues={{ title: "", amount: "", period: "" }}
           validationSchema={FormSchema}
           onSubmit={(values, actions) => {
             actions.resetForm();

@@ -14,13 +14,12 @@ const SIZES = {
 export const profileStyles = StyleSheet.create({
   logoutIcon: {
     color: COLORS.PRIMARY,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginLeft: "85%",
-    marginTop: "-9%",
+  },
+  menuIcon: {
+    color: COLORS.PRIMARY,
   },
   container: {
-    paddingVertical: "24%",
+    paddingVertical: "10%",
   },
   containerInformationsUser: {
     alignItems: "center",

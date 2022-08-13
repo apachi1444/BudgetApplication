@@ -209,10 +209,16 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
       <ScrollView style={styles.page}>
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Guide 50_30_20</Text>
-          <Image
-            style={styles.profileImage}
-            source={require("../../../assets/images/elon_musk.jpg")}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+          >
+            <Image
+              style={styles.profileImage}
+              source={require("../../../assets/images/elon_musk.jpg")}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={{ alignItems: "flex-start" }}>

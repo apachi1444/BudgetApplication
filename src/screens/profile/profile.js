@@ -1,14 +1,22 @@
 import { Text, View, Image, ImageBackground } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Avatar, Caption, Title } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
-import PlannedPayments from "./../plannedPayments/plannedPayments";
 import { profileStyles } from "./profileStyle";
 import { windowWidth } from "../../utils/dimensions";
-export default function ProfileUser({ navigation }) {
-  const navigationn = useNavigation();
+import { total } from "../../global/functions/store";
+
+import { useSelector } from "react-redux";
+
+export default ProfileUser = ({ navigation }) => {
+  let listSpendings = useSelector((state) => state.userSpending);
+  let listIncomes = useSelector((state) => state.userIncome);
+
+  const totalSpendings = total(listSpendings);
+  const totalIncomes = total(listIncomes);
+
+  const currentBudget = totalIncomes - totalSpendings;
 
   const editProfile = () => {
     navigation.navigate("EditProfile");
@@ -17,6 +25,9 @@ export default function ProfileUser({ navigation }) {
   const logOut = () => {
     navigation.goBack();
   };
+  const openDrawer = () => {
+    navigation.openDrawer();
+  };
 
   const goToPlannedPayments = () => {
     navigation.navigate("PlannedPayments");
@@ -24,15 +35,31 @@ export default function ProfileUser({ navigation }) {
 
   const renderLogOutIconAndDrawer = () => {
     return (
-      <View>
-        <View onStartShouldSetResponder={logOut}>
-          <Ionicons
-            name="log-out-outline"
-            style={profileStyles.logoutIcon}
-            size={SIZES.BASE * 7}
-          />
+      <>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginHorizontal: "5%",
+          }}
+        >
+          <View onStartShouldSetResponder={openDrawer}>
+            <Ionicons
+              name="menu-outline"
+              style={profileStyles.menuIcon}
+              size={SIZES.BASE * 7}
+            />
+          </View>
+          <View onStartShouldSetResponder={logOut}>
+            <Ionicons
+              name="log-out-outline"
+              style={profileStyles.logoutIcon}
+              size={SIZES.BASE * 7}
+            />
+          </View>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -58,7 +85,7 @@ export default function ProfileUser({ navigation }) {
             style={profileStyles.imageBudget}
           />
           <View style={profileStyles.viewTextInside}>
-            <Text style={profileStyles.textInside}>0DH</Text>
+            <Text style={profileStyles.textInside}>{currentBudget} DH</Text>
           </View>
         </View>
         <View style={profileStyles.viewMyBudgetTitle}>
@@ -82,7 +109,7 @@ export default function ProfileUser({ navigation }) {
           </View>
           <View style={profileStyles.textsInsideSpecificContainer}>
             <Title>Total Incomes</Title>
-            <Text style={profileStyles.caption}>650DH</Text>
+            <Text style={profileStyles.caption}>{totalIncomes} DH</Text>
           </View>
         </View>
 
@@ -104,7 +131,7 @@ export default function ProfileUser({ navigation }) {
           </View>
           <View style={profileStyles.textsInsideSpecificContainer}>
             <Title style={{ color: "white" }}>Total Spendings</Title>
-            <Text style={profileStyles.caption}>650DH</Text>
+            <Text style={profileStyles.caption}>{totalSpendings} DH</Text>
           </View>
         </View>
       </View>
@@ -227,4 +254,4 @@ export default function ProfileUser({ navigation }) {
       </View>
     </>
   );
-}
+};

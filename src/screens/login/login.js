@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 //   login,
 //   incrementByAmount,
 // } from "../../redux/features/user/userSlice";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,9 +15,40 @@ import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 import Input from "../../components/input/input";
 import { add } from "../../redux/features/spendings/spendings";
+// import { createTable } from "../../config/db";
+import { openDatabase } from "react-native-sqlite-storage";
 
 export default ({ navigation }) => {
   const [email, setEmail] = useState("");
+  // var db = openDatabase(
+  //   {
+  //     name: "mine",
+  //     location: "default",
+  //     createFromLocation: "~mine.db",
+  //   },
+  //   () => {},
+  //   (error) => console.log(error)
+  // );
+
+  // useEffect(() => {
+  //   db.transaction(function (txn) {
+  //     txn.executeSql(
+  //       "SELECT name FROM sqlite_master WHERE type='table' AND name='table_user'",
+  //       [],
+  //       function (tx, res) {
+  //         console.log("item:", res.rows.length);
+  //         if (res.rows.length == 0) {
+  //           txn.executeSql("DROP TABLE IF EXISTS table_user", []);
+  //           txn.executeSql(
+  //             "CREATE TABLE IF NOT EXISTS table_user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, user_name VARCHAR(20), user_contact INT(10), user_address VARCHAR(255))",
+  //             []
+  //           );
+  //         }
+  //       }
+  //     );
+  //   });
+  // }, []);
+
   const [password, setPassword] = useState("");
   const storeData = async (value) => {
     try {
@@ -33,6 +64,7 @@ export default ({ navigation }) => {
   const displayData = async () => {
     try {
       var aa = await AsyncStorage.getItem("user");
+      console.log("sdqfqsdfqsdf");
       console.log(JSON.parse(aa));
     } catch (e) {}
   };
@@ -106,18 +138,7 @@ export default ({ navigation }) => {
       <>
         <View
           onStartShouldSetResponder={() => {
-            console.log(email, " : password : " + password);
-            storeData({ email, password });
-            // navigation.navigate("UserProfile");
-            dispatch(
-              add({
-                title: "PC GAMER 2023",
-                price: "5000DH",
-                date: new Date(),
-                type: "want",
-              })
-            );
-            displayData();
+            navigation.navigate("UserProfile");
           }}
           disabled={!isValid}
           style={[styles.button, styles.signin]}

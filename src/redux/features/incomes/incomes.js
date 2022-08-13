@@ -1,33 +1,28 @@
 import { createSlice, nanoid, AsyncThunk } from "@reduxjs/toolkit";
 import { categories } from "../../../consts/categories";
-import { periodList } from "../../../consts/periodSpendingLabels";
 const initialState = [
   {
     title: "PC GAMER 2022",
-    price: 2000,
+    price: 5000,
     date: new Date(),
-    type: "want",
-    category: categories[0],
-    period: periodList[0],
+    category: categories[1],
     key: 1,
   },
   {
     title: "PC GAMER 2022",
     price: 5000,
     category: categories[1],
-    period: periodList[3],
     date: new Date(),
-    type: "save",
     key: 2,
   },
 ];
-export const spendingsSlice = createSlice({
-  name: "Spendings",
+export const incomesSlice = createSlice({
+  name: "Incomes",
   initialState: initialState,
   reducers: {
     add: (state, action) => {
       const stateToAdd = {
-        key: state.length + 1,
+        key: nanoid(),
         ...action.payload,
       };
       state.push(stateToAdd);
@@ -38,6 +33,6 @@ export const spendingsSlice = createSlice({
   },
 });
 
-export default spendingsSlice.reducer;
+export default incomesSlice.reducer;
 
-export const { add } = spendingsSlice.actions;
+export const { add } = incomesSlice.actions;

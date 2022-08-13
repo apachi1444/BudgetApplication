@@ -10,7 +10,6 @@ import CheckBox from "expo-checkbox";
 import { globalStyles } from "../../global/styles/globalStyles";
 
 import { arrayPlannedPayments } from "../../consts/plannedPayments";
-import { windowHeight } from "../../utils/dimensions";
 const PlannedPayments = ({ navigation }) => {
   const [isSelected, setSelection] = useState(false);
 
@@ -36,6 +35,9 @@ const PlannedPayments = ({ navigation }) => {
   const renderItem = ({ item }) => {
     console.log(item);
     const { id, title, price, elements } = item;
+    let aa = new Date() - new Date("2018-06-01");
+    console.log(aa, "aa");
+    let daysRemaining = aa / (1000 * 60 * 60 * 24);
 
     const renderTitleAndImageAndPriceHeader = () => {
       return (
@@ -63,7 +65,9 @@ const PlannedPayments = ({ navigation }) => {
               size={25}
               style={{ marginRight: SIZES.BASE * 1.5 }}
             />
-            <Text style={plannedPaymentsStyle.price}>{price}</Text>
+            <Text style={plannedPaymentsStyle.price}>
+              {daysRemaining.toFixed(0)}
+            </Text>
           </View>
         </View>
       );
@@ -145,13 +149,11 @@ const PlannedPayments = ({ navigation }) => {
           };
 
           const renderTimeRemaining = () => {
-            console.log(element.datePayment);
-            console.log(new Date());
             const calculateTimeRemaining = () => {};
             return (
               <View style={plannedPaymentsStyle.containerRemainingTime}>
                 <Text style={plannedPaymentsStyle.timeRemaining}>
-                  1 year Remaining
+                  {daysRemaining.toFixed(0)} days Remaining
                 </Text>
               </View>
             );

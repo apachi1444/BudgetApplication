@@ -18,16 +18,27 @@ import { windowHeight } from "../../utils/dimensions";
 import { categoriesData } from "../../consts/categoriesData";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const renderProfileInformations = () => {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const displayData = async () => {
+  try {
+    var aa = await AsyncStorage.getItem("user");
+    console.log(JSON.parse(aa));
+  } catch (e) {}
+};
+
+const renderProfileInformations = (navigation) => {
   return (
     <View style={globalStyles.headerContainer}>
       <Text style={globalStyles.titleHistory}>
         Spendings And Incomes Dashboard
       </Text>
-      <Image
-        style={globalStyles.profileImage}
-        source={require("../../assets/images/elon_musk.jpg")}
-      />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Image
+          style={globalStyles.profileImage}
+          source={require("../../assets/images/elon_musk.jpg")}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -128,7 +139,6 @@ const History = ({ navigation }) => {
 
     const onPressMoreAndLessButton = () => {
       let aa = Math.ceil((categoriesData.length - 6) / 3);
-      console.log(aa);
       if (showMoreToggle) {
         // when we click on the less button
         Animated.timing(heightAnimationValue, {
@@ -366,7 +376,6 @@ const History = ({ navigation }) => {
         const renderEditAndDeleteButton = () => {
           const deleteItem = () => {
             const id = item.id;
-            console.log(item.id);
             console.log(selectedCategory);
             selectedCategory.history.filter((item) => {
               console.log(item);
@@ -623,9 +632,11 @@ const History = ({ navigation }) => {
   const renderCalendarRectangle = () => {
     const renderDateInputsInterval = () => {
       const renderFirstDateInput = () => {
+        displayData();
         return (
           <View
             onStartShouldSetResponder={() => {
+              console.log("qsdfqsdfsdqf");
               showDatePicker();
             }}
             style={historyStyle.containerDateItem}
@@ -762,7 +773,7 @@ const History = ({ navigation }) => {
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
       <ScrollView>
         <View style={historyStyle.wholeContainer}>
-          {renderProfileInformations()}
+          {renderProfileInformations(navigation)}
           {renderCalendarRectangle()}
           {renderThreeCirclesIncomesBudgetAndSpendings()}
           {renderCategoryHeaderSection()}

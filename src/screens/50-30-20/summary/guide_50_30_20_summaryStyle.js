@@ -15,7 +15,7 @@ export const guideStyle = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.BASE * 3,
-    fontWeight: "350",
+    fontWeight: "400",
     marginRight: "25%",
   },
   profileImage: {
