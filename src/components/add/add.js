@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -14,6 +14,8 @@ import Input from "../input/input";
 import { Formik } from "formik";
 import * as yup from "yup";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { categoriesLabels } from "../../consts/categoriesLabels";
+import { periodSpendingLabels } from "../../consts/periodSpendingLabels";
 const Add = ({ handleModal }) => {
   const [categorySelected, setCategorySelected] = useState(1);
   const [choosenPart, setChoosenPart] = useState(1);
@@ -21,6 +23,8 @@ const Add = ({ handleModal }) => {
   const [period, setPeriod] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
+  const [valueCategory, setValueCategory] = useState(null);
+  const [valuePeriod, setValuePeriod] = useState(null);
 
   const FormSchema = yup.object({
     title: yup.string().required().min(4),
@@ -147,14 +151,8 @@ const Add = ({ handleModal }) => {
 
   const renderSetCategoryInput = (props) => {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-      { label: "Food", value: "Food" },
-      { label: "Street", value: "Street" },
-      { label: "Beauty", value: "Beauty" },
-    ]);
 
-    console.log(value);
+    const [items, setItems] = useState(categoriesLabels);
 
     return (
       <View style={addStyle.containerInput}>
@@ -165,7 +163,11 @@ const Add = ({ handleModal }) => {
           style={[
             globalStyles.inputContainer,
             addStyle.input,
-            { zIndex: 5000, borderColor: COLORS.FACEBOOK, borderWidth: 3 },
+            {
+              zIndex: 5000,
+              borderColor: valueCategory !== null ? COLORS.GREEN : COLORS.RED,
+              borderWidth: 3,
+            },
           ]}
         >
           <Ionicons
@@ -176,10 +178,10 @@ const Add = ({ handleModal }) => {
           />
           <DropDownPicker
             open={open}
-            value={value}
+            value={valueCategory}
             items={items}
             setOpen={setOpen}
-            setValue={setValue}
+            setValue={setValueCategory}
             setItems={setItems}
             style={{
               borderRadius: 0,
@@ -200,6 +202,11 @@ const Add = ({ handleModal }) => {
               height: windowHeight * 0.05,
               justifyContent: "center",
             }}
+            dropDownContainerStyle={{
+              backgroundColor: "red",
+              zIndex: 800000,
+              elevation: 1000,
+            }}
           />
         </View>
       </View>
@@ -208,14 +215,7 @@ const Add = ({ handleModal }) => {
 
   const renderSetPeriodInput = () => {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-      { label: "1 year", value: "1 year" },
-      { label: "6 months", value: "6 months" },
-      { label: "3 months", value: "3 months" },
-      { label: "1 month", value: "1 months" },
-    ]);
-
+    const [items, setItems] = useState(periodSpendingLabels);
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Period</Text>
@@ -225,7 +225,11 @@ const Add = ({ handleModal }) => {
           style={[
             globalStyles.inputContainer,
             addStyle.input,
-            { zIndex: 5000 },
+            {
+              zIndex: 5000,
+              borderColor: valuePeriod !== null ? COLORS.GREEN : COLORS.RED,
+              borderWidth: 3,
+            },
           ]}
         >
           <Ionicons
@@ -236,10 +240,10 @@ const Add = ({ handleModal }) => {
           />
           <DropDownPicker
             open={open}
-            value={value}
+            value={valuePeriod}
             items={items}
             setOpen={setOpen}
-            setValue={setValue}
+            setValue={setValuePeriod}
             setItems={setItems}
             style={{
               borderRadius: 0,
@@ -315,15 +319,63 @@ const Add = ({ handleModal }) => {
     return renderSetPeriodInput();
   };
 
+  const formikRef = useRef(null);
+
+  const submitForm = () => {
+    console.log(formikRef.current);
+    return formikRef.current.values;
+  };
+
+  const renderButtonDoneForm = (props) => {
+    // const values = submitForm();
+    // let bool =
+    //   values.title != "" &&
+    //   values.amount != "" &&
+    //   valueCategory != null &&
+    //   valuePeriod != null;
+    // return bool ? (
+    //   <View
+    //     onStartShouldSetResponder={() => {
+    //       handleModal();
+    //       props.submitForm;
+    //     }}
+    //     style={[addStyle.button, addStyle.done]}
+    //   >
+    //     <Text style={addStyle.textLoginButton}>Done</Text>
+    //   </View>
+    // ) : (
+    //   <View
+    //     style={[
+    //       addStyle.button,
+    //       addStyle.done,
+    //       { backgroundColor: COLORS.PRIMARY, opacity: 0.3 },
+    //     ]}
+    //   >
+    //     <Text style={addStyle.textLoginButton}>Done</Text>
+    //   </View>
+    // );
+    return (
+      <View
+        onStartShouldSetResponder={() => {
+          handleModal();
+          props.submitForm;
+        }}
+        style={[addStyle.button, addStyle.done]}
+      >
+        <Text style={addStyle.textLoginButton}>Done</Text>
+      </View>
+    );
+  };
+
   return (
     <ScrollView style={globalStyles.AndroidSafeAreaWithNoWhiteBackground}>
       <View style={addStyle.container}>
         <Formik
+          innerRef={formikRef}
           initialValues={{ title: "", amount: "" }}
           validationSchema={FormSchema}
           onSubmit={(values, actions) => {
             actions.resetForm();
-            console.log(values, "dk", actions);
           }}
         >
           {(props) => {
@@ -344,16 +396,8 @@ const Add = ({ handleModal }) => {
                     borderColor: "transparent",
                   }}
                 ></View>
-                <View
-                  onStartShouldSetResponder={() => {
-                    handleModal();
-                  }}
-                  style={[addStyle.button, addStyle.done]}
-                >
-                  <View>
-                    <Text style={addStyle.textLoginButton}>Done</Text>
-                  </View>
-                </View>
+
+                {renderButtonDoneForm(props)}
               </>
             );
           }}

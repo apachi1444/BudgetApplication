@@ -10,17 +10,12 @@ import {
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import COLORS from "../../consts/color";
 import { SIZES, SIZESS } from "./../../consts/theme";
-
 import { globalStyles } from "../../global/styles/globalStyles";
 import { historyStyle } from "./historyStyle";
 import { windowHeight } from "../../utils/dimensions";
-
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { categoriesData } from "../../consts/categoriesData";
-
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const renderProfileInformations = () => {
@@ -627,8 +622,8 @@ const History = ({ navigation }) => {
 
   const renderCalendarRectangle = () => {
     const renderDateInputsInterval = () => {
-      return (
-        <View style={historyStyle.inputContainerHistoryPage}>
+      const renderFirstDateInput = () => {
+        return (
           <View
             onStartShouldSetResponder={() => {
               showDatePicker();
@@ -656,6 +651,10 @@ const History = ({ navigation }) => {
               onCancel={hideDatePicker}
             />
           </View>
+        );
+      };
+      const renderFinalDateInput = () => {
+        return (
           <View
             onStartShouldSetResponder={() => {
               console.log(finalStringDate);
@@ -695,9 +694,14 @@ const History = ({ navigation }) => {
                   firstDate.getDate()
                 )
               }
-              // minimumDate={new Date(finalStringDate)}
             />
           </View>
+        );
+      };
+      return (
+        <View style={historyStyle.inputContainerHistoryPage}>
+          {renderFirstDateInput()}
+          {renderFinalDateInput()}
         </View>
       );
     };
