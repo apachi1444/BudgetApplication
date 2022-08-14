@@ -47,3 +47,20 @@ export const calculateTotalSpendingsParticularCategory = (list) => {
     });
   });
 };
+
+export const renderMessageTimeRemaining = () => {
+  let categoryPlannedPayment = "";
+  if (yearsRemaining > 0 && newDaysRemaining > 0)
+    categoryPlannedPayment = "Remaining";
+  else if (yearsRemaining < 0 && newDaysRemaining < 0)
+    categoryPlannedPayment = "Passed";
+
+  let finalString =
+    yearsRemaining != 0
+      ? `${yearsRemaining} years ${newDaysRemaining.toFixed(0)} days`
+      : `${newDaysRemaining.toFixed(0)} days`;
+
+  finalString += " " + categoryPlannedPayment;
+
+  return { finalString, categoryPlannedPayment };
+};

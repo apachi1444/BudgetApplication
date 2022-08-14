@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View, Image } from "react-native";
+import { Text, TouchableOpacity, View, Image, StatusBar } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Avatar } from "react-native-paper";
 import { SIZES, SIZESS } from "../../consts/theme";
@@ -35,9 +35,11 @@ const PlannedPayments = ({ navigation }) => {
   const renderItem = ({ item }) => {
     console.log(item);
     const { id, title, price, elements } = item;
-    let aa = new Date() - new Date("2018-06-01");
+    let aa = new Date("2018-06-01") - new Date();
     console.log(aa, "aa");
     let daysRemaining = aa / (1000 * 60 * 60 * 24);
+    let yearsRemaining = Math.floor(daysRemaining / 365);
+    let newDaysRemaining = daysRemaining - 365 * yearsRemaining;
 
     const renderTitleAndImageAndPriceHeader = () => {
       return (
@@ -77,24 +79,13 @@ const PlannedPayments = ({ navigation }) => {
       const renderTitleAndPriceAndPeriod = () => {
         const renderImageAndTitle = () => {
           return (
-            <View
-              style={plannedPaymentsStyle.containerCheckboxAndImageAndTitle}
-            >
-              <CheckBox
-                disabled={false}
-                value={isSelected}
-                onValueChange={(newValue) => setSelection(newValue)}
-              />
-              <Avatar.Image
-                source={require("../../assets/images/elon_musk.jpg")}
-                size={SIZESS.body1 * 1.4}
-                style={{
-                  marginHorizontal: 10,
-                }}
-              />
+            <View style={[plannedPaymentsStyle.containerAndImageAndTitle]}>
               <View>
                 <Text
-                  style={{ fontSize: SIZESS.body1 / 1.7, fontWeight: "bold" }}
+                  style={{
+                    fontSize: SIZESS.body1 / 1.7,
+                    fontWeight: "bold",
+                  }}
                 >
                   {element.title}
                 </Text>
@@ -111,6 +102,7 @@ const PlannedPayments = ({ navigation }) => {
                       color: COLORS.PRIMARY,
                       fontSize: 20,
                       marginRight: "4%",
+                      marginTop: "1.5%",
                     }}
                   />
                   <Text
@@ -149,11 +141,33 @@ const PlannedPayments = ({ navigation }) => {
           };
 
           const renderTimeRemaining = () => {
-            const calculateTimeRemaining = () => {};
+            let categoryPlannedPayment = "";
+            if (yearsRemaining > 0 && newDaysRemaining > 0)
+              categoryPlannedPayment = "Remaining";
+            else if (yearsRemaining < 0 && newDaysRemaining < 0)
+              categoryPlannedPayment = "Passed";
+
+            let finalString =
+              yearsRemaining != 0
+                ? `${yearsRemaining} years ${newDaysRemaining.toFixed(0)} days`
+                : `${newDaysRemaining.toFixed(0)} days`;
+
+            finalString += " " + categoryPlannedPayment;
+
             return (
-              <View style={plannedPaymentsStyle.containerRemainingTime}>
-                <Text style={plannedPaymentsStyle.timeRemaining}>
-                  {daysRemaining.toFixed(0)} days Remaining
+              <View
+                style={[
+                  plannedPaymentsStyle.containerRemainingTime,
+                  {
+                    backgroundColor:
+                      categoryPlannedPayment == "Passed"
+                        ? COLORS.RED
+                        : COLORS.GREEN,
+                  },
+                ]}
+              >
+                <Text style={[plannedPaymentsStyle.timeRemaining]}>
+                  {finalString}
                 </Text>
               </View>
             );
@@ -238,6 +252,12 @@ const PlannedPayments = ({ navigation }) => {
   };
   return (
     <View style={plannedPaymentsStyle.container}>
+      <StatusBar
+        barStyle="dark-content"
+        hidden={false}
+        backgroundColor="#00BCD4"
+        translucent={false}
+      />
       {renderHeader()}
       <FlatList data={arrayPlannedPayments} renderItem={renderItem} />
       {renderPagination()}

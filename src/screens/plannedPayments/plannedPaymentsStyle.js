@@ -79,9 +79,10 @@ export const plannedPaymentsStyle = StyleSheet.create({
     marginBottom: SIZESS.base,
   },
 
-  containerCheckboxAndImageAndTitle: {
+  containerAndImageAndTitle: {
     flexDirection: "row",
     alignItems: "center",
+    marginLeft: "3%",
   },
 
   containerEachLine: {
@@ -92,6 +93,7 @@ export const plannedPaymentsStyle = StyleSheet.create({
     borderRadius: SIZESS.base * 1.5,
     padding: SIZESS.base * 1.7,
     paddingHorizontal: SIZESS.base,
+    paddingVertical: "6%",
     marginHorizontal: 0,
     marginVertical: SIZES.BASE * 2.5,
   },
@@ -106,7 +108,7 @@ export const plannedPaymentsStyle = StyleSheet.create({
   containerDeleteAndEditButtons: {
     flexDirection: "row",
     position: "absolute",
-    bottom: "-41%",
+    bottom: "-10%",
     alignSelf: "center",
     right: "4%",
   },
@@ -118,7 +120,6 @@ export const plannedPaymentsStyle = StyleSheet.create({
   },
 
   containerRemainingTime: {
-    backgroundColor: COLORS.RED,
     padding: SIZES.BASE * 0.6,
     paddingHorizontal: SIZES.BASE * 1.3,
     borderRadius: SIZES.BASE * 1,
@@ -127,10 +128,12 @@ export const plannedPaymentsStyle = StyleSheet.create({
 
   containerCalendarAndTimeRemaining: {
     alignItems: "flex-end",
+    marginRight: "2%",
   },
 
   containerDetailsEachLine: {
     alignItems: "space-between",
+    padding: SIZES.BASE * 10,
   },
   headerContainer: {
     flexDirection: "row",
