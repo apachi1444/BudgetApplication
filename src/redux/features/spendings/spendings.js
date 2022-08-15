@@ -28,6 +28,7 @@ export const spendingsSlice = createSlice({
     add: (state, action) => {
       const stateToAdd = {
         key: state.length + 1,
+        date: new Date(),
         ...action.payload,
       };
       state.push(stateToAdd);

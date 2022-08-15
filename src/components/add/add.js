@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
 import { globalStyles } from "../../global/styles/globalStyles";
@@ -13,29 +13,40 @@ import { ScrollView } from "react-native-gesture-handler";
 import Input from "../input/input";
 import { Formik } from "formik";
 import * as yup from "yup";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { categoriesLabels } from "../../consts/categoriesLabels";
 import { periodSpendingLabels } from "../../consts/periodSpendingLabels";
+import { useSelector, useDispatch } from "react-redux";
+import { total } from "../../global/functions/store";
+import {
+  checkForNums,
+  checkNumsExpression,
+} from "../../global/functions/regex";
+import { add } from "../../redux/features/spendings/spendings";
+
 const Add = ({ handleModal }) => {
   const [categorySelected, setCategorySelected] = useState(1);
   const [choosenPart, setChoosenPart] = useState(1);
-  const [amount, setAmount] = useState(0);
-  const [period, setPeriod] = useState("");
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  let listSpendings = useSelector((state) => state.userSpending);
+  let listIncomes = useSelector((state) => state.userIncome);
+
+  const [nameGuideCategory, setNameGuideCategory] = useState("");
+
+  const totalSpendings = total(listSpendings);
+  const totalIncomes = total(listIncomes);
+
+  const currentBudget = totalIncomes - totalSpendings;
+
   const [valueCategory, setValueCategory] = useState(null);
   const [valuePeriod, setValuePeriod] = useState(null);
 
   const FormSchema = yup.object({
     title: yup.string().required().min(4),
-    category: yup.string().required(),
     amount: yup
       .string()
       .required()
       .test("is-num", "Amount Must Be Number ", (val) => {
-        return parseInt(val) > 0;
+        return checkNumsExpression.test(val);
       }),
-    period: yup.string().required(),
   });
   const renderIncomesAndSpendingsTitles = () => {
     return (
@@ -102,7 +113,7 @@ const Add = ({ handleModal }) => {
             name="cash-outline"
             style={addStyle.iconCashCurrentBudget}
           />
-          <Text style={addStyle.currentBudgetNumber}>210 DH</Text>
+          <Text style={addStyle.currentBudgetNumber}>{currentBudget} DH</Text>
         </View>
       </View>
     );
@@ -149,7 +160,7 @@ const Add = ({ handleModal }) => {
     );
   };
 
-  const renderSetCategoryInput = (props) => {
+  const renderSetCategoryInput = () => {
     const [open, setOpen] = useState(false);
 
     const [items, setItems] = useState(categoriesLabels);
@@ -199,12 +210,15 @@ const Add = ({ handleModal }) => {
             }}
             containerStyle={{
               flex: 1,
+              fontSize: SIZES.BASE * 3,
               height: windowHeight * 0.05,
               justifyContent: "center",
             }}
             dropDownContainerStyle={{
+              fontSize: SIZES.BASE * 3,
               backgroundColor: "red",
               zIndex: 800000,
+              flex: 1,
               elevation: 1000,
             }}
           />
@@ -213,7 +227,7 @@ const Add = ({ handleModal }) => {
     );
   };
 
-  const renderSetPeriodInput = (props) => {
+  const renderSetPeriodInput = () => {
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState(periodSpendingLabels);
     return (
@@ -226,7 +240,7 @@ const Add = ({ handleModal }) => {
             globalStyles.inputContainer,
             addStyle.input,
             {
-              zIndex: 5000,
+              zIndex: open ? 1 : 0,
               borderColor: valuePeriod !== null ? COLORS.GREEN : COLORS.RED,
               borderWidth: 3,
             },
@@ -281,6 +295,7 @@ const Add = ({ handleModal }) => {
           key={item.id}
           onPress={() => {
             setCategorySelected(item.id);
+            setNameGuideCategory(item.name);
           }}
           style={[
             addStyle.inputCategorie,
@@ -323,46 +338,35 @@ const Add = ({ handleModal }) => {
 
   const formikRef = useRef(null);
 
-  const submitForm = () => {
-    console.log(formikRef.current);
-    return formikRef.current.values;
-  };
-
   const renderButtonDoneForm = (props) => {
-    // const values = submitForm();
-    // let bool =
-    //   values.title != "" &&
-    //   values.amount != "" &&
-    //   valueCategory != null &&
-    //   valuePeriod != null;
-    // return bool ? (
-    //   <View
-    //     onStartShouldSetResponder={() => {
-    //       handleModal();
-    //       props.submitForm;
-    //     }}
-    //     style={[addStyle.button, addStyle.done]}
-    //   >
-    //     <Text style={addStyle.textLoginButton}>Done</Text>
-    //   </View>
-    // ) : (
-    //   <View
-    //     style={[
-    //       addStyle.button,
-    //       addStyle.done,
-    //       { backgroundColor: COLORS.PRIMARY, opacity: 0.3 },
-    //     ]}
-    //   >
-    //     <Text style={addStyle.textLoginButton}>Done</Text>
-    //   </View>
-    // );
+    let amount = props.values.amount;
+    let title = props.values.title;
+
+    let done =
+      valueCategory != null &&
+      valuePeriod != null &&
+      amount != "" &&
+      title != "";
+
+    let listSpendings = useSelector((state) => state.userSpending);
+    let listIncomes = useSelector((state) => state.userIncome);
+    const dispatch = useDispatch();
     return (
       <View
         onStartShouldSetResponder={() => {
-          handleModal();
-          props.submitForm;
+          // handleModal();
+          if (done) {
+            console.log(listSpendings);
+            console.log(done);
+            console.log(valueCategory);
+            console.log(categorySelected);
+            console.log(valuePeriod);
+            console.log(props.values);
+            handleModal();
+            // dispatch(add({}));
+          }
         }}
-        style={[addStyle.button, addStyle.done]}
+        style={[addStyle.button, addStyle.done, { opacity: done ? 1 : 0.6 }]}
       >
         <Text style={addStyle.textLoginButton}>Done</Text>
       </View>

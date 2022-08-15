@@ -1,5 +1,5 @@
 export const periodSpendingLabels = [
-  { label: "Yearly", value: "Yearl" },
+  { label: "Yearly", value: "Yearly" },
   { label: "Monthly", value: "Monthly" },
   { label: "Weekly", value: "Weekly" },
   { label: "3 months", value: "3 months" },

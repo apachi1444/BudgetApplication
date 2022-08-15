@@ -113,6 +113,15 @@ export const plannedPaymentsStyle = StyleSheet.create({
     right: "4%",
   },
 
+  containerTitleImageTotalPrice: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: SIZES.BASE * 2,
+    backgroundColor: COLORS.SECONDARY,
+    borderRadius: SIZES.BASE * 4,
+    paddingHorizontal: SIZES.BASE * 3.5,
+  },
+
   timeRemaining: {
     fontSize: 13,
     fontWeight: "bold",
@@ -140,7 +149,7 @@ export const plannedPaymentsStyle = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     margin: "5%",
-    marginBottom: "1%",
+    marginBottom: "7%",
     marginTop: "10%",
   },
   titleHeader: {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { categories } from "../../consts/categories";
 import { listCategories } from "../../consts/spendingCategories";
 
 export const total = (list) => {
@@ -38,14 +39,17 @@ export const images = {
     insurance: require("../../assets/images/insurance.jpg"),
   },
 };
-export const calculateTotalSpendingsParticularCategory = (list) => {
-  let totals = [];
-  listCategories.map((category) => {
-    totals.push({
-      category: category,
-      total: 0,
-    });
+export const calculateTotalSpendingsAllCategories = (list) => {
+  let totals = {};
+  categories.map((category) => {
+    totals[category] = 0;
   });
+  list.map((item) => {
+    let totalSpendings = total(item.elements);
+    totals[item.title] = totalSpendings;
+  });
+
+  return totals;
 };
 
 export const renderMessageTimeRemaining = () => {

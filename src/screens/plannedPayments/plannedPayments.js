@@ -4,16 +4,20 @@ import { FlatList } from "react-native-gesture-handler";
 import { Avatar } from "react-native-paper";
 import { SIZES, SIZESS } from "../../consts/theme";
 import { plannedPaymentsStyle } from "./plannedPaymentsStyle";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
-import CheckBox from "expo-checkbox";
 import { globalStyles } from "../../global/styles/globalStyles";
 
-import { arrayPlannedPayments } from "../../consts/plannedPayments";
+import {
+  arrayPlannedPayments,
+  warningZoneRemainingDays,
+} from "../../consts/plannedPayments";
+import { calculateTotalSpendingsAllCategories } from "../../global/functions/store";
 const PlannedPayments = ({ navigation }) => {
-  const [isSelected, setSelection] = useState(false);
-
   const numberPages = [1, 2, 3, 4];
+
+  let listTotalSpendingsCategories =
+    calculateTotalSpendingsAllCategories(arrayPlannedPayments);
 
   const renderHeader = () => {
     return (
@@ -21,7 +25,7 @@ const PlannedPayments = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-undo-circle-outline" size={42} />
         </TouchableOpacity>
-        <Text style={plannedPaymentsStyle.titleHeader}>Charts</Text>
+        <Text style={plannedPaymentsStyle.titleHeader}>Planned Payments</Text>
         <TouchableOpacity onPress={() => navigation.open()}>
           <Image
             style={globalStyles.profileImage}
@@ -33,49 +37,62 @@ const PlannedPayments = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    console.log(item);
     const { id, title, price, elements } = item;
-    let aa = new Date("2018-06-01") - new Date();
-    console.log(aa, "aa");
-    let daysRemaining = aa / (1000 * 60 * 60 * 24);
-    let yearsRemaining = Math.floor(daysRemaining / 365);
-    let newDaysRemaining = daysRemaining - 365 * yearsRemaining;
 
-    const renderTitleAndImageAndPriceHeader = () => {
-      return (
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: SIZES.BASE * 1.5,
-            backgroundColor: COLORS.SECONDARY,
-            borderRadius: SIZES.BASE * 4,
-            paddingHorizontal: SIZES.BASE * 3.5,
-          }}
-        >
-          <View style={plannedPaymentsStyle.imageAndTitle}>
-            <Avatar.Image
-              source={require("../../assets/images/elon_musk.jpg")}
-              size={SIZESS.body1 * 1.2}
-            />
-            <Text style={plannedPaymentsStyle.title}>{title}</Text>
-          </View>
-          <View style={plannedPaymentsStyle.iconAndPriceContainer}>
-            <Ionicons
-              name="cash"
-              color={COLORS.PRIMARY}
-              size={25}
-              style={{ marginRight: SIZES.BASE * 1.5 }}
-            />
-            <Text style={plannedPaymentsStyle.price}>
-              {daysRemaining.toFixed(0)}
-            </Text>
-          </View>
+    const renderTitleAndImageAndPriceHeader = () => (
+      <View style={plannedPaymentsStyle.containerTitleImageTotalPrice}>
+        <View style={plannedPaymentsStyle.imageAndTitle}>
+          <Avatar.Image
+            source={require("../../assets/images/elon_musk.jpg")}
+            size={SIZESS.body1 * 1.2}
+          />
+          <Text style={plannedPaymentsStyle.title}>{title}</Text>
         </View>
-      );
-    };
+        <View style={plannedPaymentsStyle.iconAndPriceContainer}>
+          <Ionicons
+            name="cash"
+            color={COLORS.PRIMARY}
+            size={25}
+            style={{ marginRight: SIZES.BASE * 1.5 }}
+          />
+          <Text style={plannedPaymentsStyle.price}>
+            {listTotalSpendingsCategories[title]}
+          </Text>
+        </View>
+      </View>
+    );
 
     const renderLineDetailEachItem = (element) => {
+      let { datePayment } = element;
+      let arrayComponentsDate = datePayment.split("-");
+      let day = Number(arrayComponentsDate[0]);
+      let month = Number(arrayComponentsDate[1]);
+      let year = Number(arrayComponentsDate[2]);
+      let differenceBetweenDatesMilliSeconds =
+        new Date() - new Date(year, month - 1, day);
+
+      if (differenceBetweenDatesMilliSeconds < 0) {
+        differenceBetweenDatesMilliSeconds *= -1;
+      }
+
+      let daysRemaining =
+        differenceBetweenDatesMilliSeconds / (1000 * 60 * 60 * 24);
+      let yearsRemaining = Math.ceil(daysRemaining) / 365;
+      yearsRemaining = Math.floor(yearsRemaining);
+      let newDaysRemaining = daysRemaining;
+      if (yearsRemaining > 1) {
+        newDaysRemaining =
+          Math.ceil(daysRemaining) - 365 * Math.floor(yearsRemaining);
+      }
+      let remaining = new Date(year, month, day) - new Date() > 0;
+      let color = COLORS.GREEN;
+      let message = "Remaining";
+      if (!remaining) {
+        color = COLORS.RED;
+        message = "Passed";
+      } else if (remaining && newDaysRemaining < warningZoneRemainingDays) {
+        color = COLORS.ORANGE;
+      }
       const renderTitleAndPriceAndPeriod = () => {
         const renderImageAndTitle = () => {
           return (
@@ -141,33 +158,24 @@ const PlannedPayments = ({ navigation }) => {
           };
 
           const renderTimeRemaining = () => {
-            let categoryPlannedPayment = "";
-            if (yearsRemaining > 0 && newDaysRemaining > 0)
-              categoryPlannedPayment = "Remaining";
-            else if (yearsRemaining < 0 && newDaysRemaining < 0)
-              categoryPlannedPayment = "Passed";
-
+            let stringYear = yearsRemaining == 1 ? "year" : "years";
             let finalString =
               yearsRemaining != 0
-                ? `${yearsRemaining} years ${newDaysRemaining.toFixed(0)} days`
+                ? `${yearsRemaining} ${stringYear} ${newDaysRemaining.toFixed(
+                    0
+                  )} days`
                 : `${newDaysRemaining.toFixed(0)} days`;
-
-            finalString += " " + categoryPlannedPayment;
-
             return (
               <View
                 style={[
                   plannedPaymentsStyle.containerRemainingTime,
                   {
-                    backgroundColor:
-                      categoryPlannedPayment == "Passed"
-                        ? COLORS.RED
-                        : COLORS.GREEN,
+                    backgroundColor: color,
                   },
                 ]}
               >
                 <Text style={[plannedPaymentsStyle.timeRemaining]}>
-                  {finalString}
+                  {finalString} {message}
                 </Text>
               </View>
             );
