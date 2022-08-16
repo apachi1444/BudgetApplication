@@ -10,7 +10,7 @@ const initialState = listCategories.map((item) => {
 });
 
 export const guideSpendingsSlice = createSlice({
-  name: "Spendings",
+  name: "plannedPayments",
   initialState: initialState,
   reducers: {
     addGuideSpending: (state, action) => {

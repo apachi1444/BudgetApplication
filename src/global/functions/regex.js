@@ -3,3 +3,5 @@ export function checkForNums(input) {
   console.log(result);
 }
 export const checkNumsExpression = /^\d+$/;
+
+export const checkLengthTitle = /^.{4,}$/i;

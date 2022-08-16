@@ -20,101 +20,21 @@ import { add } from "../../redux/features/spendings/spendings";
 import { addPlanned } from "../../redux/features/spendings/plannedPayments";
 import { addGuideSpending } from "../../redux/features/spendings/guideSpendings";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
-import { FormSchema } from "../../consts/schemas";
-import { checkForNums } from "../../global/functions/regex";
+import { FormSchemaIncome, FormSchemaSpending } from "../../consts/schemas";
+
 const Add = ({ handleModal }) => {
   const [categorySelected, setCategorySelected] = useState(1);
-  const [categoryIncomeSelected, setCategoryIncomeSelected] = useState(1);
   const [choosenPart, setChoosenPart] = useState(1);
   let listSpendings = useSelector((state) => state.userSpending);
-  let listIncomes = useSelector((state) => state.userIncome);
 
   const [type, setType] = useState("Wants");
 
-  const [typeIncome, setTypeIncome] = useState("Wants");
-
   const totalSpendings = total(listSpendings);
-  const totalIncomes = total(listIncomes);
-
-  const [amount, setAmount] = useState(0);
 
   const currentBudget = totalIncomes - totalSpendings;
 
-  const [valueIncomeCategory, setValueIncomeCategory] = useState(null);
-
   const [valueCategory, setValueCategory] = useState(null);
   const [valuePeriod, setValuePeriod] = useState(null);
-
-  const renderIncomesAndSpendingsTitles = () => {
-    return (
-      <View style={addStyle.containerButtons}>
-        <TouchableOpacity
-          onPress={() => {
-            setChoosenPart(1);
-          }}
-          style={[
-            addStyle.containerButton,
-            {
-              backgroundColor: choosenPart == 1 ? COLORS.PRIMARY : COLORS.WHITE,
-            },
-          ]}
-        >
-          <Ionicons
-            name="arrow-down-circle"
-            color={COLORS.RED}
-            size={SIZES.BASE * 7}
-          />
-          <Text
-            style={[
-              addStyle.textButton,
-              { color: choosenPart == 1 ? COLORS.WHITE : COLORS.PRIMARY },
-            ]}
-          >
-            Spending
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setChoosenPart(2);
-          }}
-          style={[
-            addStyle.containerButton,
-            {
-              backgroundColor: choosenPart == 2 ? COLORS.PRIMARY : COLORS.WHITE,
-            },
-          ]}
-        >
-          <Ionicons
-            name="arrow-up-circle"
-            color={COLORS.GREEN}
-            size={SIZES.BASE * 7}
-          />
-          <Text
-            style={[
-              addStyle.textButton,
-              { color: choosenPart == 2 ? COLORS.WHITE : COLORS.PRIMARY },
-            ]}
-          >
-            Income
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-  const renderCurrentBudget = () => {
-    return (
-      <View style={addStyle.containerBudget}>
-        <Text style={addStyle.title}>CURRENT BUDGET</Text>
-        <View style={addStyle.containerBudgetText}>
-          <Ionicons
-            name="cash-outline"
-            style={addStyle.iconCashCurrentBudget}
-          />
-          <Text style={addStyle.currentBudgetNumber}>{currentBudget} DH</Text>
-        </View>
-      </View>
-    );
-  };
 
   const renderSetTitleInput = (props) => {
     return (
@@ -134,52 +54,8 @@ const Add = ({ handleModal }) => {
       </View>
     );
   };
-  const renderSetTitleIncomeInput = (props) => {
-    return (
-      <View style={addStyle.containerInput}>
-        <Text style={addStyle.title}>Set Title</Text>
-        <Text style={addStyle.subTitle}>Set Your Title For Your Spending</Text>
-        <Input
-          nameIcon="cash-outline"
-          placeholder="Set Title"
-          isPassword={false}
-          onChangeText={props.handleChange("titleIncome")}
-          value={props.values.titleIncome}
-          onBlur={props.handleBlur("titleIncome")}
-          error={props.errors.titleIncome}
-          touched={props.touched.titleIncome}
-        />
-      </View>
-    );
-  };
-  const renderSetAmountIncomeInput = (props) => {
-    let subtitle =
-      choosenPart == 1
-        ? "How much is your spending"
-        : "How much Do you wanna add to your wallet";
-    console.log(props);
-    return (
-      <View style={addStyle.containerInput}>
-        <Text style={addStyle.title}>Set Amount</Text>
-        <Text style={addStyle.subTitle}>{subtitle}</Text>
-        <Input
-          nameIcon="cash-outline"
-          placeholder="Set Amount"
-          isPassword={false}
-          onChangeText={props.handleChange("amountIncome")}
-          value={props.values.amountIncome}
-          onBlur={props.handleBlur("amountIncome")}
-          error={props.errors.amountIncome}
-          touched={props.touched.amountIncome}
-        />
-      </View>
-    );
-  };
   const renderSetAmountInput = (props) => {
-    let subtitle =
-      choosenPart == 1
-        ? "How much is your spending"
-        : "How much Do you wanna add to your wallet";
+    let subtitle = "How much is your spending";
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Amount</Text>
@@ -188,10 +64,10 @@ const Add = ({ handleModal }) => {
           nameIcon="cash-outline"
           placeholder="Set Amount"
           isPassword={false}
-          onChangeText={props.handleChange("amount")}
+          onChangeText={props.handleChange(attribute)}
           value={props.values.amount}
-          onBlur={props.handleBlur("amount")}
-          error={props.errors.amount}
+          onBlur={props.handleBlur(attribute)}
+          error={error}
           touched={props.touched.amount}
         />
       </View>
@@ -203,19 +79,18 @@ const Add = ({ handleModal }) => {
 
     const [items, setItems] = useState(categoriesLabels);
 
-    let valueUsed = choosenPart == 1 ? valueCategory : valueIncomeCategory;
-
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Category</Text>
         <Text style={addStyle.subTitle}>Choose Your Category</Text>
+
         <View
           style={[
             globalStyles.inputContainer,
             addStyle.input,
             {
               zIndex: 5000,
-              borderColor: valueUsed !== null ? COLORS.GREEN : COLORS.RED,
+              borderColor: valueCategory !== null ? COLORS.GREEN : COLORS.RED,
               borderWidth: 3,
             },
           ]}
@@ -228,12 +103,10 @@ const Add = ({ handleModal }) => {
           />
           <DropDownPicker
             open={open}
-            value={choosenPart == 1 ? valueCategory : valueIncomeCategory}
+            value={valueCategory}
             items={items}
             setOpen={setOpen}
-            setValue={
-              choosenPart == 1 ? setValueCategory : setValueIncomeCategory
-            }
+            setValue={setValueCategory}
             setItems={setItems}
             style={{
               borderRadius: 0,
@@ -389,16 +262,10 @@ const Add = ({ handleModal }) => {
   };
 
   const formikRef = useRef(null);
-  const formikRefSecondary = useRef(null);
 
   const renderButtonDoneForm = (props) => {
-    let amount =
-      choosenPart == 1
-        ? props.values.spendingAmount
-        : props.values.incomeAmount;
-
-    let title =
-      choosenPart == 1 ? props.values.spendingTitle : props.values.incomeTitle;
+    let amount = props.values.amount;
+    let title = props.values.title;
 
     let doneSpending =
       valueCategory != null &&
@@ -406,7 +273,7 @@ const Add = ({ handleModal }) => {
       amount != "" &&
       title != "";
 
-    let doneIncome = valueIncomeCategory != null && amount != "" && title != "";
+    let doneIncome = valueCategory != null && amount != "" && title != "";
 
     let listSpendings = useSelector((state) => state.userPlannedSpend);
     let listIncomes = useSelector((state) => state.userIncome);
@@ -446,8 +313,8 @@ const Add = ({ handleModal }) => {
         {choosenPart == 1 ? (
           <Formik
             innerRef={formikRef}
-            initialValues={{ title: "", amount: "" }}
-            validationSchema={FormSchema}
+            initialValues={{ title: "", amount: "", period: "" }}
+            validationSchema={FormSchemaSpending}
             onSubmit={(values, actions) => {
               actions.resetForm();
             }}
@@ -478,9 +345,9 @@ const Add = ({ handleModal }) => {
           </Formik>
         ) : (
           <Formik
-            innerRef={formikRefSecondary}
-            initialValues={{ titleIncome: "", amountIncome: "" }}
-            validationSchema={FormSchema}
+            innerRef={formikRef}
+            initialValues={{ title: "", amount: "", period: "" }}
+            validationSchema={FormSchemaIncome}
             onSubmit={(values, actions) => {
               actions.resetForm();
             }}
@@ -490,8 +357,8 @@ const Add = ({ handleModal }) => {
                 <>
                   {renderIncomesAndSpendingsTitles()}
                   {renderCurrentBudget()}
-                  {renderSetAmountIncomeInput(props)}
-                  {renderSetTitleIncomeInput(props)}
+                  {renderSetAmountInput(props)}
+                  {renderSetTitleInput(props)}
                   {renderSetCategoryInput(props)}
                   {choosenPart == 1 ? <Period props={props} /> : null}
 
