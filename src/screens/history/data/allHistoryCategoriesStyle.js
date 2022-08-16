@@ -1,13 +1,23 @@
 import { StyleSheet } from "react-native";
-import COLORS from "../../consts/color";
-import { windowHeight, windowWidth } from "../../utils/dimensions";
-import { SIZES, SIZESS } from "./../../consts/theme";
-
-export const historyStyle = StyleSheet.create({
-  wholeContainer: {
-    paddingHorizontal: "5%",
+import COLORS from "../../../consts/color";
+import { SIZES, SIZESS } from "../../../consts/theme";
+import { windowWidth, windowHeight } from "../../../utils/dimensions";
+import { historyStyle } from "../historyStyle";
+export const allHistoryStyle = StyleSheet.create({
+  containerCategory: {
+    backgroundColor: COLORS.PRIMARY,
+    width: windowWidth * 0.8,
+    padding: SIZES.BASE * 3,
+    marginVertical: SIZES.BASE * 2.5,
+    borderColor: COLORS.RED,
+    borderRadius: SIZES.BASE * 2,
+    alignSelf: "center",
   },
-
+  containerImageAndTitle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   containerProfileInformations: {
     paddingVertical: "6%",
     flexDirection: "row",

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
-import { SIZES, SIZESS } from "./../../consts/theme";
+import { SIZES } from "./../../consts/theme";
 import { globalStyles } from "../../global/styles/globalStyles";
 import { historyStyle } from "./historyStyle";
 import { windowHeight } from "../../utils/dimensions";
@@ -19,6 +19,7 @@ import { categoriesData } from "../../consts/categoriesData";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AllHistoryCategories from "./data/allHistoryCategories";
 
 const displayData = async () => {
   try {
@@ -97,28 +98,26 @@ const History = ({ navigation }) => {
   const [viewMode, setViewMode] = useState("list");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showMoreToggle, setShowMoreToggle] = useState(false);
-
+  const [title, setSelectedTitle] = useState("All");
   const renderCategoryList = () => {
     const renderItem = ({ item }) => (
       <TouchableOpacity
         onPress={() => {
-          setSelectedCategory(item);
-          setSelectedTitle(item.name);
+          if (title == item.name) {
+            setSelectedTitle("All");
+          } else {
+            setSelectedCategory(item);
+            setSelectedTitle(item.name);
+          }
         }}
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          margin: 5,
-          paddingVertical: SIZES.BASE * 2,
-          paddingHorizontal: SIZES.PADDING * 1,
-          borderRadius: 5,
-          backgroundColor: title == item.name ? COLORS.SECONDARY : COLORS.WHITE,
-          borderWidth: 1,
-          borderColor: COLORS.PRIMARY,
-          ...historyStyle.shadow,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        style={[
+          {
+            backgroundColor:
+              title == item.name ? COLORS.SECONDARY : COLORS.WHITE,
+            ...historyStyle.shadow,
+          },
+          historyStyle.containerOneBoxCategory,
+        ]}
       >
         <Ionicons
           name="bar-chart"
@@ -299,16 +298,8 @@ const History = ({ navigation }) => {
         const renderImageAndTitle = () => {
           return (
             <View style={historyStyle.containerCheckboxAndImageAndTitle}>
-              {/* <Avatar.Image
-                source={require("../../assets/images/elon_musk.jpg")}
-                size={SIZESS.body1 * 2}
-                style={{
-                  marginRight: 4,
-                }}
-              /> */}
               <Text
                 style={{
-                  // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                   fontWeight: "bold",
                   fontSize: SIZES.BASE * 2.5,
                   marginRight: "4%",
@@ -456,7 +447,7 @@ const History = ({ navigation }) => {
     return (
       <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
-        {allHistory.length > 0 && (
+        {allHistory.length > 0 && title != "All" && (
           <View
             style={{
               borderWidth: 0.1,
@@ -474,21 +465,14 @@ const History = ({ navigation }) => {
             })}
           </View>
         )}
-        {allHistory.length == 0 && (
+        {allHistory.length == 0 && title != "All" && (
           <View>
-            <Text
-              style={{
-                alignSelf: "center",
-                marginTop: SIZES.BASE * 2,
-                fontWeight: "bold",
-                fontSize: SIZES.BASE * 3,
-                marginBottom: SIZES.BASE * 6,
-              }}
-            >
+            <Text style={historyStyle.textInsideCategoryContent}>
               No Results for the moment
             </Text>
           </View>
         )}
+        {title == "All" && <AllHistoryCategories list={[1, 2, 3]} />}
       </View>
     );
   };
@@ -581,7 +565,6 @@ const History = ({ navigation }) => {
     hideFinalDatePicker();
   };
 
-  const [title, setSelectedTitle] = useState("Nutrition");
   const renderSwitchTimeIntervals = () => {
     const renderOneTime = (number, text) => {
       return (
@@ -636,7 +619,6 @@ const History = ({ navigation }) => {
         return (
           <View
             onStartShouldSetResponder={() => {
-              console.log("qsdfqsdfsdqf");
               showDatePicker();
             }}
             style={historyStyle.containerDateItem}
@@ -660,6 +642,13 @@ const History = ({ navigation }) => {
               mode="date"
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
+              maximumDate={
+                new Date(
+                  finalDate.getFullYear(),
+                  finalDate.getMonth(),
+                  finalDate.getDate()
+                )
+              }
             />
           </View>
         );
