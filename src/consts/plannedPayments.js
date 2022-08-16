@@ -2,7 +2,6 @@ export const arrayPlannedPayments = [
   {
     id: 1,
     title: "Insurance",
-    price: 250,
     elements: [
       {
         id: 1,
@@ -37,7 +36,6 @@ export const arrayPlannedPayments = [
   {
     id: 2,
     title: "Insurance",
-    price: 250,
     elements: [
       {
         id: 1,

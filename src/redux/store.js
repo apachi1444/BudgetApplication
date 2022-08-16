@@ -1,13 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSpendings from "./features/spendings/userSpendings";
 import userReducer from "./features/user/userSlice";
 import userSpending from "./features/spendings/spendings";
 import userIncome from "./features/incomes//incomes";
-
+import userPlannedSpending from "./features/spendings/plannedPayments";
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    userSpendings: userSpendings,
+    userPlannedSpend: userPlannedSpending,
     userSpending: userSpending,
     userIncome: userIncome,
   },

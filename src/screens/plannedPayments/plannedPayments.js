@@ -13,6 +13,7 @@ import {
   warningZoneRemainingDays,
 } from "../../consts/plannedPayments";
 import { calculateTotalSpendingsAllCategories } from "../../global/functions/store";
+import { useSelector } from "react-redux";
 const PlannedPayments = ({ navigation }) => {
   const numberPages = [1, 2, 3, 4];
 
@@ -258,6 +259,14 @@ const PlannedPayments = ({ navigation }) => {
       </View>
     );
   };
+
+  const plannedPayments = useSelector((state) => state.userSpending);
+
+  console.log(
+    "this is the array of all the planend paymetns that we have in our system ",
+    plannedPayments
+  );
+
   return (
     <View style={plannedPaymentsStyle.container}>
       <StatusBar

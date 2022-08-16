@@ -1,6 +1,7 @@
 import { createSlice, nanoid, AsyncThunk } from "@reduxjs/toolkit";
 import { categories } from "../../../consts/categories";
 import { periodList } from "../../../consts/periodSpendingLabels";
+let length = 0;
 const initialState = [
   {
     title: "PC GAMER 2022",
@@ -21,11 +22,13 @@ const initialState = [
     key: 2,
   },
 ];
+
 export const spendingsSlice = createSlice({
   name: "Spendings",
   initialState: initialState,
   reducers: {
     add: (state, action) => {
+      console.log("klsqdjfklsqdjfkl");
       const stateToAdd = {
         key: state.length + 1,
         date: new Date(),

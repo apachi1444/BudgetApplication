@@ -17,11 +17,10 @@ import { categoriesLabels } from "../../consts/categoriesLabels";
 import { periodSpendingLabels } from "../../consts/periodSpendingLabels";
 import { useSelector, useDispatch } from "react-redux";
 import { total } from "../../global/functions/store";
-import {
-  checkForNums,
-  checkNumsExpression,
-} from "../../global/functions/regex";
+import { checkNumsExpression } from "../../global/functions/regex";
 import { add } from "../../redux/features/spendings/spendings";
+import { addPlanned } from "../../redux/features/spendings/plannedPayments";
+import { addGuideSpending } from "../../redux/features/spendings/guideSpendings";
 
 const Add = ({ handleModal }) => {
   const [categorySelected, setCategorySelected] = useState(1);
@@ -29,7 +28,7 @@ const Add = ({ handleModal }) => {
   let listSpendings = useSelector((state) => state.userSpending);
   let listIncomes = useSelector((state) => state.userIncome);
 
-  const [nameGuideCategory, setNameGuideCategory] = useState("");
+  const [type, setType] = useState("Wants");
 
   const totalSpendings = total(listSpendings);
   const totalIncomes = total(listIncomes);
@@ -295,7 +294,8 @@ const Add = ({ handleModal }) => {
           key={item.id}
           onPress={() => {
             setCategorySelected(item.id);
-            setNameGuideCategory(item.name);
+            console.log("this is the item name ", item.name);
+            setType(item.name);
           }}
           style={[
             addStyle.inputCategorie,
@@ -342,31 +342,49 @@ const Add = ({ handleModal }) => {
     let amount = props.values.amount;
     let title = props.values.title;
 
-    let done =
+    let doneSpending =
       valueCategory != null &&
       valuePeriod != null &&
       amount != "" &&
       title != "";
 
-    let listSpendings = useSelector((state) => state.userSpending);
+    let doneIncome = valueCategory != null && amount != "" && title != "";
+
+    let listSpendings = useSelector((state) => state.userPlannedSpend);
     let listIncomes = useSelector((state) => state.userIncome);
     const dispatch = useDispatch();
     return (
       <View
         onStartShouldSetResponder={() => {
-          // handleModal();
-          if (done) {
-            console.log(listSpendings);
-            console.log(done);
-            console.log(valueCategory);
-            console.log(categorySelected);
-            console.log(valuePeriod);
-            console.log(props.values);
+          if (doneSpending || doneIncome) {
             handleModal();
-            // dispatch(add({}));
+            // dispatch(
+            //   add({
+            //     title: title,
+            //     price: Number(amount),
+            //     category: valueCategory,
+            //     period: valuePeriod,
+            //     type: type,
+            //   })
+            // );
+            console.log(addGuideSpending);
+            dispatch(
+              addGuideSpending({
+                title: title,
+                price: Number(amount),
+                category: valueCategory,
+                period: valuePeriod,
+                type: type,
+              })
+            );
+            console.log("klsdjqf");
           }
         }}
-        style={[addStyle.button, addStyle.done, { opacity: done ? 1 : 0.6 }]}
+        style={[
+          addStyle.button,
+          addStyle.done,
+          { opacity: (choosenPart == 1 ? doneSpending : doneIncome) ? 1 : 0.6 },
+        ]}
       >
         <Text style={addStyle.textLoginButton}>Done</Text>
       </View>
