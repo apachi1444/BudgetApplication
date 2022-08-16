@@ -16,6 +16,7 @@ import COLORS from "../../../consts/color";
 import { guideStyle as styles } from "./guide_50_30_20_summaryStyle";
 import { SIZES, SIZESS } from "../../../consts/theme";
 import { ScrollView } from "react-native-gesture-handler";
+import { needs, saves, wants } from "../../../consts/percentages";
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
   useEffect(() => {
@@ -71,8 +72,8 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         y: totalWants,
         label: `${percentageWant}%`,
         color: COLORS.PRIMARY,
-        normal: 50,
-        difference: `${50 - percentageWant}`,
+        normal: wants,
+        difference: `${wants - percentageWant}`,
         actual: percentageWant,
       },
       {
@@ -82,8 +83,8 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         label: `${percentageSave}%`,
         actual: percentageSave,
         color: COLORS.SECONDARY,
-        normal: 20,
-        difference: `${20 - percentageSave}`,
+        normal: saves,
+        difference: `${saves - percentageSave}`,
       },
       {
         id: 3,
@@ -92,8 +93,8 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         label: `${percentageNeed}%`,
         y: totalNeeds,
         color: COLORS.RED,
-        normal: 30,
-        difference: `${30 - percentageNeed}`,
+        normal: needs,
+        difference: `${needs - percentageNeed}`,
       },
     ];
 
@@ -174,7 +175,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                 fontSize: SIZESS.base * 1.85,
               }}
             >
-              {item.y} DH - {difference} {text}
+              {item.y} DH - {difference} % {text}
             </Text>
           </View>
         </TouchableOpacity>
@@ -197,7 +198,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   let { finalGuideDataExpenses } = processCategoryDataToDisplay();
   let colorScales = finalGuideDataExpenses.map((item) => item.color);
-
+  console.log(finalGuideDataExpenses);
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
       {/* <Button

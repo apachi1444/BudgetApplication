@@ -17,11 +17,8 @@ import { periodSpendingLabels } from "../../consts/periodSpendingLabels";
 import { useSelector, useDispatch } from "react-redux";
 import { total } from "../../global/functions/store";
 import { add } from "../../redux/features/spendings/spendings";
-import { addPlanned } from "../../redux/features/spendings/plannedPayments";
-import { addGuideSpending } from "../../redux/features/spendings/guideSpendings";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
 import { FormSchema } from "../../consts/schemas";
-import { checkForNums } from "../../global/functions/regex";
 const Add = ({ handleModal }) => {
   const [categorySelected, setCategorySelected] = useState(1);
   const [categoryIncomeSelected, setCategoryIncomeSelected] = useState(1);
@@ -130,6 +127,7 @@ const Add = ({ handleModal }) => {
           onBlur={props.handleBlur("title")}
           error={props.errors.title}
           touched={props.touched.title}
+          isNumeric={false}
         />
       </View>
     );
@@ -148,6 +146,7 @@ const Add = ({ handleModal }) => {
           onBlur={props.handleBlur("titleIncome")}
           error={props.errors.titleIncome}
           touched={props.touched.titleIncome}
+          isNumeric={false}
         />
       </View>
     );
@@ -157,7 +156,6 @@ const Add = ({ handleModal }) => {
       choosenPart == 1
         ? "How much is your spending"
         : "How much Do you wanna add to your wallet";
-    console.log(props);
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Amount</Text>
@@ -171,6 +169,7 @@ const Add = ({ handleModal }) => {
           onBlur={props.handleBlur("amountIncome")}
           error={props.errors.amountIncome}
           touched={props.touched.amountIncome}
+          isNumeric={true}
         />
       </View>
     );
@@ -193,6 +192,7 @@ const Add = ({ handleModal }) => {
           onBlur={props.handleBlur("amount")}
           error={props.errors.amount}
           touched={props.touched.amount}
+          isNumeric={true}
         />
       </View>
     );
@@ -393,12 +393,10 @@ const Add = ({ handleModal }) => {
 
   const renderButtonDoneForm = (props) => {
     let amount =
-      choosenPart == 1
-        ? props.values.spendingAmount
-        : props.values.incomeAmount;
+      choosenPart == 1 ? props.values.amount : props.values.amountIncome;
 
     let title =
-      choosenPart == 1 ? props.values.spendingTitle : props.values.incomeTitle;
+      choosenPart == 1 ? props.values.title : props.values.titleIncome;
 
     let doneSpending =
       valueCategory != null &&
@@ -427,6 +425,7 @@ const Add = ({ handleModal }) => {
                 type: type,
               })
             );
+            handleModal();
           }
         }}
         style={[
@@ -436,6 +435,17 @@ const Add = ({ handleModal }) => {
         ]}
       >
         <Text style={addStyle.textLoginButton}>Done</Text>
+      </View>
+    );
+  };
+
+  const renderCloseButton = () => {
+    return (
+      <View
+        style={addStyle.containerCloseButton}
+        onStartShouldSetResponder={handleModal}
+      >
+        <Ionicons style={addStyle.iconClose} name="close-circle-outline" />
       </View>
     );
   };
@@ -455,6 +465,7 @@ const Add = ({ handleModal }) => {
             {(props) => {
               return (
                 <>
+                  {renderCloseButton()}
                   {renderIncomesAndSpendingsTitles()}
                   {renderCurrentBudget()}
                   {renderSetAmountInput(props)}

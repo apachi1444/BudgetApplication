@@ -1,8 +1,22 @@
 import { StyleSheet } from "react-native";
 import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
+import { windowWidth } from "../../utils/dimensions";
 
 export const addStyle = StyleSheet.create({
+  containerCloseButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: "6%",
+    marginTop: "-4%",
+    borderRadius: SIZES.BASE * 10,
+    alignSelf: "center",
+    alignItems: "center",
+  },
+  iconClose: {
+    fontWeight: "bold",
+    fontSize: SIZES.BASE * 10,
+  },
   container: {
     backgroundColor: COLORS.LIGHTGREY,
     borderTopLeftRadius: SIZES.BASE * 5,

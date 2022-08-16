@@ -18,6 +18,9 @@ const COLORS = {
   LIGHTGREY: "#DBDBDB",
   ORANGE: "#ED8E00",
   MEDUIMGREY: "#BFC3B1",
+  WANTS: "#3A1412",
+  NEEDS: "#ED2D7B",
+  SAVES: "#BE9275",
 };
 
 export default COLORS;

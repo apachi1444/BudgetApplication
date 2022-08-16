@@ -22,6 +22,7 @@ const Input = (props) => {
     touched,
     error,
     onBlur,
+    isNumeric,
   } = props;
   var borderRed;
   touched && error
@@ -66,6 +67,7 @@ const Input = (props) => {
               placeholder={placeholder}
               onChangeText={onChangeText}
               onBlur={onBlur}
+              keyboardType={isNumeric ? "numeric" : "default"}
             />
           )}
         </View>
