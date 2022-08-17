@@ -18,3 +18,15 @@ export const periodList = [
   "None",
   "Other",
 ];
+
+export const objectCorrespondence = {
+  Yearly: 365,
+  Monthly: 30,
+  Daily: 1,
+  Weekly: 7,
+  "3 Months": 90,
+};
+
+export const renderNumberDaysDependingOnPeriodName = (title) => {
+  return objectCorrespondence[title];
+};

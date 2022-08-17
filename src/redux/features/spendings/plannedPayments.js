@@ -16,7 +16,7 @@ export const plannedSpendingsSlice = createSlice({
   initialState: initialState,
   reducers: {
     addPlanned: (state, action) => {
-      console.log(action.payload);
+      console.warn(action.payload);
     },
     delete: (state, action) => {
       state.delete(action.payload);

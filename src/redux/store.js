@@ -6,8 +6,8 @@ import userPlannedSpending from "./features/spendings/plannedPayments";
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    userPlannedSpend: userPlannedSpending,
-    userSpending: userSpending,
+    userPlannedSpending: userPlannedSpending,
+    spendingsAndIncomes: userSpending,
     userIncome: userIncome,
   },
   middleware: (getDefaultMiddleware) =>

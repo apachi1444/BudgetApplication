@@ -5,16 +5,22 @@ import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
 import { profileStyles } from "./profileStyle";
 import { windowWidth } from "../../utils/dimensions";
-import { total } from "../../global/functions/store";
+import {
+  calculateAllIncomes,
+  calculateAllSpendings,
+  total,
+} from "../../global/functions/store";
 
 import { useSelector } from "react-redux";
 
 export default ProfileUser = ({ navigation }) => {
-  let listSpendings = useSelector((state) => state.userSpending);
-  let listIncomes = useSelector((state) => state.userIncome);
+  let list = useSelector((state) => state.spendingsAndIncomes);
+  let plannedList = useSelector((state) => state.userPlannedSpending);
 
-  const totalSpendings = total(listSpendings);
-  const totalIncomes = total(listIncomes);
+  console.log("this is the list of all the planned payments ", plannedList);
+
+  const totalSpendings = calculateAllSpendings(list);
+  const totalIncomes = calculateAllIncomes(list);
 
   const currentBudget = totalIncomes - totalSpendings;
 

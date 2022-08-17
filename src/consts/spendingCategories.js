@@ -3,19 +3,19 @@ import COLORS from "./color";
 export const listCategories = [
   {
     id: 1,
-    color: COLORS.WANTS,
+    color: COLORS.BLACK,
     name: "Wants",
     icon: "Home",
   },
   {
     id: 2,
-    color: COLORS.NEEDS,
+    color: COLORS.BLACK,
     name: "Needs",
     icon: "Home",
   },
   {
     id: 3,
-    color: COLORS.SAVES,
+    color: COLORS.BLACK,
     name: "Save",
     icon: "add",
   },

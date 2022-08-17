@@ -46,7 +46,6 @@ export const calculateTotalSpendingsAllCategories = (list) => {
   });
   list.map((item) => {
     let totalSpendings = total(item.elements);
-    totals[item.title] = totalSpendings;
   });
 
   return totals;
@@ -67,4 +66,49 @@ export const renderMessageTimeRemaining = () => {
   finalString += " " + categoryPlannedPayment;
 
   return { finalString, categoryPlannedPayment };
+};
+
+export const calculateAllIncomes = (list) => {
+  let total = 0;
+  list.map((item) => {
+    item.incomeElements.map((income) => {
+      total += income.price;
+    });
+  });
+  return total;
+};
+
+export const calculateSpendingsWants = (list) => {
+  let spendingObject = list[0];
+  let totalSpendings = 0;
+  spendingObject.spendingElements.map((item) => {
+    totalSpendings += item.price;
+  });
+  return totalSpendings;
+};
+
+export const calculateSpendingsNeeds = (list) => {
+  let spendingObject = list[1];
+  let totalSpendings = 0;
+  spendingObject.spendingElements.map((item) => {
+    totalSpendings += item.price;
+  });
+  return totalSpendings;
+};
+
+export const calculateSpendingsSaves = (list) => {
+  let spendingObject = list[2];
+  let totalSpendings = 0;
+  spendingObject.spendingElements.map((item) => {
+    totalSpendings += item.price;
+  });
+  return totalSpendings;
+};
+
+export const calculateAllSpendings = (list) => {
+  return (
+    calculateSpendingsNeeds(list) +
+    calculateSpendingsSaves(list) +
+    calculateSpendingsWants(list)
+  );
 };

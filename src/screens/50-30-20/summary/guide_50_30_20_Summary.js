@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import { VictoryPie } from "victory-native";
-
+import { useSelector, useDispatch } from "react-redux";
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { guideData } from "./../../../consts/guideData";
 import COLORS from "../../../consts/color";
@@ -17,6 +17,12 @@ import { guideStyle as styles } from "./guide_50_30_20_summaryStyle";
 import { SIZES, SIZESS } from "../../../consts/theme";
 import { ScrollView } from "react-native-gesture-handler";
 import { needs, saves, wants } from "../../../consts/percentages";
+import {
+  calculateAllIncomes,
+  calculateSpendingsNeeds,
+  calculateSpendingsSaves,
+  calculateSpendingsWants,
+} from "../../../global/functions/store";
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
   useEffect(() => {
@@ -26,6 +32,20 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
       useNativeDriver: false,
     });
   });
+
+  let data = useSelector((state) => {
+    return state.userSpending;
+  });
+
+  const totalIncomes = calculateAllIncomes(data);
+
+  const totalOptimalSavesIncomes = (totalIncomes * 0.2).toFixed(0);
+  const totalOptimamWantsIncomes = (totalIncomes * 0.3).toFixed(0);
+  const totalOptimalNeedsIncomes = (totalIncomes * 0.5).toFixed(0);
+
+  const totalWantsSpendings = calculateSpendingsWants(data);
+  const totalSavesSpedings = calculateSpendingsSaves(data);
+  const totalNeedsSpendings = calculateSpendingsNeeds(data);
 
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status
@@ -51,16 +71,16 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
     let finalGuideDataExpenses = [
       {
         y: totalWants,
-        color: COLORS.PRIMARY,
+        color: COLORS.WANTS,
         label: `${percentageWant}%`,
       },
       {
         y: totalSaves,
-        color: COLORS.SECONDARY,
+        color: COLORS.SAVES,
         label: `${percentageSave}%`,
       },
       {
-        color: COLORS.RED,
+        color: COLORS.NEEDS,
         y: totalNeeds,
         label: `${percentageNeed}%`,
       },
@@ -71,7 +91,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         name: "Wants",
         y: totalWants,
         label: `${percentageWant}%`,
-        color: COLORS.PRIMARY,
+        color: COLORS.WANTS,
         normal: wants,
         difference: `${wants - percentageWant}`,
         actual: percentageWant,
@@ -82,7 +102,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         y: totalSaves,
         label: `${percentageSave}%`,
         actual: percentageSave,
-        color: COLORS.SECONDARY,
+        color: COLORS.SAVES,
         normal: saves,
         difference: `${saves - percentageSave}`,
       },
@@ -92,7 +112,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         actual: percentageNeed,
         label: `${percentageNeed}%`,
         y: totalNeeds,
-        color: COLORS.RED,
+        color: COLORS.NEEDS,
         normal: needs,
         difference: `${needs - percentageNeed}`,
       },
@@ -110,6 +130,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const renderGuideExpensesSummary = () => {
     let { finalGuideDataExpensesSummary } = processCategoryDataToDisplay();
+    console.log(finalGuideDataExpensesSummary);
     const renderItem = ({ item }) => {
       let difference = item.difference;
       let colorAppropriate;
@@ -198,7 +219,6 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   let { finalGuideDataExpenses } = processCategoryDataToDisplay();
   let colorScales = finalGuideDataExpenses.map((item) => item.color);
-  console.log(finalGuideDataExpenses);
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
       {/* <Button
@@ -248,7 +268,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
               }
               style={{
                 labels: {
-                  fill: "black",
+                  fill: "white",
                   fontWeight: "bold",
                   fontSize: SIZES.BASE * 3.5,
                 },

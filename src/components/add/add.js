@@ -13,27 +13,32 @@ import { ScrollView } from "react-native-gesture-handler";
 import Input from "../input/input";
 import { Formik } from "formik";
 import { categoriesLabels } from "../../consts/categoriesLabels";
-import { periodSpendingLabels } from "../../consts/periodSpendingLabels";
+import {
+  periodSpendingLabels,
+  renderNumberDaysDependingOnPeriodName,
+} from "../../consts/periodSpendingLabels";
 import { useSelector, useDispatch } from "react-redux";
-import { total } from "../../global/functions/store";
+import {
+  calculateAllIncomes,
+  calculateAllSpendings,
+} from "../../global/functions/store";
 import { add } from "../../redux/features/spendings/spendings";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
 import { FormSchema } from "../../consts/schemas";
+import { addPlanned } from "../../redux/features/spendings/plannedPayments";
 const Add = ({ handleModal }) => {
   const [categorySelected, setCategorySelected] = useState(1);
   const [categoryIncomeSelected, setCategoryIncomeSelected] = useState(1);
   const [choosenPart, setChoosenPart] = useState(1);
-  let listSpendings = useSelector((state) => state.userSpending);
-  let listIncomes = useSelector((state) => state.userIncome);
 
   const [type, setType] = useState("Wants");
 
   const [typeIncome, setTypeIncome] = useState("Wants");
 
-  const totalSpendings = total(listSpendings);
-  const totalIncomes = total(listIncomes);
+  let list = useSelector((state) => state.spendingsAndIncomes);
 
-  const [amount, setAmount] = useState(0);
+  const totalSpendings = calculateAllSpendings(list);
+  const totalIncomes = calculateAllIncomes(list);
 
   const currentBudget = totalIncomes - totalSpendings;
 
@@ -413,7 +418,20 @@ const Add = ({ handleModal }) => {
       <View
         onStartShouldSetResponder={() => {
           if (doneSpending || doneIncome) {
-            // handleModal();
+            let milliseconds =
+              new Date().getTime() +
+              renderNumberDaysDependingOnPeriodName(valuePeriod) *
+                (24 * 60 * 60 * 1000);
+            let newDate = new Date(milliseconds);
+
+            dispatch(
+              addPlanned({
+                title: title,
+                price: Number(amount),
+                date: newDate,
+                period: renderNumberDaysDependingOnPeriodName(valuePeriod),
+              })
+            );
             dispatch(
               add({
                 transaction: convertNumberTypeTransactionToName(choosenPart),

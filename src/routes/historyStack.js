@@ -4,7 +4,6 @@ import ChartCategories from "../screens/history/chartCategories/chartCategories"
 import FoodCategory from "../screens/history/chartCategories/foodCategory/foodCategory";
 import FoodSubCategories from "../screens/history/chartCategories/foodCategory/foodSubCategories/foodSubCategories";
 import History from "../screens/history/history";
-import ListSpendingsAndIncomes from "../screens/listSpendingsAndIncomes/listSpendingsAndIncomes";
 
 const HistoryStack = createNativeStackNavigator();
 

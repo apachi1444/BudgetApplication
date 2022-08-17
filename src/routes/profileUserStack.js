@@ -3,7 +3,6 @@ import React from "react";
 import editProfile from "../screens/editProfile/editProfile";
 import PlannedPayments from "../screens/plannedPayments/plannedPayments";
 import ProfileUser from "../screens/profile/profile";
-import HistoryIncomesAndSpendingsStack from "./historyIncomesAndSpendingsStack";
 // import { TabBottomNavigation } from "./tabBottomNavigationStack";
 import BottomBar from "./../components/bottomBar";
 import { DrawerNavigator } from "./drawerNavigationStack";

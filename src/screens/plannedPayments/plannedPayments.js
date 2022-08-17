@@ -17,6 +17,10 @@ import { useSelector } from "react-redux";
 const PlannedPayments = ({ navigation }) => {
   const numberPages = [1, 2, 3, 4];
 
+  const finalList = useSelector((state) => state.spendingsAndIncomes);
+
+  console.log("this is the final list ", finalList);
+
   let listTotalSpendingsCategories =
     calculateTotalSpendingsAllCategories(arrayPlannedPayments);
 
@@ -219,7 +223,7 @@ const PlannedPayments = ({ navigation }) => {
         return (
           <View style={plannedPaymentsStyle.containerDeleteAndEditButtons}>
             {renderIcon("trash")}
-            {renderIcon("pencil-outline")}
+            {renderIcon("checkmark-done-circle")}
           </View>
         );
       };
@@ -261,11 +265,6 @@ const PlannedPayments = ({ navigation }) => {
   };
 
   const plannedPayments = useSelector((state) => state.userSpending);
-
-  console.log(
-    "this is the array of all the planend paymetns that we have in our system ",
-    plannedPayments
-  );
 
   return (
     <View style={plannedPaymentsStyle.container}>
