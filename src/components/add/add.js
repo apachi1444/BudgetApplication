@@ -1,7 +1,5 @@
 import React, { useRef, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
-
 import { globalStyles } from "../../global/styles/globalStyles";
 import { addStyle } from "./addStyle";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +15,9 @@ import {
   periodSpendingLabels,
   renderNumberDaysDependingOnPeriodName,
 } from "../../consts/periodSpendingLabels";
+
+import SelectDropdown from "react-native-select-dropdown";
+
 import { useSelector, useDispatch } from "react-redux";
 import {
   calculateAllIncomes,
@@ -26,9 +27,12 @@ import { add } from "../../redux/features/spendings/spendings";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
 import { FormSchema } from "../../consts/schemas";
 import { addPlanned } from "../../redux/features/spendings/plannedPayments";
+import { returnNewDate } from "../../global/functions/time";
+import { categories } from "../../consts/categories";
 const Add = ({ handleModal }) => {
-  const [categorySelected, setCategorySelected] = useState(1);
-  const [categoryIncomeSelected, setCategoryIncomeSelected] = useState(1);
+  const [typeCategorySelected, setTypeCategorySelected] = useState(1);
+  const [typeCategoryIncomeSelected, setTypeCategoryIncomeSelected] =
+    useState(1);
   const [choosenPart, setChoosenPart] = useState(1);
 
   const [type, setType] = useState("Wants");
@@ -42,11 +46,8 @@ const Add = ({ handleModal }) => {
 
   const currentBudget = totalIncomes - totalSpendings;
 
-  const [valueIncomeCategory, setValueIncomeCategory] = useState(null);
-
-  const [valueCategory, setValueCategory] = useState(null);
-  const [valuePeriod, setValuePeriod] = useState(null);
-
+  const [category, setCategory] = useState(categories[0]);
+  const [categoryIncome, setCategoryIncome] = useState(categories[0]);
   const renderIncomesAndSpendingsTitles = () => {
     return (
       <View style={addStyle.containerButtons}>
@@ -204,68 +205,45 @@ const Add = ({ handleModal }) => {
   };
 
   const renderSetCategoryInput = () => {
-    const [open, setOpen] = useState(false);
-
-    const [items, setItems] = useState(categoriesLabels);
-
-    let valueUsed = choosenPart == 1 ? valueCategory : valueIncomeCategory;
-
+    const items = categories;
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Category</Text>
         <Text style={addStyle.subTitle}>Choose Your Category</Text>
-        <View
-          style={[
-            globalStyles.inputContainer,
-            addStyle.input,
-            {
-              zIndex: 5000,
-              borderColor: valueUsed !== null ? COLORS.GREEN : COLORS.RED,
-              borderWidth: 3,
-            },
-          ]}
-        >
+        <View style={[globalStyles.inputContainer, addStyle.input]}>
           <Ionicons
-            name="cash-outline"
+            name="grid"
             size={SIZES.FONT * 1.5}
             color={COLORS.PRIMARY}
             style={globalStyles.inputIcon}
           />
-          <DropDownPicker
-            open={open}
-            value={choosenPart == 1 ? valueCategory : valueIncomeCategory}
-            items={items}
-            setOpen={setOpen}
-            setValue={
-              choosenPart == 1 ? setValueCategory : setValueIncomeCategory
-            }
-            setItems={setItems}
-            style={{
-              borderRadius: 0,
-              borderColor: "transparent",
-              flex: 30000,
-              zIndex: 50000,
-            }}
-            showArrowIcon={true}
-            autoScroll={false}
-            stickyHeader={true}
-            labelStyle={{
+          <SelectDropdown
+            buttonTextStyle={{
+              color: COLORS.PRIMARY,
               fontWeight: "bold",
-              fontSize: SIZES.BASE * 3,
-              textAlign: "center",
             }}
-            containerStyle={{
-              flex: 1,
-              fontSize: SIZES.BASE * 3,
-              height: windowHeight * 0.05,
-              justifyContent: "center",
+            data={items}
+            onSelect={(selectedItem, index) => {
+              choosenPart == 1
+                ? setCategory(selectedItem)
+                : setCategoryIncome(selectedItem);
             }}
-            dropDownContainerStyle={{
-              fontSize: SIZES.BASE * 3,
-              backgroundColor: "red",
-              zIndex: 800000,
-              flex: 1,
-              elevation: 1000,
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return choosenPart == 1 ? category : categoryIncome;
+            }}
+            rowTextForSelection={(item, index) => {
+              return item;
+            }}
+            rowTextStyle={{
+              color: "white",
+            }}
+            renderSearchInputRightIcon={true}
+            rowStyle={{
+              backgroundColor: COLORS.PRIMARY,
+            }}
+            defaultValue={items[0]}
+            buttonStyle={{
+              backgroundColor: "transparent",
             }}
           />
         </View>
@@ -273,69 +251,108 @@ const Add = ({ handleModal }) => {
     );
   };
 
-  const renderSetPeriodInput = () => {
-    const [open, setOpen] = useState(false);
-    const [items, setItems] = useState(periodSpendingLabels);
+  const renderSetPeriodInputFormTextInput = (props) => {
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Period</Text>
-        <Text style={addStyle.subTitle}>Choose Your Period Now !</Text>
-
-        <View
-          style={[
-            globalStyles.inputContainer,
-            addStyle.input,
-            {
-              zIndex: open ? 1 : 0,
-              borderColor: valuePeriod !== null ? COLORS.GREEN : COLORS.RED,
-              borderWidth: 3,
-            },
-          ]}
-        >
-          <>
-            <Ionicons
-              name="cash-outline"
-              size={SIZES.FONT * 1.5}
-              color={COLORS.PRIMARY}
-              style={globalStyles.inputIcon}
-            />
-            <DropDownPicker
-              open={open}
-              value={valuePeriod}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValuePeriod}
-              setItems={setItems}
-              style={{
-                borderRadius: 0,
-                borderColor: "transparent",
-              }}
-              zIndex={5000}
-              showArrowIcon={true}
-              autoScroll={true}
-              stickyHeader={true}
-              labelStyle={{
-                fontWeight: "bold",
-                fontSize: SIZES.BASE * 3,
-                textAlign: "center",
-              }}
-              containerStyle={{
-                flex: 1,
-                height: windowHeight * 0.05,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            />
-          </>
-        </View>
+        <Text style={addStyle.subTitle}>Choose Your period of payment</Text>
+        <Input
+          nameIcon="alarm"
+          placeholder="Type 0 if it is a non planned Spending"
+          isPassword={false}
+          onChangeText={props.handleChange("period")}
+          value={props.values.period}
+          onBlur={props.handleBlur("period")}
+          error={props.errors.period}
+          touched={props.touched.period}
+          isNumeric={true}
+        />
       </View>
     );
   };
+  // const renderSetPeriodInput = () => {
+  //   const items = periodSpendingLabels;
+  //   return (
+  //     <View style={addStyle.containerInput}>
+  //       <Text style={addStyle.title}>Set Period</Text>
+  //       <Text style={addStyle.subTitle}>Choose Your Period Now !</Text>
+
+  //       <View style={[globalStyles.inputContainer, addStyle.input]}>
+  //         <>
+  //           <Ionicons
+  //             name="alarm"
+  //             size={SIZES.FONT * 1.5}
+  //             color={COLORS.PRIMARY}
+  //             style={globalStyles.inputIcon}
+  //           />
+  //           <SelectDropdown
+  //             style={{
+  //               backgroundColor: COLORS.RED,
+  //             }}
+  //             data={items}
+  //             onSelect={(selectedItem, index) => {
+  //               console.log(selectedItem, index);
+  //               setPeriod(selectedItem);
+  //             }}
+  //             buttonTextAfterSelection={(selectedItem, index) => {
+  //               return selectedItem;
+  //             }}
+  //             rowTextForSelection={(item, index) => {
+  //               return item;
+  //             }}
+  //             rowTextStyle={{
+  //               color: "white",
+  //             }}
+  //             rowStyle={{
+  //               backgroundColor: COLORS.PRIMARY,
+  //             }}
+  //             defaultValue={items[0]}
+  //             buttonTextStyle={{
+  //               color: COLORS.PRIMARY,
+  //               fontWeight: "bold",
+  //             }}
+  //             buttonStyle={{
+  //               backgroundColor: "transparent",
+  //             }}
+  //             searchPlaceHolder="qsdklfsdf"
+  //           />
+  //           {/* <DropDownPicker
+  //             open={open}
+  //             value={period}
+  //             items={items}
+  //             setOpen={setOpen}
+  //             setValue={setperiod}
+  //             setItems={setItems}
+  //             style={{
+  //               borderRadius: 0,
+  //               borderColor: "transparent",
+  //             }}
+  //             zIndex={5000}
+  //             showArrowIcon={true}
+  //             autoScroll={true}
+  //             stickyHeader={true}
+  //             labelStyle={{
+  //               fontWeight: "bold",
+  //               fontSize: SIZES.BASE * 3,
+  //               textAlign: "center",
+  //             }}
+  //             containerStyle={{
+  //               flex: 1,
+  //               height: windowHeight * 0.05,
+  //               justifyContent: "center",
+  //               alignItems: "center",
+  //             }}
+  //           /> */}
+  //         </>
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   const renderClassifySpending = () => {
     let title = choosenPart == 1 ? "SPENDING" : "INCOME";
     let finalCategorySelected =
-      choosenPart == 2 ? categoryIncomeSelected : categorySelected;
+      choosenPart == 2 ? typeCategoryIncomeSelected : typeCategorySelected;
     const renderItem = ({ item }) => {
       const changingTypeIncome = () => {
         setCategoryIncomeSelected(item.id);
@@ -343,7 +360,7 @@ const Add = ({ handleModal }) => {
       };
 
       const changingTypeSpending = () => {
-        setCategorySelected(item.id);
+        setTypeCategorySelected(item.id);
         setType(item.name);
       };
       let color =
@@ -390,7 +407,7 @@ const Add = ({ handleModal }) => {
   };
 
   const Period = (props) => {
-    return renderSetPeriodInput(props);
+    return renderSetPeriodInputFormTextInput(props);
   };
 
   const formikRef = useRef(null);
@@ -402,44 +419,38 @@ const Add = ({ handleModal }) => {
 
     let title =
       choosenPart == 1 ? props.values.title : props.values.titleIncome;
+    let period = props.values.period;
 
     let doneSpending =
-      valueCategory != null &&
-      valuePeriod != null &&
-      amount != "" &&
-      title != "";
+      category != null && period != "" && amount != "" && title != "";
 
-    let doneIncome = valueIncomeCategory != null && amount != "" && title != "";
-
-    let listSpendings = useSelector((state) => state.userPlannedSpend);
-    let listIncomes = useSelector((state) => state.userIncome);
+    let doneIncome = categoryIncome != null && amount != "" && title != "";
     const dispatch = useDispatch();
     return (
       <View
         onStartShouldSetResponder={() => {
           if (doneSpending || doneIncome) {
-            let milliseconds =
-              new Date().getTime() +
-              renderNumberDaysDependingOnPeriodName(valuePeriod) *
-                (24 * 60 * 60 * 1000);
-            let newDate = new Date(milliseconds);
+            let newDate = returnNewDate(new Date(), period);
+            if (period != 0) {
+              dispatch(
+                addPlanned({
+                  title: title,
+                  price: Number(amount),
+                  category: category,
+                  date: newDate,
+                  duration: period,
+                })
+              );
+            }
 
-            dispatch(
-              addPlanned({
-                title: title,
-                price: Number(amount),
-                date: newDate,
-                period: renderNumberDaysDependingOnPeriodName(valuePeriod),
-              })
-            );
             dispatch(
               add({
                 transaction: convertNumberTypeTransactionToName(choosenPart),
                 date: new Date(),
                 title: title,
                 price: Number(amount),
-                category: valueCategory,
-                period: valuePeriod,
+                category: category,
+                period: period,
                 type: type,
               })
             );
@@ -471,10 +482,11 @@ const Add = ({ handleModal }) => {
   return (
     <ScrollView style={globalStyles.AndroidSafeAreaWithNoWhiteBackground}>
       <View style={addStyle.container}>
+        {renderCloseButton()}
         {choosenPart == 1 ? (
           <Formik
             innerRef={formikRef}
-            initialValues={{ title: "", amount: "" }}
+            initialValues={{ title: "", amount: "", period: "" }}
             validationSchema={FormSchema}
             onSubmit={(values, actions) => {
               actions.resetForm();
@@ -483,14 +495,12 @@ const Add = ({ handleModal }) => {
             {(props) => {
               return (
                 <>
-                  {renderCloseButton()}
                   {renderIncomesAndSpendingsTitles()}
                   {renderCurrentBudget()}
                   {renderSetAmountInput(props)}
                   {renderSetTitleInput(props)}
                   {renderSetCategoryInput(props)}
-                  <Period props={props} />
-
+                  {renderSetPeriodInputFormTextInput(props)}
                   {renderClassifySpending()}
                   <View
                     style={{
@@ -522,8 +532,6 @@ const Add = ({ handleModal }) => {
                   {renderSetAmountIncomeInput(props)}
                   {renderSetTitleIncomeInput(props)}
                   {renderSetCategoryInput(props)}
-                  {choosenPart == 1 ? <Period props={props} /> : null}
-
                   {renderClassifySpending()}
                   <View
                     style={{

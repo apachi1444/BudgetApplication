@@ -16,4 +16,10 @@ export const FormSchema = yup.object({
     .test("is-num", "Amount Must Be Number ", (val) => {
       return checkNumsExpression.test(val);
     }),
+  period: yup
+    .string()
+    .required()
+    .test("is-num", "Period Must Be Number ", (val) => {
+      return checkNumsExpression.test(val);
+    }),
 });

@@ -1,1 +1,1 @@
-export const categories = ["Food", "Street", "Beauty", "Insurance"];
+export const categories = ["Food", "Street", "Beauty", "Insurance", "Fast"];

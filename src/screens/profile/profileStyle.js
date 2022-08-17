@@ -125,6 +125,7 @@ export const profileStyles = StyleSheet.create({
     padding: 5,
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
   },
 
   arrowIcon: {
@@ -141,7 +142,7 @@ export const profileStyles = StyleSheet.create({
   },
   textInside: {
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 25,
     color: COLORS.PRIMARY,
   },
   viewMyBudgetTitle: {

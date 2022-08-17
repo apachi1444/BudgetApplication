@@ -1,11 +1,13 @@
 export const periodSpendingLabels = [
-  { label: "Yearly", value: "Yearly" },
-  { label: "Monthly", value: "Monthly" },
-  { label: "3 months", value: "3 months" },
-  { label: "Weekly", value: "Weekly" },
-  { label: "Daily", value: "Daily" },
-  { label: "None", value: "None" },
-  { label: "Other", value: "Other" },
+  "None",
+  "1 year",
+  "6 Months",
+  "3 Months",
+  "1 Month",
+  "15 Days",
+  "10 Days",
+  "1 Day",
+  "Other",
 ];
 
 export const periodList = [

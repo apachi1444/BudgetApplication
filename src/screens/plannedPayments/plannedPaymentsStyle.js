@@ -28,7 +28,7 @@ export const plannedPaymentsStyle = StyleSheet.create({
   containerDetails: {
     marginVertical: SIZESS.base * 1.5,
     borderRadius: SIZESS.body1 / 1.5,
-    paddingHorizontal: SIZESS.base,
+    paddingHorizontal: SIZESS.base / 10,
   },
 
   priceAndDeleteButton: {
@@ -154,6 +154,6 @@ export const plannedPaymentsStyle = StyleSheet.create({
   },
   titleHeader: {
     fontSize: SIZES.BASE * 3,
-    fontWeight: "350",
+    fontWeight: "400",
   },
 });

@@ -8,21 +8,19 @@ import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 
+import { warningZoneRemainingDays } from "../../consts/plannedPayments";
+import { total } from "../../global/functions/store";
+import { useSelector, useDispatch } from "react-redux";
 import {
-  arrayPlannedPayments,
-  warningZoneRemainingDays,
-} from "../../consts/plannedPayments";
-import { calculateTotalSpendingsAllCategories } from "../../global/functions/store";
-import { useSelector } from "react-redux";
+  deletePlan,
+  updatePlan,
+} from "../../redux/features/spendings/plannedPayments";
 const PlannedPayments = ({ navigation }) => {
-  const numberPages = [1, 2, 3, 4];
-
-  const finalList = useSelector((state) => state.spendingsAndIncomes);
-
-  console.log("this is the final list ", finalList);
-
-  let listTotalSpendingsCategories =
-    calculateTotalSpendingsAllCategories(arrayPlannedPayments);
+  const finalList = useSelector((state) => state.userPlannedSpending);
+  const dispatch = useDispatch();
+  const filteredNonEmptyCategories = finalList.filter((item) => {
+    return item.elements.length != 0;
+  });
 
   const renderHeader = () => {
     return (
@@ -42,7 +40,9 @@ const PlannedPayments = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    const { id, title, price, elements } = item;
+    const { id, title, elements } = item;
+
+    let totalSpendings = total(elements);
 
     const renderTitleAndImageAndPriceHeader = () => (
       <View style={plannedPaymentsStyle.containerTitleImageTotalPrice}>
@@ -60,45 +60,50 @@ const PlannedPayments = ({ navigation }) => {
             size={25}
             style={{ marginRight: SIZES.BASE * 1.5 }}
           />
-          <Text style={plannedPaymentsStyle.price}>
-            {listTotalSpendingsCategories[title]}
-          </Text>
+          <Text style={plannedPaymentsStyle.price}>{totalSpendings}</Text>
         </View>
       </View>
     );
 
     const renderLineDetailEachItem = (element) => {
-      let { datePayment } = element;
-      let arrayComponentsDate = datePayment.split("-");
-      let day = Number(arrayComponentsDate[0]);
-      let month = Number(arrayComponentsDate[1]);
-      let year = Number(arrayComponentsDate[2]);
-      let differenceBetweenDatesMilliSeconds =
-        new Date() - new Date(year, month - 1, day);
+      let { date, key, period, price } = element;
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
 
+      let finalStringDate = `${year}-${month}-${day}`;
+
+      let differenceBetweenDatesMilliSeconds = new Date() - date;
       if (differenceBetweenDatesMilliSeconds < 0) {
         differenceBetweenDatesMilliSeconds *= -1;
       }
 
       let daysRemaining =
         differenceBetweenDatesMilliSeconds / (1000 * 60 * 60 * 24);
+
       let yearsRemaining = Math.ceil(daysRemaining) / 365;
       yearsRemaining = Math.floor(yearsRemaining);
       let newDaysRemaining = daysRemaining;
-      if (yearsRemaining > 1) {
+      if (yearsRemaining >= 1) {
         newDaysRemaining =
           Math.ceil(daysRemaining) - 365 * Math.floor(yearsRemaining);
       }
-      let remaining = new Date(year, month, day) - new Date() > 0;
+
+      let remaining = date - new Date() > 0;
       let color = COLORS.GREEN;
       let message = "Remaining";
       if (!remaining) {
         color = COLORS.RED;
         message = "Passed";
-      } else if (remaining && newDaysRemaining < warningZoneRemainingDays) {
+      } else if (
+        remaining &&
+        newDaysRemaining < warningZoneRemainingDays &&
+        yearsRemaining == 0
+      ) {
         color = COLORS.ORANGE;
       }
       const renderTitleAndPriceAndPeriod = () => {
+        let { date, key, period } = element;
         const renderImageAndTitle = () => {
           return (
             <View style={[plannedPaymentsStyle.containerAndImageAndTitle]}>
@@ -134,7 +139,7 @@ const PlannedPayments = ({ navigation }) => {
                       fontSize: SIZES.BASE * 2.8,
                     }}
                   >
-                    {element.price} ( {element.period} )
+                    {element.price}DH ( {element.duration} Days )
                   </Text>
                 </View>
               </View>
@@ -151,9 +156,7 @@ const PlannedPayments = ({ navigation }) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={globalStyles.primaryColor}>
-                  {element.datePayment}
-                </Text>
+                <Text style={globalStyles.primaryColor}>{finalStringDate}</Text>
                 <Ionicons
                   name="calendar-outline"
                   style={globalStyles.primaryColor}
@@ -164,12 +167,17 @@ const PlannedPayments = ({ navigation }) => {
 
           const renderTimeRemaining = () => {
             let stringYear = yearsRemaining == 1 ? "year" : "years";
-            let finalString =
-              yearsRemaining != 0
-                ? `${yearsRemaining} ${stringYear} ${newDaysRemaining.toFixed(
-                    0
-                  )} days`
-                : `${newDaysRemaining.toFixed(0)} days`;
+            let finalString = "";
+            if (yearsRemaining != 0 && newDaysRemaining == 0) {
+              finalString = `${yearsRemaining} ${stringYear}`;
+            } else if (yearsRemaining != 0 && newDaysRemaining != 0) {
+              finalString = `${yearsRemaining} ${stringYear} ${newDaysRemaining.toFixed(
+                0
+              )} days`;
+            } else {
+              finalString = `${newDaysRemaining.toFixed(0)} days`;
+            }
+
             return (
               <View
                 style={[
@@ -204,8 +212,27 @@ const PlannedPayments = ({ navigation }) => {
       };
 
       const renderDeleteAndEditButtons = () => {
-        const deleteItem = () => {};
-        const updateItem = () => {};
+        let { date, key, duration } = element;
+        const deleteItem = () => {
+          dispatch(
+            deletePlan({
+              id,
+              duration,
+              key,
+              date,
+            })
+          );
+        };
+        const updateItem = () => {
+          dispatch(
+            updatePlan({
+              id,
+              duration,
+              key,
+              date,
+            })
+          );
+        };
         const renderIcon = (name) => {
           return (
             <TouchableOpacity
@@ -240,13 +267,16 @@ const PlannedPayments = ({ navigation }) => {
       return (
         <View style={plannedPaymentsStyle.containerDetails}>
           {elements.map((element, index) => {
-            return <View>{renderLineDetailEachItem(element)}</View>;
+            if (element.duration != 0) {
+              return renderLineDetailEachItem(element);
+            } else {
+              return null;
+            }
           })}
         </View>
       );
     };
-
-    return (
+    return totalSpendings == 0 ? null : (
       <View style={plannedPaymentsStyle.containerItem}>
         {renderTitleAndImageAndPriceHeader()}
         {renderContainerDetails()}
@@ -254,17 +284,34 @@ const PlannedPayments = ({ navigation }) => {
     );
   };
 
-  const renderPagination = () => {
+  const renderEmptyContent = () => {
     return (
-      <View>
-        {numberPages.map((page) => {
-          <View>{page}</View>;
-        })}
+      <View
+        style={{
+          backgroundColor: COLORS.PRIMARY,
+          margin: "5%",
+          padding: "5%",
+          paddingVertical: "15%",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: SIZES.BASE * 5,
+        }}
+      >
+        <Ionicons name="sad" size={26} color="white" />
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 20,
+            marginLeft: "5%",
+          }}
+        >
+          No Planned Payments
+        </Text>
       </View>
     );
   };
-
-  const plannedPayments = useSelector((state) => state.userSpending);
 
   return (
     <View style={plannedPaymentsStyle.container}>
@@ -275,8 +322,8 @@ const PlannedPayments = ({ navigation }) => {
         translucent={false}
       />
       {renderHeader()}
-      <FlatList data={arrayPlannedPayments} renderItem={renderItem} />
-      {renderPagination()}
+      {filteredNonEmptyCategories.length == 0 && renderEmptyContent()}
+      <FlatList data={filteredNonEmptyCategories} renderItem={renderItem} />
     </View>
   );
 };
