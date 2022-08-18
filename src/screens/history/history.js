@@ -17,15 +17,24 @@ import { historyStyle } from "./historyStyle";
 import { windowHeight } from "../../utils/dimensions";
 import { categoriesData } from "../../consts/categoriesData";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AllHistoryCategories from "./data/allHistoryCategories";
+import { renderFinalDate } from "../../global/functions/time";
+import { categories } from "../../consts/categories";
 
+import {
+  calculateBudgetAllTime,
+  calculateBudgetAndIncomesAndSpendings,
+  calculateBudgetInterval,
+  calculateBudgetSingleDay,
+} from "./logic";
 const displayData = async () => {
   try {
     var aa = await AsyncStorage.getItem("user");
-    console.log(JSON.parse(aa));
-  } catch (e) {}
+  } catch (e) {
+    console.warn("this is the error moth", e);
+  }
 };
 
 const renderProfileInformations = (navigation) => {
@@ -79,26 +88,17 @@ const renderOneCircle = (name, price) => {
   );
 };
 
-const renderThreeCirclesIncomesBudgetAndSpendings = () => {
-  return (
-    <View style={historyStyle.containerThreeCircles}>
-      {renderOneCircle("Incomes", 0)}
-      {renderOneCircle("Budget", 1000)}
-      {renderOneCircle("Spendings", 2000)}
-    </View>
-  );
-};
-
 const History = ({ navigation }) => {
   const heightAnimationValue = useRef(
     new Animated.Value(windowHeight * 0.17)
   ).current;
 
-  const [categories, setCategories] = useState(categoriesData);
   const [viewMode, setViewMode] = useState("list");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showMoreToggle, setShowMoreToggle] = useState(false);
   const [title, setSelectedTitle] = useState("All");
+
+  const data = useSelector((state) => state.userSpendingsAndIncomesCategories);
   const renderCategoryList = () => {
     const renderItem = ({ item }) => (
       <TouchableOpacity
@@ -367,9 +367,7 @@ const History = ({ navigation }) => {
         const renderEditAndDeleteButton = () => {
           const deleteItem = () => {
             const id = item.id;
-            console.log(selectedCategory);
             selectedCategory.history.filter((item) => {
-              console.log(item);
               item.id === id;
             });
           };
@@ -505,26 +503,11 @@ const History = ({ navigation }) => {
 
   const [timeOptionSelected, setTimeOptionSelected] = useState(2);
 
-  let finalStringSingleDate =
-    singleDate.getFullYear() +
-    " - " +
-    (singleDate.getMonth() + 1) +
-    " - " +
-    singleDate.getDate();
+  let finalStringSingleDate = renderFinalDate(singleDate);
 
-  let finalStringDate =
-    firstDate.getFullYear() +
-    " - " +
-    (firstDate.getMonth() + 1) +
-    " - " +
-    firstDate.getDate();
+  let finalStringDate = renderFinalDate(firstDate);
 
-  let finalStringFinalDate =
-    finalDate.getFullYear() +
-    " - " +
-    (finalDate.getMonth() + 1) +
-    " - " +
-    finalDate.getDate();
+  let finalStringFinalDate = renderFinalDate(finalDate);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -563,6 +546,29 @@ const History = ({ navigation }) => {
   const handleConfirmFinal = (date) => {
     setFinalDate(date);
     hideFinalDatePicker();
+  };
+
+  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
+
+  // const { finalFilteredListIncomes, finalFilteredListSpendings } =
+  //   calculateBudgetSingleDay(singleDate, list);
+
+  // const { finalFilteredListIncomes, finalFilteredListSpendings } =
+  //   calculateBudgetInterval(firstDate, finalDate, list);
+
+  const { finalListIncomes, finalListSpendings } = calculateBudgetAllTime(list);
+
+  const { currentBudget, totalIncomes, totalSpendings } =
+    calculateBudgetAndIncomesAndSpendings(finalListIncomes, finalListSpendings);
+
+  const renderThreeCirclesIncomesBudgetAndSpendings = () => {
+    return (
+      <View style={historyStyle.containerThreeCircles}>
+        {renderOneCircle("Incomes", totalIncomes)}
+        {renderOneCircle("Budget", currentBudget)}
+        {renderOneCircle("Spendings", totalSpendings)}
+      </View>
+    );
   };
 
   const renderSwitchTimeIntervals = () => {
@@ -657,13 +663,11 @@ const History = ({ navigation }) => {
         return (
           <View
             onStartShouldSetResponder={() => {
-              console.log(finalStringDate);
               let aa = new Date(
                 firstDate.getFullYear(),
                 firstDate.getMonth() + 1,
                 firstDate.getDate()
               );
-              console.log(aa);
               showFinalDatePicker();
             }}
             style={historyStyle.containerDateItem}

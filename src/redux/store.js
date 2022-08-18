@@ -1,14 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./features/user/userSlice";
-import userSpending from "./features/spendings/spendings";
-import userIncome from "./features/incomes//incomes";
 import userPlannedSpending from "./features/spendings/plannedPayments";
+import userSpendingsAndIncomesCategories from "./features/user/userSpendingsAndIncomesCategories";
+import userSpendingAndIncomes from "./features/user/userSpendingsAndIncomesTypeTransaction";
 export const store = configureStore({
   reducer: {
-    user: userReducer,
     userPlannedSpending: userPlannedSpending,
-    spendingsAndIncomes: userSpending,
-    userIncome: userIncome,
+    userSpendingsAndIncomes: userSpendingAndIncomes,
+    userSpendingsAndIncomesCategories: userSpendingsAndIncomesCategories,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

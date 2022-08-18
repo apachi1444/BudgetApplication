@@ -23,8 +23,15 @@ const Input = (props) => {
     error,
     onBlur,
     isNumeric,
+    setter,
   } = props;
   var borderRed;
+
+  if (touched && error) {
+    setter(true);
+  } else if (touched && !error) {
+    setter(false);
+  }
   touched && error
     ? (borderRed = {
         borderColor: COLORS.RED,

@@ -1,6 +1,5 @@
-import { createSlice, nanoid, AsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { categories } from "../../../consts/categories";
-import { periodList } from "../../../consts/periodSpendingLabels";
 import { returnNewDate } from "../../../global/functions/time";
 let length = 0;
 const initialState = categories.map((item) => {

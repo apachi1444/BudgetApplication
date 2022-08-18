@@ -14,10 +14,10 @@ import {
 import { useSelector } from "react-redux";
 
 export default ProfileUser = ({ navigation }) => {
-  let list = useSelector((state) => state.spendingsAndIncomes);
-  let plannedList = useSelector((state) => state.userPlannedSpending);
-
-  console.log("this is the list of all the planned payments ", plannedList);
+  let list = useSelector((state) => state.userSpendingsAndIncomes);
+  let listCategories = useSelector(
+    (state) => state.userSpendingsAndIncomesCategories
+  );
 
   const totalSpendings = calculateAllSpendings(list);
   const totalIncomes = calculateAllIncomes(list);

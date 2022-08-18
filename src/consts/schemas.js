@@ -10,7 +10,19 @@ export const FormSchema = yup.object({
     .test("len-4", "Title Must Contains 4 chars", (val) => {
       return checkLengthTitle.test(val);
     }),
+  titleIncome: yup
+    .string()
+    .required()
+    .test("len-4", "Title Must Contains 4 chars", (val) => {
+      return checkLengthTitle.test(val);
+    }),
   amount: yup
+    .string()
+    .required()
+    .test("is-num", "Amount Must Be Number ", (val) => {
+      return checkNumsExpression.test(val);
+    }),
+  amountIncome: yup
     .string()
     .required()
     .test("is-num", "Amount Must Be Number ", (val) => {

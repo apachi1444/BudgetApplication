@@ -1,10 +1,5 @@
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
-// import {
-//   increment,
-//   login,
-//   incrementByAmount,
-// } from "../../redux/features/user/userSlice";
 import React, { useRef, useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 
@@ -14,8 +9,6 @@ import { loginStyle as styles } from "./loginStyle";
 import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 import Input from "../../components/input/input";
-import { add } from "../../redux/features/spendings/spendings";
-// import { createTable } from "../../config/db";
 import { openDatabase } from "react-native-sqlite-storage";
 
 export default ({ navigation }) => {
@@ -74,9 +67,6 @@ export default ({ navigation }) => {
   });
 
   const dispatch = useDispatch();
-
-  console.log("object", count1);
-
   const [incrementAmount, setIncremenetAmount] = useState(0);
   const addValue = Number(incrementAmount) || 0;
   const renderInputs = () => {

@@ -5,17 +5,12 @@ import { addStyle } from "./addStyle";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
-import { listCategories } from "../../consts/spendingCategories";
+
+import { typeTransactions } from "../../consts/spendingCategories";
 import { windowHeight } from "../../utils/dimensions";
 import { ScrollView } from "react-native-gesture-handler";
 import Input from "../input/input";
 import { Formik } from "formik";
-import { categoriesLabels } from "../../consts/categoriesLabels";
-import {
-  periodSpendingLabels,
-  renderNumberDaysDependingOnPeriodName,
-} from "../../consts/periodSpendingLabels";
-
 import SelectDropdown from "react-native-select-dropdown";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -23,12 +18,14 @@ import {
   calculateAllIncomes,
   calculateAllSpendings,
 } from "../../global/functions/store";
-import { add } from "../../redux/features/spendings/spendings";
+import { add as addTypeTransaction } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import { addTransaction as addCategory } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
 import { FormSchema } from "../../consts/schemas";
 import { addPlanned } from "../../redux/features/spendings/plannedPayments";
 import { returnNewDate } from "../../global/functions/time";
 import { categories } from "../../consts/categories";
+
 const Add = ({ handleModal }) => {
   const [typeCategorySelected, setTypeCategorySelected] = useState(1);
   const [typeCategoryIncomeSelected, setTypeCategoryIncomeSelected] =
@@ -39,15 +36,21 @@ const Add = ({ handleModal }) => {
 
   const [typeIncome, setTypeIncome] = useState("Wants");
 
-  let list = useSelector((state) => state.spendingsAndIncomes);
+  const [amountError, setAmountError] = useState(true);
+  const [amountIncomeError, setAmountIncomeError] = useState(true);
+  const [titleError, setTitleError] = useState(true);
+  const [titleIncomeError, setTitleIncomeError] = useState(true);
+  const [periodError, setPeriodError] = useState(true);
+
+  let list = useSelector((state) => state.userSpendingsAndIncomes);
 
   const totalSpendings = calculateAllSpendings(list);
   const totalIncomes = calculateAllIncomes(list);
 
   const currentBudget = totalIncomes - totalSpendings;
 
-  const [category, setCategory] = useState(categories[0]);
-  const [categoryIncome, setCategoryIncome] = useState(categories[0]);
+  const [category, setCategory] = useState(categories[0].name);
+  const [categoryIncome, setCategoryIncome] = useState(categories[0].name);
   const renderIncomesAndSpendingsTitles = () => {
     return (
       <View style={addStyle.containerButtons}>
@@ -134,6 +137,7 @@ const Add = ({ handleModal }) => {
           error={props.errors.title}
           touched={props.touched.title}
           isNumeric={false}
+          setter={setTitleError}
         />
       </View>
     );
@@ -153,6 +157,7 @@ const Add = ({ handleModal }) => {
           error={props.errors.titleIncome}
           touched={props.touched.titleIncome}
           isNumeric={false}
+          setter={setTitleIncomeError}
         />
       </View>
     );
@@ -176,6 +181,7 @@ const Add = ({ handleModal }) => {
           error={props.errors.amountIncome}
           touched={props.touched.amountIncome}
           isNumeric={true}
+          setter={setAmountIncomeError}
         />
       </View>
     );
@@ -199,13 +205,16 @@ const Add = ({ handleModal }) => {
           error={props.errors.amount}
           touched={props.touched.amount}
           isNumeric={true}
+          setter={setAmountError}
         />
       </View>
     );
   };
 
   const renderSetCategoryInput = () => {
-    const items = categories;
+    const items = categories.map((item) => {
+      return item.name;
+    });
     return (
       <View style={addStyle.containerInput}>
         <Text style={addStyle.title}>Set Category</Text>
@@ -266,88 +275,11 @@ const Add = ({ handleModal }) => {
           error={props.errors.period}
           touched={props.touched.period}
           isNumeric={true}
+          setter={setPeriodError}
         />
       </View>
     );
   };
-  // const renderSetPeriodInput = () => {
-  //   const items = periodSpendingLabels;
-  //   return (
-  //     <View style={addStyle.containerInput}>
-  //       <Text style={addStyle.title}>Set Period</Text>
-  //       <Text style={addStyle.subTitle}>Choose Your Period Now !</Text>
-
-  //       <View style={[globalStyles.inputContainer, addStyle.input]}>
-  //         <>
-  //           <Ionicons
-  //             name="alarm"
-  //             size={SIZES.FONT * 1.5}
-  //             color={COLORS.PRIMARY}
-  //             style={globalStyles.inputIcon}
-  //           />
-  //           <SelectDropdown
-  //             style={{
-  //               backgroundColor: COLORS.RED,
-  //             }}
-  //             data={items}
-  //             onSelect={(selectedItem, index) => {
-  //               console.log(selectedItem, index);
-  //               setPeriod(selectedItem);
-  //             }}
-  //             buttonTextAfterSelection={(selectedItem, index) => {
-  //               return selectedItem;
-  //             }}
-  //             rowTextForSelection={(item, index) => {
-  //               return item;
-  //             }}
-  //             rowTextStyle={{
-  //               color: "white",
-  //             }}
-  //             rowStyle={{
-  //               backgroundColor: COLORS.PRIMARY,
-  //             }}
-  //             defaultValue={items[0]}
-  //             buttonTextStyle={{
-  //               color: COLORS.PRIMARY,
-  //               fontWeight: "bold",
-  //             }}
-  //             buttonStyle={{
-  //               backgroundColor: "transparent",
-  //             }}
-  //             searchPlaceHolder="qsdklfsdf"
-  //           />
-  //           {/* <DropDownPicker
-  //             open={open}
-  //             value={period}
-  //             items={items}
-  //             setOpen={setOpen}
-  //             setValue={setperiod}
-  //             setItems={setItems}
-  //             style={{
-  //               borderRadius: 0,
-  //               borderColor: "transparent",
-  //             }}
-  //             zIndex={5000}
-  //             showArrowIcon={true}
-  //             autoScroll={true}
-  //             stickyHeader={true}
-  //             labelStyle={{
-  //               fontWeight: "bold",
-  //               fontSize: SIZES.BASE * 3,
-  //               textAlign: "center",
-  //             }}
-  //             containerStyle={{
-  //               flex: 1,
-  //               height: windowHeight * 0.05,
-  //               justifyContent: "center",
-  //               alignItems: "center",
-  //             }}
-  //           /> */}
-  //         </>
-  //       </View>
-  //     </View>
-  //   );
-  // };
 
   const renderClassifySpending = () => {
     let title = choosenPart == 1 ? "SPENDING" : "INCOME";
@@ -355,7 +287,7 @@ const Add = ({ handleModal }) => {
       choosenPart == 2 ? typeCategoryIncomeSelected : typeCategorySelected;
     const renderItem = ({ item }) => {
       const changingTypeIncome = () => {
-        setCategoryIncomeSelected(item.id);
+        setTypeCategoryIncomeSelected(item.id);
         setTypeIncome(item.name);
       };
 
@@ -395,7 +327,7 @@ const Add = ({ handleModal }) => {
         <Text style={addStyle.title}>Classify Your {title}</Text>
         <View style={addStyle.containerCategories}>
           <FlatList
-            data={listCategories}
+            data={typeTransactions}
             keyExtractor={(item) => `${item.id}`}
             numColumns={3}
             showsVerticalScrollIndicator={false}
@@ -411,25 +343,19 @@ const Add = ({ handleModal }) => {
   };
 
   const formikRef = useRef(null);
-  const formikRefSecondary = useRef(null);
 
   const renderButtonDoneForm = (props) => {
-    let amount =
-      choosenPart == 1 ? props.values.amount : props.values.amountIncome;
-
-    let title =
-      choosenPart == 1 ? props.values.title : props.values.titleIncome;
+    let amount = props.values.amount;
+    let title = props.values.title;
     let period = props.values.period;
-
     let doneSpending =
-      category != null && period != "" && amount != "" && title != "";
+      category != null && !periodError && !titleError && !amountError;
 
-    let doneIncome = categoryIncome != null && amount != "" && title != "";
     const dispatch = useDispatch();
     return (
       <View
         onStartShouldSetResponder={() => {
-          if (doneSpending || doneIncome) {
+          if (doneSpending) {
             let newDate = returnNewDate(new Date(), period);
             if (period != 0) {
               dispatch(
@@ -444,7 +370,19 @@ const Add = ({ handleModal }) => {
             }
 
             dispatch(
-              add({
+              addCategory({
+                transaction: convertNumberTypeTransactionToName(choosenPart),
+                date: new Date(),
+                title: title,
+                price: Number(amount),
+                category: category,
+                period: period,
+                type: type,
+              })
+            );
+
+            dispatch(
+              addTypeTransaction({
                 transaction: convertNumberTypeTransactionToName(choosenPart),
                 date: new Date(),
                 title: title,
@@ -460,7 +398,55 @@ const Add = ({ handleModal }) => {
         style={[
           addStyle.button,
           addStyle.done,
-          { opacity: (choosenPart == 1 ? doneSpending : doneIncome) ? 1 : 0.6 },
+          { opacity: doneSpending ? 1 : 0.6 },
+        ]}
+      >
+        <Text style={addStyle.textLoginButton}>Done</Text>
+      </View>
+    );
+  };
+
+  const renderButtonDoneFormIncome = (props) => {
+    let amount = props.values.amountIncome;
+    let title = props.values.titleIncome;
+    let doneIncome =
+      categoryIncome != null &&
+      !amountIncomeError != "" &&
+      !titleIncomeError != "";
+
+    const dispatch = useDispatch();
+    return (
+      <View
+        onStartShouldSetResponder={() => {
+          if (doneIncome) {
+            dispatch(
+              addCategory({
+                transaction: convertNumberTypeTransactionToName(choosenPart),
+                date: new Date(),
+                title: title,
+                price: Number(amount),
+                category: category,
+                type: type,
+              })
+            );
+
+            dispatch(
+              addTypeTransaction({
+                transaction: convertNumberTypeTransactionToName(choosenPart),
+                date: new Date(),
+                title: title,
+                price: Number(amount),
+                category: category,
+                type: type,
+              })
+            );
+            handleModal();
+          }
+        }}
+        style={[
+          addStyle.button,
+          addStyle.done,
+          { opacity: doneIncome ? 1 : 0.6 },
         ]}
       >
         <Text style={addStyle.textLoginButton}>Done</Text>
@@ -483,10 +469,18 @@ const Add = ({ handleModal }) => {
     <ScrollView style={globalStyles.AndroidSafeAreaWithNoWhiteBackground}>
       <View style={addStyle.container}>
         {renderCloseButton()}
+        {renderIncomesAndSpendingsTitles()}
+        {renderCurrentBudget()}
         {choosenPart == 1 ? (
           <Formik
             innerRef={formikRef}
-            initialValues={{ title: "", amount: "", period: "" }}
+            initialValues={{
+              title: "",
+              amount: "",
+              period: "",
+              titleIncome: "",
+              amountIncome: "",
+            }}
             validationSchema={FormSchema}
             onSubmit={(values, actions) => {
               actions.resetForm();
@@ -495,8 +489,6 @@ const Add = ({ handleModal }) => {
             {(props) => {
               return (
                 <>
-                  {renderIncomesAndSpendingsTitles()}
-                  {renderCurrentBudget()}
                   {renderSetAmountInput(props)}
                   {renderSetTitleInput(props)}
                   {renderSetCategoryInput(props)}
@@ -517,8 +509,14 @@ const Add = ({ handleModal }) => {
           </Formik>
         ) : (
           <Formik
-            innerRef={formikRefSecondary}
-            initialValues={{ titleIncome: "", amountIncome: "" }}
+            innerRef={formikRef}
+            initialValues={{
+              title: "",
+              amount: "",
+              period: "",
+              titleIncome: "",
+              amountIncome: "",
+            }}
             validationSchema={FormSchema}
             onSubmit={(values, actions) => {
               actions.resetForm();
@@ -527,8 +525,6 @@ const Add = ({ handleModal }) => {
             {(props) => {
               return (
                 <>
-                  {renderIncomesAndSpendingsTitles()}
-                  {renderCurrentBudget()}
                   {renderSetAmountIncomeInput(props)}
                   {renderSetTitleIncomeInput(props)}
                   {renderSetCategoryInput(props)}
@@ -541,7 +537,7 @@ const Add = ({ handleModal }) => {
                     }}
                   ></View>
 
-                  {renderButtonDoneForm(props)}
+                  {renderButtonDoneFormIncome(props)}
                 </>
               );
             }}

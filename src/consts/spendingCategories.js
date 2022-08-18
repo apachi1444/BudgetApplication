@@ -1,6 +1,6 @@
 import COLORS from "./color";
 
-export const listCategories = [
+export const typeTransactions = [
   {
     id: 1,
     color: COLORS.BLACK,
