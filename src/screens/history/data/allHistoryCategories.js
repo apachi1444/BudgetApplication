@@ -17,8 +17,8 @@ import { allHistoryStyle } from "./allHistoryCategoriesStyle";
 
 const AllHistoryCategories = (props) => {
   const { list } = props;
+  console.log("this is the list coming from the history page ", list);
   const renderOneCategory = (item) => {
-    let aa = [1, 2, 3];
     const renderRecordLine = () => {
       const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {

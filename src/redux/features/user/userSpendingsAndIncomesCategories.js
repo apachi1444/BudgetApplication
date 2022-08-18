@@ -44,14 +44,22 @@ export const userSpendingsAndIncomesCategories = createSlice({
       //   });
     },
     deleteTransaction: (state, action) => {
-      //   const { id, key } = action.payload;
-      //   state.map((item) => {
-      //     if (item.id == id) {
-      //       item.elements = item.elements.filter((element) => {
-      //         element.key != key;
-      //       });
-      //     }
-      //   });
+      return state.map((item) => {
+        let { category, transaction, key } = action.payload;
+        if (item.title == category) {
+          let finalList =
+            transaction == "Income"
+              ? item?.incomeElements
+              : item?.spendingElements;
+          console.log(
+            "this is the final list of items in the transaction  ",
+            finalList
+          );
+          console.log("this is the action payload ", action.payload);
+
+          finalList.filter((item) => item.key != key);
+        }
+      });
     },
   },
 });

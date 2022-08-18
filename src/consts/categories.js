@@ -9,7 +9,7 @@ export const categories = [
   },
   {
     id: 2,
-    name: "Street",
+    name: "Fourc",
     icon: "fast-food",
     color: COLORS.RED,
   },
@@ -30,5 +30,11 @@ export const categories = [
     name: "Fast",
     icon: "fast-food",
     color: COLORS.GREEN,
+  },
+  {
+    id: 6,
+    name: "LOL",
+    icon: "fast-food",
+    color: COLORS.MEDUIMGREY,
   },
 ];

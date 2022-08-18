@@ -71,3 +71,49 @@ export const calculateBudgetAndIncomesAndSpendings = (
   const currentBudget = totalIncomes - totalSpendings;
   return { currentBudget, totalIncomes, totalSpendings };
 };
+
+export const concatenateIncomesAndSpendings = (title, list) => {
+  let finalArrayContainingSpendingsAndIncomes = [];
+  list.map((item) => {
+    if (item.title == title) {
+      item.incomeElements.map((incomeElement) => {
+        finalArrayContainingSpendingsAndIncomes.push(incomeElement);
+      });
+      item.spendingElements.map((spendingElement) => {
+        finalArrayContainingSpendingsAndIncomes.push(spendingElement);
+      });
+    }
+  });
+  return finalArrayContainingSpendingsAndIncomes;
+};
+
+export const renderInformationsAboutBudgetIncomesAndSpendings = (
+  list,
+  timeOptionSelected,
+  singleDate,
+  firstDate,
+  finalDate
+) => {
+  if (timeOptionSelected == 2) {
+    const { finalFilteredListIncomes, finalFilteredListSpendings } =
+      calculateBudgetInterval(firstDate, finalDate, list);
+    return {
+      finalListIncomes: finalFilteredListIncomes,
+      finalListSpendings: finalFilteredListSpendings,
+    };
+  } else if (timeOptionSelected == 1) {
+    const { finalListIncomes, finalListSpendings } =
+      calculateBudgetAllTime(list);
+    return {
+      finalListIncomes,
+      finalListSpendings,
+    };
+  } else {
+    const { finalFilteredListIncomes, finalFilteredListSpendings } =
+      calculateBudgetSingleDay(singleDate, list);
+    return {
+      finalListIncomes: finalFilteredListIncomes,
+      finalListSpendings: finalFilteredListSpendings,
+    };
+  }
+};
