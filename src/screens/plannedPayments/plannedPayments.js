@@ -15,11 +15,18 @@ import {
   deletePlan,
   updatePlan,
 } from "../../redux/features/spendings/plannedPayments";
+import {
+  deleteTransaction,
+  updateTransaction,
+} from "../../redux/features/user/userSpendingsAndIncomesCategories";
+import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 const PlannedPayments = ({ navigation }) => {
-  const finalList = useSelector((state) => state.userPlannedSpending);
+  let finalList = useSelector(
+    (state) => state.userSpendingsAndIncomesCategories
+  );
   const dispatch = useDispatch();
   const filteredNonEmptyCategories = finalList.filter((item) => {
-    return item.elements.length != 0;
+    return item?.spendingElements.length != 0;
   });
 
   const renderHeader = () => {
@@ -40,9 +47,9 @@ const PlannedPayments = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    const { id, title, elements } = item;
+    const { id, title, spendingElements } = item;
 
-    let totalSpendings = total(elements);
+    let totalSpendings = total(spendingElements);
 
     const renderTitleAndImageAndPriceHeader = () => (
       <View style={plannedPaymentsStyle.containerTitleImageTotalPrice}>
@@ -71,9 +78,17 @@ const PlannedPayments = ({ navigation }) => {
       let month = date.getMonth() + 1;
       let day = date.getDate();
 
-      let finalStringDate = `${year}-${month}-${day}`;
+      const newDateAfterPeriod = new Date(
+        period * 24 * 60 * 60 * 1000 + date.getTime()
+      );
 
-      let differenceBetweenDatesMilliSeconds = new Date() - date;
+      let yearNewDateAfterPeriod = newDateAfterPeriod.getFullYear();
+      let monthNewDateAfterPeriod = newDateAfterPeriod.getMonth() + 1;
+      let dayNewDateAfterPeriod = newDateAfterPeriod.getDate();
+
+      let finalStringDate = `${yearNewDateAfterPeriod}-${monthNewDateAfterPeriod}-${dayNewDateAfterPeriod}`;
+
+      let differenceBetweenDatesMilliSeconds = new Date() - newDateAfterPeriod;
       if (differenceBetweenDatesMilliSeconds < 0) {
         differenceBetweenDatesMilliSeconds *= -1;
       }
@@ -89,7 +104,7 @@ const PlannedPayments = ({ navigation }) => {
           Math.ceil(daysRemaining) - 365 * Math.floor(yearsRemaining);
       }
 
-      let remaining = date - new Date() > 0;
+      let remaining = new Date(year, month, day) - new Date() > 0;
       let color = COLORS.GREEN;
       let message = "Remaining";
       if (!remaining) {
@@ -102,46 +117,43 @@ const PlannedPayments = ({ navigation }) => {
       ) {
         color = COLORS.ORANGE;
       }
-      const renderTitleAndPriceAndPeriod = () => {
-        let { date, key, period } = element;
-        const renderImageAndTitle = () => {
+      const renderTitleAndPriceAndPeriodAndButtons = () => {
+        const renderPriceAndTitle = () => {
           return (
-            <View style={[plannedPaymentsStyle.containerAndImageAndTitle]}>
-              <View>
+            <View style={[plannedPaymentsStyle.containerPriceAndTitle]}>
+              <Text
+                style={{
+                  fontSize: SIZESS.body1 / 1.7,
+                  fontWeight: "bold",
+                }}
+              >
+                {element.title}
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  color: COLORS.PRIMARY,
+                }}
+              >
+                <Ionicons
+                  name="cash"
+                  style={{
+                    color: COLORS.PRIMARY,
+                    fontSize: 20,
+                    marginRight: "4%",
+                    marginTop: "1.5%",
+                  }}
+                />
                 <Text
                   style={{
-                    fontSize: SIZESS.body1 / 1.7,
                     fontWeight: "bold",
-                  }}
-                >
-                  {element.title}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
                     color: COLORS.PRIMARY,
+                    fontSize: SIZES.BASE * 2.8,
                   }}
                 >
-                  <Ionicons
-                    name="cash"
-                    style={{
-                      color: COLORS.PRIMARY,
-                      fontSize: 20,
-                      marginRight: "4%",
-                      marginTop: "1.5%",
-                    }}
-                  />
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                      color: COLORS.PRIMARY,
-                      fontSize: SIZES.BASE * 2.8,
-                    }}
-                  >
-                    {element.price}DH ( {element.duration} Days )
-                  </Text>
-                </View>
+                  {element.price}DH ( {element.period} Days )
+                </Text>
               </View>
             </View>
           );
@@ -198,67 +210,74 @@ const PlannedPayments = ({ navigation }) => {
             <View
               style={plannedPaymentsStyle.containerCalendarAndTimeRemaining}
             >
-              <View>{renderDate()}</View>
               <View>{renderTimeRemaining()}</View>
+              <View>{renderDate()}</View>
+            </View>
+          );
+        };
+        const renderDeleteAndEditButtons = () => {
+          let { date, key, period, transaction, type } = element;
+          console.log(
+            "this is the element that we have in our planned payments ",
+            element
+          );
+          const deleteItem = () => {
+            dispatch(
+              deleteTransaction({
+                id,
+                period,
+                key,
+                transaction,
+                date,
+              })
+            );
+
+            dispatch(deleteGuide(id, period, key, transaction, date, type));
+            console.log("haha after deleting from the store");
+          };
+          const updateItem = () => {
+            dispatch(
+              updateTransaction({
+                id,
+                period,
+                key,
+                date,
+              })
+            );
+          };
+          const renderIcon = (name) => {
+            return (
+              <TouchableOpacity
+                style={plannedPaymentsStyle.button}
+                onPress={name == "trash" ? deleteItem : updateItem}
+              >
+                <Ionicons
+                  name={name}
+                  size={SIZES.BASE * 3}
+                  color={COLORS.WHITE}
+                />
+              </TouchableOpacity>
+            );
+          };
+          return (
+            <View style={plannedPaymentsStyle.containerDeleteAndEditButtons}>
+              {renderIcon("trash")}
+              {renderIcon("checkmark-done-circle")}
             </View>
           );
         };
         return (
           <View style={plannedPaymentsStyle.containerEachLine}>
-            {renderImageAndTitle()}
+            {renderPriceAndTitle()}
             {renderDateAndTimeRemaining()}
-          </View>
-        );
-      };
-
-      const renderDeleteAndEditButtons = () => {
-        let { date, key, duration } = element;
-        const deleteItem = () => {
-          dispatch(
-            deletePlan({
-              id,
-              duration,
-              key,
-              date,
-            })
-          );
-        };
-        const updateItem = () => {
-          dispatch(
-            updatePlan({
-              id,
-              duration,
-              key,
-              date,
-            })
-          );
-        };
-        const renderIcon = (name) => {
-          return (
-            <TouchableOpacity
-              style={plannedPaymentsStyle.button}
-              onPress={name == "trash" ? deleteItem : updateItem}
-            >
-              <Ionicons
-                name={name}
-                size={SIZES.BASE * 3}
-                color={COLORS.WHITE}
-              />
-            </TouchableOpacity>
-          );
-        };
-        return (
-          <View style={plannedPaymentsStyle.containerDeleteAndEditButtons}>
-            {renderIcon("trash")}
-            {renderIcon("checkmark-done-circle")}
+            {renderDeleteAndEditButtons()}
           </View>
         );
       };
 
       return (
         <View>
-          <View>{renderTitleAndPriceAndPeriod()}</View>
-          <View>{renderDeleteAndEditButtons()}</View>
+          <View>{renderTitleAndPriceAndPeriodAndButtons()}</View>
         </View>
       );
     };
@@ -266,8 +285,8 @@ const PlannedPayments = ({ navigation }) => {
     const renderContainerDetails = () => {
       return (
         <View style={plannedPaymentsStyle.containerDetails}>
-          {elements.map((element, index) => {
-            if (element.duration != 0) {
+          {spendingElements.map((element, index) => {
+            if (element.period != 0) {
               return renderLineDetailEachItem(element);
             } else {
               return null;

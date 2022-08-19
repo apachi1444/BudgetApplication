@@ -18,7 +18,7 @@ export default ProfileUser = ({ navigation }) => {
   let listCategories = useSelector(
     (state) => state.userSpendingsAndIncomesCategories
   );
-
+  console.log("this is the list coming from the store ", list);
   const totalSpendings = calculateAllSpendings(list);
   const totalIncomes = calculateAllIncomes(list);
 

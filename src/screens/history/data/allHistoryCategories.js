@@ -121,10 +121,6 @@ const AllHistoryCategories = (props) => {
             <View
               style={{
                 flexDirection: "row",
-                position: "absolute",
-                bottom: "-41%",
-                alignSelf: "center",
-                right: "4%",
               }}
             >
               {renderIcon("trash")}
@@ -152,14 +148,16 @@ const AllHistoryCategories = (props) => {
                 {renderImageAndTitle()}
                 {renderPrice()}
               </View>
-              {/* {renderEditAndDeleteButton()} */}
               <View
                 style={{
+                  flexDirection: "row",
                   marginVertical: "3%",
                   alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
                 {renderDate()}
+                {renderEditAndDeleteButton()}
               </View>
             </View>
           </>

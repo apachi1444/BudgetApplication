@@ -16,7 +16,7 @@ export const typeTransactions = [
   {
     id: 3,
     color: COLORS.BLACK,
-    name: "Save",
+    name: "Saves",
     icon: "add",
   },
 ];

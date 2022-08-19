@@ -31,12 +31,29 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
         }
       });
     },
-    delete: (state, action) => {
-      state.delete(action.payload);
+    deleteGuide: (state, action) => {
+      state = state.map((item) => {
+        let { id, transaction, key, type } = action.payload;
+        if (item.type == type) {
+          if (transaction == "Income") {
+            item.incomeElements = item.incomeElements.filter(
+              (income) => income.key != key
+            );
+          } else {
+            console.log(
+              "hey from the other side dude we are in the spending type "
+            );
+            item.spendingElements = item.spendingElements.filter(
+              (spending) => spending.key != key
+            );
+          }
+        }
+      });
     },
   },
 });
 
 export default userSpendingsAndIncomesTypeTransaction.reducer;
 
-export const { add } = userSpendingsAndIncomesTypeTransaction.actions;
+export const { add, deleteGuide } =
+  userSpendingsAndIncomesTypeTransaction.actions;

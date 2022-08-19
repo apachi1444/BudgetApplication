@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { categories } from "../../../consts/categories";
+import { returnNewDate } from "../../../global/functions/time";
 let length = 0;
 const initialState = categories.map((item) => {
   length += 1;
@@ -34,28 +35,47 @@ export const userSpendingsAndIncomesCategories = createSlice({
       });
     },
     updateTransaction: (state, action) => {
-      //   const { id, duration, key, date } = action.payload;
-      //   state.map((item) => {
-      //     if (item.id == id) {
-      //       item.elements.map((elem) => {
-      //         if (elem.key == key) {
-      //           let newDate = returnNewDate(date, duration);
-      //           elem.date = newDate;
-      //         }
-      //       });
-      //     }
-      //   });
+      const { id, period, key, date } = action.payload;
+      console.log(action.payload);
+      state.map((item) => {
+        if (item.id == id) {
+          item.spendingElements.map((elem) => {
+            if (elem.key == key) {
+              let newDate = returnNewDate(date, period);
+              elem.date = newDate;
+            }
+          });
+        }
+      });
+    },
+    updateTransactionPlanned: (state, action) => {
+      const { id, period, key, date } = action.payload;
+      console.log(action.payload);
+      state.map((item) => {
+        if (item.id == id) {
+          item.spendingElements.map((elem) => {
+            if (elem.key == key) {
+              let newDate = returnNewDate(date, period);
+              elem.date = newDate;
+            }
+          });
+        }
+      });
     },
     deleteTransaction: (state, action) => {
-      return state.map((item) => {
-        let { category, transaction, key } = action.payload;
-        if (item.title == category) {
-          let finalList =
-            transaction == "Income"
-              ? item?.incomeElements
-              : item?.spendingElements;
-
-          finalList.filter((item) => item.key != key);
+      console.log("this is the action payload ", action.payload);
+      state = state.map((item) => {
+        let { id, transaction, key } = action.payload;
+        if (item.id == id) {
+          if (transaction == "Income") {
+            item.incomeElements = item.incomeElements.filter(
+              (income) => income.key != key
+            );
+          } else {
+            item.spendingElements = item.spendingElements.filter(
+              (spending) => spending.key != key
+            );
+          }
         }
       });
     },
@@ -64,5 +84,9 @@ export const userSpendingsAndIncomesCategories = createSlice({
 
 export default userSpendingsAndIncomesCategories.reducer;
 
-export const { addTransaction, updateTransaction, deleteTransaction } =
-  userSpendingsAndIncomesCategories.actions;
+export const {
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
+  updateTransactionPlanned,
+} = userSpendingsAndIncomesCategories.actions;

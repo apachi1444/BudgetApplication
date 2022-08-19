@@ -22,7 +22,16 @@ import {
   calculateSpendingsNeeds,
   calculateSpendingsSaves,
   calculateSpendingsWants,
+  total,
 } from "../../../global/functions/store";
+import {
+  needsSpendings,
+  returnColorAppropriateBorder,
+  returnOverpassedOrRemaining,
+  returnTotalSavesWantsNeeds,
+  savesSpedings,
+  wantsSpendings,
+} from "../guide";
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
   useEffect(() => {
@@ -34,7 +43,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   });
 
   let data = useSelector((state) => {
-    return state.userSpending;
+    return state.userSpendingsAndIncomes;
   });
 
   const totalIncomes = calculateAllIncomes(data);
@@ -43,31 +52,26 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   const totalOptimamWantsIncomes = (totalIncomes * 0.3).toFixed(0);
   const totalOptimalNeedsIncomes = (totalIncomes * 0.5).toFixed(0);
 
-  const totalWantsSpendings = calculateSpendingsWants(data);
-  const totalSavesSpedings = calculateSpendingsSaves(data);
-  const totalNeedsSpendings = calculateSpendingsNeeds(data);
+  const totalWants = wantsSpendings(data);
+  const totalSaves = savesSpedings(data);
+  const totalNeeds = needsSpendings(data);
 
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status
-    let totalNeeds = 0;
-    let totalSaves = 0;
-    let totalWants = 0;
-    guideData.map((item) => {
-      if (item.type === "save") {
-        totalSaves += item.amout;
-      } else if (item.type === "need") {
-        totalNeeds += item.amout;
-      } else {
-        totalWants += item.amout;
-      }
-    });
 
-    let totalExpenses = totalSaves + totalWants + totalNeeds;
+    let percentageWant = (
+      (totalWants / totalOptimamWantsIncomes) *
+      100
+    ).toFixed(0);
 
-    let percentageWant = ((totalWants / totalExpenses) * 100).toFixed(0);
-    let percentageNeed = ((totalNeeds / totalExpenses) * 100).toFixed(0);
-    let percentageSave = ((totalSaves / totalExpenses) * 100).toFixed(0);
-
+    let percentageNeed = (
+      (totalNeeds / totalOptimalNeedsIncomes) *
+      100
+    ).toFixed(0);
+    let percentageSave = (
+      (totalSaves / totalOptimalSavesIncomes) *
+      100
+    ).toFixed(0);
     let finalGuideDataExpenses = [
       {
         y: totalWants,
@@ -90,7 +94,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         id: 1,
         name: "Wants",
         y: totalWants,
-        label: `${percentageWant}%`,
+        // label: `${percentageWant}%`,
         color: COLORS.WANTS,
         normal: wants,
         difference: `${wants - percentageWant}`,
@@ -100,7 +104,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         id: 2,
         name: "Saves",
         y: totalSaves,
-        label: `${percentageSave}%`,
+        // label: `${percentageSave}%`,
         actual: percentageSave,
         color: COLORS.SAVES,
         normal: saves,
@@ -110,7 +114,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         id: 3,
         name: "Needs",
         actual: percentageNeed,
-        label: `${percentageNeed}%`,
+        // label: `${percentageNeed}%`,
         y: totalNeeds,
         color: COLORS.NEEDS,
         normal: needs,
@@ -130,31 +134,20 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const renderGuideExpensesSummary = () => {
     let { finalGuideDataExpensesSummary } = processCategoryDataToDisplay();
-    console.log(finalGuideDataExpensesSummary);
+
     const renderItem = ({ item }) => {
       let difference = item.difference;
-      let colorAppropriate;
-      let text;
+      let colorAppropriate = returnColorAppropriateBorder(difference);
+      let text = returnOverpassedOrRemaining(difference);
       if (difference < 0) {
-        colorAppropriate = COLORS.RED;
         difference = difference * -1;
-        text = "Overpassed";
-      } else {
-        colorAppropriate = COLORS.GREEN;
-        text = "Remaining";
       }
       return (
         <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            height: 40,
-            paddingHorizontal: SIZESS.radius,
-            borderRadius: 10,
-            backgroundColor: COLORS.BOTTOMBAR,
-            marginBottom: SIZESS.base * 2,
-            borderColor: colorAppropriate,
-            borderWidth: 2,
-          }}
+          style={[
+            styles.containerOneExpenseSummary,
+            { borderColor: colorAppropriate },
+          ]}
           onPress={() => {
             renderNavigationToTheDetailsCategoryChoosen(item);
           }}
@@ -205,14 +198,12 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
     return (
       <View>
-        <View>
-          <FlatList
-            data={finalGuideDataExpensesSummary}
-            renderItem={(item) => renderItem(item)}
-            keyExtractor={(item) => `${item.id}`}
-            showsVerticalScrollIndicator={true}
-          />
-        </View>
+        <FlatList
+          data={finalGuideDataExpensesSummary}
+          renderItem={(item) => renderItem(item)}
+          keyExtractor={(item) => `${item.id}`}
+          showsVerticalScrollIndicator={true}
+        />
       </View>
     );
   };
@@ -221,12 +212,6 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   let colorScales = finalGuideDataExpenses.map((item) => item.color);
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
-      {/* <Button
-        title="goToWants "
-        onPress={() => {
-          navigation.navigate("Wants");
-        }}
-      ></Button> */}
       <ScrollView style={styles.page}>
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Guide 50_30_20</Text>
@@ -246,6 +231,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           <Text style={styles.topText}> Our Guide </Text>
           <Text style={styles.bottomText}>Let's Learn About Finance </Text>
         </View>
+
         <View style={styles.mainContainer}>
           <View
             style={{
@@ -255,114 +241,60 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
             }}
           >
             <Text style={styles.summaryText}>Your Summary</Text>
-            <VictoryPie
-              data={finalGuideDataExpenses}
-              labels={(datum) => {
-                console.log(datum);
-                return datum.datum.yName;
-              }}
-              radius={SIZES.BASE * 25}
-              innerRadius={60}
-              labelRadius={({ innerRadius }) =>
-                (SIZES.BASE * 30 + innerRadius) / 2.5
-              }
-              style={{
-                labels: {
-                  fill: "white",
-                  fontWeight: "bold",
-                  fontSize: SIZES.BASE * 3.5,
-                },
-                parent: {
-                  // ...chartCategoriesStyle.shadow,
-                },
-              }}
-              colorScale={colorScales}
-            />
+            {totalIncomes == 0 && (
+              <View style={styles.mainContainerEmpty}>
+                {totalNeeds == 0 && totalSaves == 0 && totalWants == 0 && (
+                  <Text style={styles.textNoHistory}>
+                    You Have No Income And Spendings For The Momenet
+                  </Text>
+                )}
+                {totalNeeds != 0 ||
+                  totalSaves != 0 ||
+                  (totalWants != 0 && (
+                    <Text style={styles.textNoHistory}>
+                      You Have No Income For The Momenet
+                    </Text>
+                  ))}
+              </View>
+            )}
+            {totalIncomes == 0 &&
+              (totalIncomes != 0 || totalNeeds != 0 || totalSaves != 0) && (
+                <Text style={styles.textNoHistory}>
+                  You Should Add An Income Before
+                </Text>
+              )}
           </View>
-          {renderGuideExpensesSummary()}
         </View>
+
+        {totalIncomes != 0 &&
+          (totalNeeds != 0 || totalSaves != 0 || totalWants != 0) && (
+            <View style={styles.mainContainer}>
+              <View
+                style={{
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <VictoryPie
+                  data={finalGuideDataExpenses}
+                  labels={(datum) => {
+                    return null;
+                  }}
+                  radius={SIZES.BASE * 25}
+                  innerRadius={60}
+                  labelRadius={({ innerRadius }) =>
+                    (SIZES.BASE * 30 + innerRadius) / 2.5
+                  }
+                  colorScale={colorScales}
+                />
+              </View>
+              {renderGuideExpensesSummary()}
+            </View>
+          )}
       </ScrollView>
     </SafeAreaView>
   );
 };
-
-// const styles = StyleSheet.create({
-//   page: {
-//     backgroundColor: COLORS.LIGHTGREY,
-//     flex: 1,
-//   },
-//   headerContainer: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     marginTop: 40,
-//     marginHorizontal: 20,
-//   },
-//   shadow: {
-//     backgroundColor: COLORS.LIGHTGREY,
-//     height: 320,
-//     width: 20,
-//     marginLeft: 195,
-//     opacity: 0.5,
-//     marginTop: 20,
-//     borderRadius: 20,
-//     position: "absolute",
-//   },
-//   textStorage: {
-//     color: COLORS.GREEN,
-//     fontSize: 15,
-//   },
-//   btn: {
-//     alignSelf: "center",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     marginTop: 30,
-//     backgroundColor: COLORS.SECONDARY,
-//     paddingVertical: 10,
-//     paddingHorizontal: 25,
-//     borderRadius: 2,
-//     borderWidth: 3,
-//     borderColor: "#f04946",
-//   },
-//   textFree: {
-//     color: COLORS.LIGHT,
-//   },
-//   circle: {
-//     width: 10,
-//     height: 15,
-//     borderRadius: 3,
-//     marginHorizontal: 10,
-//   },
-//   textUsed: {
-//     color: COLORS.PRIMARY,
-//   },
-//   labelContainer: {
-//     flexDirection: "row",
-//     alignSelf: "center",
-//     alignItems: "center ",
-//     marginTop: 20,
-//   },
-//   av: {
-//     width: 40,
-//     height: 40,
-//     borderRadius: 20,
-//   },
-//   dot: {
-//     width: 8,
-//     height: 8,
-//     borderRadius: 4,
-//     marginLeft: 4,
-//   },
-//   topText: {
-//     alignItems: "center",
-//     marginHorizontal: 20,
-//     flexDirection: "row",
-//     marginTop: 40,
-//   },
-//   textFile: {
-//     fontSize: 34,
-//     color: COLORS.RED,
-//     flex: 1,
-//   },
-// });
 
 export default Guide_50_30_20_Summary;

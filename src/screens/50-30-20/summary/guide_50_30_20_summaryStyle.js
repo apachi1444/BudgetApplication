@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import COLORS from "../../../consts/color";
-import { SIZES } from "../../../consts/theme";
+import { SIZES, SIZESS } from "../../../consts/theme";
 import { windowHeight } from "../../../utils/dimensions";
 
 export const guideStyle = StyleSheet.create({
@@ -35,15 +35,39 @@ export const guideStyle = StyleSheet.create({
   },
   mainContainer: {
     backgroundColor: COLORS.LIGHTGREY,
-    margin: SIZES.BASE * 6,
-    padding: SIZES.BASE * 2,
+    margin: SIZES.BASE * 3,
+    padding: SIZES.BASE * 1,
     borderRadius: SIZES.BASE * 5,
     // height: windowHeight * 0.5,
+  },
+  mainContainerEmpty: {
+    backgroundColor: COLORS.LIGHTGREY,
+    margin: SIZES.BASE * 3,
+    padding: SIZES.BASE * 3,
+    borderRadius: SIZES.BASE * 5,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "justify",
+    // height: windowHeight * 0.5,
+  },
+  textNoHistory: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   summaryText: {
     alignSelf: "center",
     fontWeight: "bold",
     color: "black",
     fontSize: SIZES.BASE * 4,
+  },
+  containerOneExpenseSummary: {
+    flexDirection: "row",
+    height: 40,
+    paddingHorizontal: SIZESS.radius,
+    borderRadius: 10,
+    backgroundColor: COLORS.BOTTOMBAR,
+    marginBottom: SIZESS.base * 2,
+    borderWidth: 2,
+    marginHorizontal: SIZES.BASE * 2,
   },
 });
