@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import COLORS from "../../../consts/color";
-import { SIZES } from "../../../consts/theme";
+import { FONTS, SIZES, SIZESS } from "../../../consts/theme";
 import { windowWidth } from "../../../utils/dimensions";
 
 export const chartCategoriesStyle = StyleSheet.create({
@@ -74,5 +74,60 @@ export const chartCategoriesStyle = StyleSheet.create({
   title: {
     fontSize: SIZES.BASE * 3,
     fontWeight: "350",
+  },
+
+  containerNumberCategoriesChart: {
+    position: "absolute",
+    top: "42%",
+    left: "39%",
+    alignSelf: "center",
+  },
+
+  numberCategoriesChart: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 25,
+  },
+
+  titleCategories: {
+    textAlign: "center",
+    fontWeight: "400",
+    fontSize: 20,
+  },
+
+  // this must be preced with the key labels
+  labelChart: {
+    fill: "black",
+    ...FONTS.body3,
+    fontWeight: "bold",
+    fontSize: SIZESS.body1 / 1.6,
+  },
+
+  containerOneLineSummaryChart: {
+    flexDirection: "row",
+    height: 40,
+    paddingHorizontal: SIZESS.radius,
+    borderRadius: 10,
+    backgroundColor: COLORS.BOTTOMBAR,
+    marginBottom: SIZESS.base * 2,
+  },
+
+  littleRectangleCategoryColor: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+  },
+
+  titleCategorySummaryLine: {
+    marginLeft: SIZESS.base,
+    color: COLORS.PRIMARY,
+    fontWeight: "bold",
+    fontSize: SIZESS.base * 2,
+  },
+
+  textPriceAndPercentageSummaryLine: {
+    color: COLORS.PRIMARY,
+    fontWeight: "bold",
+    fontSize: SIZESS.base * 2,
   },
 });

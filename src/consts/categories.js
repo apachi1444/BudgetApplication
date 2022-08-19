@@ -37,7 +37,7 @@ export const categories = [
     id: 5,
     name: "Fast",
     icon: "fast-food",
-    color: COLORS.GREEN,
+    color: COLORS.GOOGLE,
     imageUrl:
       "/Users/Admin/Desktop/budgetproject/src/assets/images/fastFood.png",
   },

@@ -1,34 +1,21 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-  FlatList,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import { Avatar } from "react-native-paper";
-import { categories } from "../../../consts/categories";
+import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import COLORS from "../../../consts/color";
 import { SIZES } from "../../../consts/theme";
 import { renderFinalDate } from "../../../global/functions/time";
 import { globalStyles } from "../../../global/styles/globalStyles";
-import { windowHeight, windowWidth } from "../../../utils/dimensions";
+import { windowHeight } from "../../../utils/dimensions";
 import { historyStyle } from "../historyStyle";
-import {
-  concatenateIncomesAndSpendings,
-  concatenateIncomesAndSpendingsOneCategory,
-  renderIconCategory,
-  renderImageCategory,
-} from "../logic";
+import { concatenateIncomesAndSpendingsOneCategory } from "../logic";
 import { allHistoryStyle } from "./allHistoryCategoriesStyle";
-
+import { useSelector } from "react-redux";
 const AllHistoryCategories = (props) => {
-  const { list } = props;
+  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
   const renderOneCategory = (item) => {
     let arrayIncomesSpendings = concatenateIncomesAndSpendingsOneCategory(item);
-    const iconCategory = renderIconCategory(categories, item.title);
+    const iconCategory = item.icon;
     const categoryRecordsLength = arrayIncomesSpendings.length;
 
     const renderRecordLine = (item) => {
@@ -77,6 +64,7 @@ const AllHistoryCategories = (props) => {
                   flexDirection: "row",
                   alignItems: "center",
                   marginLeft: "2%",
+                  alignSelf: "center",
                 }}
               >
                 <Text
@@ -145,19 +133,36 @@ const AllHistoryCategories = (props) => {
           );
         };
         return (
-          <View style={allHistoryStyle.containerRecordLine}>
-            <View>
-              <Ionicons
-                name={nameIconArrow}
-                color={color}
-                size={SIZES.BASE * 7}
-              />
+          <>
+            <View style={allHistoryStyle.containerRecordLine}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View>
+                  <Ionicons
+                    name={nameIconArrow}
+                    color={color}
+                    size={SIZES.BASE * 7}
+                  />
+                </View>
+                {renderImageAndTitle()}
+                {renderPrice()}
+              </View>
+              {/* {renderEditAndDeleteButton()} */}
+              <View
+                style={{
+                  marginVertical: "3%",
+                  alignItems: "center",
+                }}
+              >
+                {renderDate()}
+              </View>
             </View>
-            {renderImageAndTitle()}
-            {renderPrice()}
-            {renderDate()}
-            {/* {renderEditAndDeleteButton()} */}
-          </View>
+          </>
         );
       };
       return (
@@ -207,18 +212,7 @@ const AllHistoryCategories = (props) => {
         {renderImageAndTitle()}
 
         {arrayIncomesSpendings.length == 0 && (
-          <View
-            style={{
-              backgroundColor: COLORS.LIGHTGREY,
-              padding: "8%",
-              margin: "5%",
-              alignSelf: "center",
-              borderRadius: SIZES.BASE * 3,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <View style={allHistoryStyle.noResultText}>
             <Ionicons name="sad" size={25} />
             <Text style={{ marginLeft: "5%" }}>
               There is no data for the moment

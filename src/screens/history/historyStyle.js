@@ -20,17 +20,28 @@ export const historyStyle = StyleSheet.create({
   containerImageBudget: (color) => {
     return {
       marginTop: SIZES.BASE * 3,
-      marginHorizontal: SIZES.BASE,
-      width: windowWidth * 0.27,
+      marginHorizontal: SIZES.BASE / 2,
+      width: windowWidth * 0.28,
       height: windowHeight * 0.15,
-      borderRadius: windowWidth * 0.2,
+      borderRadius: windowWidth * 0.25,
       borderColor: color,
       borderWidth: 2,
-      padding: 5,
       justifyContent: "center",
       alignItems: "center",
+      padding: "1%",
     };
   },
+
+  containerHistoryItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: SIZES.BASE * 2,
+    backgroundColor: COLORS.BOTTOMBAR,
+    padding: SIZES.BASE * 2.5,
+    borderRadius: SIZES.BASE * 3.5,
+  },
+
   containerOneBoxCategory: {
     flex: 1,
     flexDirection: "row",
@@ -61,11 +72,14 @@ export const historyStyle = StyleSheet.create({
   },
   viewTextInside: {
     position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
   },
   textInside: (color) => {
     return {
       fontWeight: "bold",
-      fontSize: 23,
+      fontSize: 17,
       color: color,
     };
   },

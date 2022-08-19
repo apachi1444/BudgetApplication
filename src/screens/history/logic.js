@@ -1,3 +1,4 @@
+import COLORS from "../../consts/color";
 import { total } from "../../global/functions/store";
 import {
   compareFirstTargetFinalDates,
@@ -72,28 +73,40 @@ export const calculateBudgetAndIncomesAndSpendings = (
   return { currentBudget, totalIncomes, totalSpendings };
 };
 
-export const concatenateIncomesAndSpendings = (title, list) => {
+export const concatenateIncomesAndSpendingsOneCategory = (item) => {
   let finalArrayContainingSpendingsAndIncomes = [];
-  list.map((item) => {
-    if (item.title == title) {
-      item.incomeElements.map((incomeElement) => {
-        finalArrayContainingSpendingsAndIncomes.push(incomeElement);
-      });
-      item.spendingElements.map((spendingElement) => {
-        finalArrayContainingSpendingsAndIncomes.push(spendingElement);
-      });
-    }
+  item.incomeElements.map((incomeElement) => {
+    finalArrayContainingSpendingsAndIncomes.push({
+      ...incomeElement,
+      color: item.color,
+    });
+  });
+  item.spendingElements.map((spendingElement) => {
+    finalArrayContainingSpendingsAndIncomes.push({
+      ...spendingElement,
+      color: item.color,
+    });
   });
   return finalArrayContainingSpendingsAndIncomes;
 };
 
-export const concatenateIncomesAndSpendingsOneCategory = (item) => {
+export const concatenateIncomesAndSpendings = (title, list) => {
   let finalArrayContainingSpendingsAndIncomes = [];
-  item.incomeElements.map((incomeElement) => {
-    finalArrayContainingSpendingsAndIncomes.push(incomeElement);
-  });
-  item.spendingElements.map((spendingElement) => {
-    finalArrayContainingSpendingsAndIncomes.push(spendingElement);
+  list.map((item) => {
+    if (item.title == title || title == "All") {
+      item.incomeElements.map((incomeElement) => {
+        finalArrayContainingSpendingsAndIncomes.push({
+          ...incomeElement,
+          color: item.color,
+        });
+      });
+      item.spendingElements.map((spendingElement) => {
+        finalArrayContainingSpendingsAndIncomes.push({
+          ...spendingElement,
+          color: item.color,
+        });
+      });
+    }
   });
   return finalArrayContainingSpendingsAndIncomes;
 };
@@ -129,23 +142,17 @@ export const renderInformationsAboutBudgetIncomesAndSpendings = (
   }
 };
 
-export const renderIconCategory = (categories, title) => {
-  let lastValue = "";
-  categories.map((category) => {
-    if (category.name == title) {
-      lastValue = category.icon;
-    }
-  });
-  return lastValue;
-};
+export const renderColorCircleBudget = (name, price) => {
+  switch (name) {
+    case "Incomes":
+      return COLORS.GREEN;
+    case "Budget":
+      return COLORS.PRIMARY;
 
-export const renderImageCategory = (categories, title) => {
-  let lastValue = "";
-  console.log("this is all the categories ", categories);
-  categories.map((category) => {
-    if (category.name == title) {
-      lastValue = category.imageUrl;
-    }
-  });
-  return lastValue;
+    case "Spendings":
+      return COLORS.RED;
+
+    default:
+      break;
+  }
 };

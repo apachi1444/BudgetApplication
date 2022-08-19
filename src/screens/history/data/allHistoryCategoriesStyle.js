@@ -28,10 +28,18 @@ export const allHistoryStyle = StyleSheet.create({
     flexDirection: "row",
   },
 
-  containerRecordLine: {
+  noResultText: {
+    backgroundColor: COLORS.LIGHTGREY,
+    padding: "8%",
+    margin: "5%",
+    alignSelf: "center",
+    borderRadius: SIZES.BASE * 3,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+  },
+
+  containerRecordLine: {
     marginVertical: SIZES.BASE * 2,
     backgroundColor: COLORS.WHITE,
     padding: SIZES.BASE * 2.5,

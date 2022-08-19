@@ -6,6 +6,9 @@ const initialState = categories.map((item) => {
   return {
     id: length,
     title: item.name,
+    color: item.color,
+    icon: item.icon,
+    imageUrl: item.imageUrl,
     incomeElements: [],
     spendingElements: [],
   };

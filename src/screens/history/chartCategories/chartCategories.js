@@ -14,9 +14,10 @@ import { SIZESS, FONTS } from "../../../consts/theme";
 import COLORS from "../../../consts/color";
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from "../../../global/styles/globalStyles";
-
+import { total } from "../../../global/functions/store";
+import { useSelector } from "react-redux";
 const ChartCategories = ({ navigation, route }) => {
-  const categories = route.params;
+  let data = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [modeSelected, setModeSelected] = useState("Spendings");
@@ -44,22 +45,12 @@ const ChartCategories = ({ navigation, route }) => {
 
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status
-    let chartData = categories.map((item) => {
-      let totalIncomes = 0;
-      let totalExpenses = 0;
-      item.history.map((item) => {
-        item.type == "Spending"
-          ? (totalExpenses += item.total)
-          : (totalIncomes += item.total);
-      });
-
-      // let totalSpendings = listSpendings.reduce(
-      //   (a, b) => a + (b.total || 0),
-      //   0
-      // );
+    let chartData = data.map((item) => {
+      let totalIncomes = total(item.incomeElements);
+      let totalExpenses = total(item.spendingElements);
 
       return {
-        name: item.name,
+        title: item.title,
         expenseCount: totalExpenses,
         incomeCount: totalIncomes,
         color: item.color,
@@ -101,7 +92,7 @@ const ChartCategories = ({ navigation, route }) => {
         y: Number(item.incomeCount),
         incomeCount: item.incomeCount,
         color: item.color,
-        name: item.name,
+        title: item.title,
         id: item.id,
       };
     });
@@ -116,7 +107,7 @@ const ChartCategories = ({ navigation, route }) => {
         y: Number(item.expenseCount),
         expenseCount: item.expenseCount,
         color: item.color,
-        name: item.name,
+        title: item.title,
         id: item.id,
       };
     });
@@ -134,51 +125,27 @@ const ChartCategories = ({ navigation, route }) => {
       processCategoryDataToDisplay();
 
     let colorScales = finalChartDataExpense.map((item) => item.color);
-    console.log(finalChartDataExpense);
+
     return (
       <View style={{ alignItems: "center", justifyContent: "center" }}>
         <VictoryPie
           data={finalChartDataExpense}
           labels={(datum) => {
-            return datum.datum.labelExpense;
+            return null;
           }}
           radius={SIZESS.width * 0.4}
           innerRadius={70}
           labelRadius={({ innerRadius }) =>
             (SIZESS.width * 0.4 + innerRadius) / 2
           }
-          style={{
-            labels: {
-              fill: "black",
-              ...FONTS.body3,
-              fontWeight: "bold",
-              fontSize: SIZESS.body1 / 1.6,
-            },
-            parent: {
-              ...chartCategoriesStyle.shadow,
-            },
-          }}
           colorScale={colorScales}
         />
 
-        <View
-          style={{
-            position: "absolute",
-            top: "42%",
-            left: "39%",
-            alignSelf: "center",
-          }}
-        >
-          <Text
-            style={{ textAlign: "center", fontWeight: "bold", fontSize: 25 }}
-          >
+        <View style={chartCategoriesStyle.containerNumberCategoriesChart}>
+          <Text style={chartCategoriesStyle.numberCategoriesChart}>
             {categoriesExpenses}
           </Text>
-          <Text
-            style={{ textAlign: "center", fontWeight: "400", fontSize: 20 }}
-          >
-            Categories
-          </Text>
+          <Text style={chartCategoriesStyle.titleCategories}>Categories</Text>
         </View>
       </View>
     );
@@ -195,45 +162,21 @@ const ChartCategories = ({ navigation, route }) => {
         <VictoryPie
           data={finalChartDataIncome}
           labels={(datum) => {
-            return datum.datum.labelIncome;
+            return null;
           }}
           radius={SIZESS.width * 0.4}
           innerRadius={70}
           labelRadius={({ innerRadius }) =>
             (SIZESS.width * 0.4 + innerRadius) / 2
           }
-          style={{
-            labels: {
-              fill: "black",
-              ...FONTS.body3,
-              fontWeight: "bold",
-              fontSize: SIZESS.body1 / 1.6,
-            },
-            parent: {
-              ...chartCategoriesStyle.shadow,
-            },
-          }}
           colorScale={colorScales}
         />
 
-        <View
-          style={{
-            position: "absolute",
-            top: "42%",
-            left: "39%",
-            alignSelf: "center",
-          }}
-        >
-          <Text
-            style={{ textAlign: "center", fontWeight: "bold", fontSize: 25 }}
-          >
+        <View style={chartCategoriesStyle.containerNumberCategoriesChart}>
+          <Text style={chartCategoriesStyle.numberCategoriesChart}>
             {categoriesIncomes}
           </Text>
-          <Text
-            style={{ textAlign: "center", fontWeight: "400", fontSize: 20 }}
-          >
-            Categories
-          </Text>
+          <Text style={chartCategoriesStyle.titleCategories}>Categories</Text>
         </View>
       </View>
     );
@@ -282,14 +225,7 @@ const ChartCategories = ({ navigation, route }) => {
 
     const renderItem = ({ item }) => (
       <TouchableOpacity
-        style={{
-          flexDirection: "row",
-          height: 40,
-          paddingHorizontal: SIZESS.radius,
-          borderRadius: 10,
-          backgroundColor: COLORS.BOTTOMBAR,
-          marginBottom: SIZESS.base * 2,
-        }}
+        style={chartCategoriesStyle.containerOneLineSummaryChart}
         onPress={() => {
           renderNavigationToTheDetailsCategoryChoosen();
         }}
@@ -297,36 +233,21 @@ const ChartCategories = ({ navigation, route }) => {
         {/* Name/Category */}
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <View
-            style={{
-              width: 20,
-              height: 20,
-              backgroundColor: item.color,
-              borderRadius: 5,
-            }}
+            style={[
+              chartCategoriesStyle.littleRectangleCategoryColor,
+              { backgroundColor: item.color },
+            ]}
           />
 
-          <Text
-            style={{
-              marginLeft: SIZESS.base,
-              color: COLORS.PRIMARY,
-              fontWeight: "bold",
-              fontSize: SIZESS.base * 2,
-            }}
-          >
-            {item.name}
+          <Text style={chartCategoriesStyle.titleCategorySummaryLine}>
+            {item.title}
           </Text>
         </View>
 
         {/* Expenses */}
         <View style={{ justifyContent: "center" }}>
-          <Text
-            style={{
-              color: COLORS.PRIMARY,
-              fontWeight: "bold",
-              fontSize: SIZESS.base * 1.7,
-            }}
-          >
-            - {item.expenseCount} DH - {item.labelExpense}
+          <Text style={chartCategoriesStyle.textPriceAndPercentageSummaryLine}>
+            -{item.expenseCount} DH {"  |  "} {item.labelExpense}
           </Text>
         </View>
       </TouchableOpacity>
@@ -350,14 +271,7 @@ const ChartCategories = ({ navigation, route }) => {
 
     const renderItem = ({ item }) => (
       <TouchableOpacity
-        style={{
-          flexDirection: "row",
-          height: 40,
-          paddingHorizontal: SIZESS.radius,
-          borderRadius: 10,
-          backgroundColor: COLORS.BOTTOMBAR,
-          marginBottom: SIZESS.base * 2,
-        }}
+        style={chartCategoriesStyle.containerOneLineSummaryChart}
         onPress={() => {
           renderNavigationToTheDetailsCategoryChoosen();
         }}
@@ -365,36 +279,21 @@ const ChartCategories = ({ navigation, route }) => {
         {/* Name/Category */}
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
           <View
-            style={{
-              width: 20,
-              height: 20,
-              backgroundColor: item.color,
-              borderRadius: 5,
-            }}
+            style={[
+              chartCategoriesStyle.littleRectangleCategoryColor,
+              { backgroundColor: item.color },
+            ]}
           />
 
-          <Text
-            style={{
-              marginLeft: SIZESS.base,
-              color: COLORS.PRIMARY,
-              fontWeight: "bold",
-              fontSize: SIZESS.base * 2,
-            }}
-          >
-            {item.name}
+          <Text style={chartCategoriesStyle.titleCategorySummaryLine}>
+            {item.title}
           </Text>
         </View>
 
         {/* Expenses */}
         <View style={{ justifyContent: "center" }}>
-          <Text
-            style={{
-              color: COLORS.PRIMARY,
-              fontWeight: "bold",
-              fontSize: SIZESS.base * 1.7,
-            }}
-          >
-            +{item.incomeCount} DH - {item.labelIncome}
+          <Text style={chartCategoriesStyle.textPriceAndPercentageSummaryLine}>
+            -{item.incomeCount} DH {"  |  "} {item.labelIncome}
           </Text>
         </View>
       </TouchableOpacity>

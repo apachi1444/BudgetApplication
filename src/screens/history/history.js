@@ -30,6 +30,7 @@ import {
   calculateBudgetInterval,
   calculateBudgetSingleDay,
   concatenateIncomesAndSpendings,
+  renderColorCircleBudget,
   renderInformationsAboutBudgetIncomesAndSpendings,
 } from "./logic";
 const displayData = async () => {
@@ -57,22 +58,8 @@ const renderProfileInformations = (navigation) => {
 };
 
 const renderOneCircle = (name, price) => {
-  var color;
+  var color = renderColorCircleBudget(name, price);
 
-  switch (name) {
-    case "Incomes":
-      color = COLORS.GREEN;
-      break;
-    case "Budget":
-      color = COLORS.PRIMARY;
-      break;
-    case "Spendings":
-      color = COLORS.RED;
-      break;
-
-    default:
-      break;
-  }
   return (
     <View>
       <View style={historyStyle.containerImageBudget(color)}>
@@ -98,6 +85,8 @@ const History = ({ navigation }) => {
   const [title, setSelectedTitle] = useState("All");
 
   const data = useSelector((state) => state.userSpendingsAndIncomesCategories);
+
+  let categoriesDetails = concatenateIncomesAndSpendings("All", data);
 
   const [firstDate, setFirstDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
@@ -554,11 +543,7 @@ const History = ({ navigation }) => {
   };
 
   const renderHistoryCategory = () => {
-    let finalArray = concatenateIncomesAndSpendings(
-      selectedCategory?.name,
-      data
-    );
-
+    let finalArray = concatenateIncomesAndSpendings(title, data);
     let allHistory = finalArray;
 
     const renderHistoryItem = (item) => {
@@ -673,18 +658,7 @@ const History = ({ navigation }) => {
           );
         };
         return (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginVertical: SIZES.BASE * 2,
-              backgroundColor: COLORS.BOTTOMBAR,
-              padding: SIZES.BASE * 2.5,
-              borderRadius: SIZES.BASE * 3.5,
-              // ...historyStyle.shadowProp,
-            }}
-          >
+          <View style={historyStyle.containerHistoryItem}>
             <View>
               <Ionicons
                 name={
@@ -712,6 +686,10 @@ const History = ({ navigation }) => {
     return (
       <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
+        {console.log(
+          "this is the length of the all history ",
+          allHistory.length
+        )}
         {allHistory.length > 0 && title != "All" && (
           <View>
             {allHistory.map((item, index) => {
@@ -738,7 +716,11 @@ const History = ({ navigation }) => {
   const renderChartRectangle = () => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("charts", categoriesData)}
+        onPress={() =>
+          navigation.navigate("charts", {
+            data,
+          })
+        }
         style={historyStyle.containerChartFigure}
       >
         <Ionicons name="add-circle-sharp" style={historyStyle.categoryIcon} />
