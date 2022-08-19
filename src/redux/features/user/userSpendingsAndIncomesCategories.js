@@ -51,11 +51,6 @@ export const userSpendingsAndIncomesCategories = createSlice({
             transaction == "Income"
               ? item?.incomeElements
               : item?.spendingElements;
-          console.log(
-            "this is the final list of items in the transaction  ",
-            finalList
-          );
-          console.log("this is the action payload ", action.payload);
 
           finalList.filter((item) => item.key != key);
         }

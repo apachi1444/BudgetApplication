@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  Animated,
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -560,8 +559,6 @@ const History = ({ navigation }) => {
       data
     );
 
-    console.log("this is the new data after the update of course ", data);
-
     let allHistory = finalArray;
 
     const renderHistoryItem = (item) => {
@@ -610,7 +607,6 @@ const History = ({ navigation }) => {
               >
                 <Text
                   style={{
-                    // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                     fontWeight: "bold",
                     fontSize: SIZES.BASE * 2.4,
                     fontWeight: "bold",
@@ -621,7 +617,6 @@ const History = ({ navigation }) => {
                 <Ionicons
                   name="calendar-outline"
                   style={{
-                    // color: type == "Spending" ? COLORS.RED : COLORS.GREEN,
                     fontWeight: "bold",
                     fontSize: SIZES.BASE * 2.5,
                     marginLeft: SIZES.BASE,
@@ -718,24 +713,22 @@ const History = ({ navigation }) => {
       <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
         {allHistory.length > 0 && title != "All" && (
-          <View
-            style={{
-              borderWidth: 0.1,
-            }}
-          >
+          <View>
             {allHistory.map((item, index) => {
               return renderHistoryItem(item);
             })}
           </View>
         )}
-        {allHistory.length == 0 && title != "All" && (
+        {allHistory.length > 0 && title == "All" && (
+          <AllHistoryCategories list={data} concat={allHistory} />
+        )}
+        {allHistory.length == 0 && (
           <View>
             <Text style={historyStyle.textInsideCategoryContent}>
               No Results for the moment
             </Text>
           </View>
         )}
-        {title == "All" && <AllHistoryCategories list={finalArray} />}
       </View>
     );
   };

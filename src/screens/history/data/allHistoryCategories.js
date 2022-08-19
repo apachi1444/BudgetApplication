@@ -8,18 +8,36 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Avatar } from "react-native-paper";
+import { categories } from "../../../consts/categories";
 import COLORS from "../../../consts/color";
 import { SIZES } from "../../../consts/theme";
+import { renderFinalDate } from "../../../global/functions/time";
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { windowHeight, windowWidth } from "../../../utils/dimensions";
 import { historyStyle } from "../historyStyle";
+import {
+  concatenateIncomesAndSpendings,
+  concatenateIncomesAndSpendingsOneCategory,
+  renderIconCategory,
+  renderImageCategory,
+} from "../logic";
 import { allHistoryStyle } from "./allHistoryCategoriesStyle";
 
 const AllHistoryCategories = (props) => {
   const { list } = props;
-  console.log("this is the list coming from the history page ", list);
+
   const renderOneCategory = (item) => {
-    const renderRecordLine = () => {
+    let arrayIncomesSpendings = concatenateIncomesAndSpendingsOneCategory(item);
+    const iconCategory = renderIconCategory(categories, item.title);
+    const categoryRecordsLength = arrayIncomesSpendings.length;
+
+    const renderRecordLine = (item) => {
+      const finalDate = renderFinalDate(item?.date);
+      const nameIconArrow =
+        item.transaction == "Spending"
+          ? "arrow-down-circle"
+          : "arrow-up-circle";
+      const color = item.transaction == "Spending" ? COLORS.RED : COLORS.GREEN;
       const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
           return (
@@ -31,7 +49,7 @@ const AllHistoryCategories = (props) => {
                   marginRight: "4%",
                 }}
               >
-                haha
+                {item.title}
               </Text>
             </View>
           );
@@ -46,7 +64,7 @@ const AllHistoryCategories = (props) => {
                   fontSize: SIZES.BASE * 3,
                 }}
               >
-                {item.total} DH
+                {item?.price} DH
               </Text>
             </View>
           );
@@ -69,7 +87,7 @@ const AllHistoryCategories = (props) => {
                     fontWeight: "bold",
                   }}
                 >
-                  12/05/2023
+                  {finalDate}
                 </Text>
                 <Ionicons
                   name="calendar-outline"
@@ -127,22 +145,11 @@ const AllHistoryCategories = (props) => {
           );
         };
         return (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginVertical: SIZES.BASE * 2,
-              backgroundColor: COLORS.WHITE,
-              padding: SIZES.BASE * 2.5,
-              paddingVertical: SIZES.BASE * 1.8,
-              borderRadius: SIZES.BASE * 3.5,
-            }}
-          >
+          <View style={allHistoryStyle.containerRecordLine}>
             <View>
               <Ionicons
-                name={"arrow-up-circle"}
-                color={COLORS.RED}
+                name={nameIconArrow}
+                color={color}
                 size={SIZES.BASE * 7}
               />
             </View>
@@ -162,28 +169,22 @@ const AllHistoryCategories = (props) => {
     const renderImageAndTitle = () => {
       return (
         <View style={allHistoryStyle.containerImageAndTitle}>
-          <Avatar.Image
-            source={require("../../../assets/images/elon_musk.jpg")}
-            size={40}
-          />
+          <Ionicons name={iconCategory} size={30} color="white" />
           <View>
             <View
               style={[
                 globalStyles.flexRowAndAlignCenter,
-                { marginBottom: SIZES.BASE * 1 },
+                { marginBottom: SIZES.BASE * 1, justifyContent: "flex-end" },
               ]}
             >
-              <Ionicons
-                name="add-circle"
-                size={20}
-                style={{ marginRight: "2%" }}
-              />
               <Text
                 style={{
                   fontWeight: "bold",
+                  color: "white",
+                  alignSelf: "flex-end",
                 }}
               >
-                qdsklfjqskldfj
+                {item.title}
               </Text>
             </View>
             <Text
@@ -191,27 +192,50 @@ const AllHistoryCategories = (props) => {
                 alignSelf: "flex-end",
                 fontWeight: "400",
                 fontSize: SIZES.BASE * 2,
+                color: "white",
               }}
             >
-              15 Records
+              {categoryRecordsLength} Records
             </Text>
           </View>
         </View>
       );
     };
+
     return (
       <View style={allHistoryStyle.containerCategory}>
         {renderImageAndTitle()}
-        {list.map((item, index) => {
-          return renderRecordLine(item);
-        })}
-        {renderRecordLine()}
+
+        {arrayIncomesSpendings.length == 0 && (
+          <View
+            style={{
+              backgroundColor: COLORS.LIGHTGREY,
+              padding: "8%",
+              margin: "5%",
+              alignSelf: "center",
+              borderRadius: SIZES.BASE * 3,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Ionicons name="sad" size={25} />
+            <Text style={{ marginLeft: "5%" }}>
+              There is no data for the moment
+            </Text>
+          </View>
+        )}
+
+        {arrayIncomesSpendings.length > 0 &&
+          arrayIncomesSpendings.map((item, index) => {
+            return renderRecordLine(item);
+          })}
       </View>
     );
   };
   return (
     <ScrollView>
-      {list.map((item, index) => {
+      {list.map((item) => {
         return renderOneCategory(item);
       })}
     </ScrollView>

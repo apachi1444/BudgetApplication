@@ -27,6 +27,18 @@ export const allHistoryStyle = StyleSheet.create({
   containerThreeCircles: {
     flexDirection: "row",
   },
+
+  containerRecordLine: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: SIZES.BASE * 2,
+    backgroundColor: COLORS.WHITE,
+    padding: SIZES.BASE * 2.5,
+    paddingVertical: SIZES.BASE * 1.8,
+    borderRadius: SIZES.BASE * 3.5,
+  },
+
   containerImageBudget: (color) => {
     return {
       marginTop: SIZES.BASE * 3,

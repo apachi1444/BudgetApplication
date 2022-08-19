@@ -6,7 +6,7 @@ export const returnNewDate = (date, numberDays) => {
 
 export const renderFinalDate = (date) => {
   return (
-    date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate()
+    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
   );
 };
 

@@ -87,6 +87,17 @@ export const concatenateIncomesAndSpendings = (title, list) => {
   return finalArrayContainingSpendingsAndIncomes;
 };
 
+export const concatenateIncomesAndSpendingsOneCategory = (item) => {
+  let finalArrayContainingSpendingsAndIncomes = [];
+  item.incomeElements.map((incomeElement) => {
+    finalArrayContainingSpendingsAndIncomes.push(incomeElement);
+  });
+  item.spendingElements.map((spendingElement) => {
+    finalArrayContainingSpendingsAndIncomes.push(spendingElement);
+  });
+  return finalArrayContainingSpendingsAndIncomes;
+};
+
 export const renderInformationsAboutBudgetIncomesAndSpendings = (
   list,
   timeOptionSelected,
@@ -116,4 +127,25 @@ export const renderInformationsAboutBudgetIncomesAndSpendings = (
       finalListSpendings: finalFilteredListSpendings,
     };
   }
+};
+
+export const renderIconCategory = (categories, title) => {
+  let lastValue = "";
+  categories.map((category) => {
+    if (category.name == title) {
+      lastValue = category.icon;
+    }
+  });
+  return lastValue;
+};
+
+export const renderImageCategory = (categories, title) => {
+  let lastValue = "";
+  console.log("this is all the categories ", categories);
+  categories.map((category) => {
+    if (category.name == title) {
+      lastValue = category.imageUrl;
+    }
+  });
+  return lastValue;
 };
