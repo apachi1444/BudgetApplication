@@ -17,18 +17,11 @@ import { guideStyle as styles } from "./guide_50_30_20_summaryStyle";
 import { SIZES, SIZESS } from "../../../consts/theme";
 import { ScrollView } from "react-native-gesture-handler";
 import { needs, saves, wants } from "../../../consts/percentages";
-import {
-  calculateAllIncomes,
-  calculateSpendingsNeeds,
-  calculateSpendingsSaves,
-  calculateSpendingsWants,
-  total,
-} from "../../../global/functions/store";
+import { calculateAllIncomes } from "../../../global/functions/store";
 import {
   needsSpendings,
   returnColorAppropriateBorder,
   returnOverpassedOrRemaining,
-  returnTotalSavesWantsNeeds,
   savesSpedings,
   wantsSpendings,
 } from "../guide";
@@ -99,6 +92,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         normal: wants,
         difference: `${wants - percentageWant}`,
         actual: percentageWant,
+        totalOptimal: totalOptimamWantsIncomes,
       },
       {
         id: 2,
@@ -109,8 +103,10 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
         color: COLORS.SAVES,
         normal: saves,
         difference: `${saves - percentageSave}`,
+        totalOptimal: totalOptimalSavesIncomes,
       },
       {
+        totalOptimal: totalOptimalNeedsIncomes,
         id: 3,
         name: "Needs",
         actual: percentageNeed,
@@ -129,6 +125,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   };
 
   const renderNavigationToTheDetailsCategoryChoosen = (item) => {
+    console.log("this is the item ", item);
     navigation.navigate("Details", { item });
   };
 
@@ -283,9 +280,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                   }}
                   radius={SIZES.BASE * 25}
                   innerRadius={60}
-                  labelRadius={({ innerRadius }) =>
-                    (SIZES.BASE * 30 + innerRadius) / 2.5
-                  }
+                  labelRadius={50000}
                   colorScale={colorScales}
                 />
               </View>

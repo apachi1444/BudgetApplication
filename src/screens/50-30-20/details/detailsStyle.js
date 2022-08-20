@@ -14,7 +14,8 @@ export const detailsStyle = StyleSheet.create({
   titleAndIcon: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: -SIZES.BASE * 8,
+
+    justifyContent: "space-between",
   },
   title: {
     fontWeight: "bold",

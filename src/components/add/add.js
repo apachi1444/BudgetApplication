@@ -22,7 +22,7 @@ import { add as addTypeTransaction } from "../../redux/features/user/userSpendin
 import { addTransaction as addCategory } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
 import { FormSchema } from "../../consts/schemas";
-import { addPlanned } from "../../redux/features/spendings/plannedPayments";
+// import { addPlanned } from "../../redux/features/spendings/plannedPayments";
 import { returnNewDate } from "../../global/functions/time";
 import { categories } from "../../consts/categories";
 
@@ -358,15 +358,14 @@ const Add = ({ handleModal }) => {
           if (doneSpending) {
             let newDate = returnNewDate(new Date(), period);
             if (period != 0) {
-              dispatch(
-                addPlanned({
-                  title: title,
-                  price: Number(amount),
-                  category: category,
-                  date: newDate,
-                  duration: period,
-                })
-              );
+              // dispatch();
+              // addPlanned({
+              //   title: title,
+              //   price: Number(amount),
+              //   category: category,
+              //   date: newDate,
+              //   duration: period,
+              // })
             }
 
             dispatch(

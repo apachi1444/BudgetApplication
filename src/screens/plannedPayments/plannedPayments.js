@@ -11,10 +11,10 @@ import { globalStyles } from "../../global/styles/globalStyles";
 import { warningZoneRemainingDays } from "../../consts/plannedPayments";
 import { total } from "../../global/functions/store";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  deletePlan,
-  updatePlan,
-} from "../../redux/features/spendings/plannedPayments";
+// import {
+//   deletePlan,
+//   updatePlan,
+// } from "../../redux/features/spendings/plannedPayments";
 import {
   deleteTransaction,
   updateTransaction,

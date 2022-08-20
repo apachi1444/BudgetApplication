@@ -17,15 +17,29 @@ import { Ionicons, Entypo } from "@expo/vector-icons";
 import { detailsStyle } from "./detailsStyle";
 import COLORS from "../../../consts/color";
 import { ScrollView } from "react-native-gesture-handler";
-
-import { guideData } from "../../../consts/guideData";
+import { useSelector } from "react-redux";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
+  let data = useSelector((state) => {
+    return state.userSpendingsAndIncomes;
+  });
+  let { name } = item;
+
+  console.log("this is the data from the store in the details page ", data);
+  console.log("this is the item qsdf ", item);
+
+  let final = data.map((item) => {
+    if (item.title == name) {
+      return item;
+    }
+  });
+
+  console.log("this is the final array ", final);
+
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(true);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
   let finalStringDate =
     date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
 
@@ -61,33 +75,60 @@ const Details = ({ navigation, route }) => {
   };
 
   const renderRectangleDetailsChart = () => {
+    let { y, totalOptimal } = item;
+    const renderOptimalIncome = () => {
+      return (
+        <View
+          style={{
+            backgroundColor: COLORS.PRIMARY,
+            marginBottom: -SIZES.BASE * 6,
+            marginTop: SIZES.BASE * 3,
+            alignItems: "center",
+            padding: SIZES.BASE * 2,
+            borderRadius: SIZES.BASE * 3,
+          }}
+        >
+          <Text style={[detailsStyle.title, { color: "white" }]}>
+            Optimal {item.name} Income : {totalOptimal} DH
+          </Text>
+        </View>
+      );
+    };
     const renderTitleAndIcon = () => {
       return (
-        <View style={detailsStyle.titleAndIcon}>
-          <Entypo name="dots-three-vertical" size={26} />
-          <Text style={detailsStyle.title}>Details</Text>
-        </View>
+        <>
+          <View style={detailsStyle.titleAndIcon}>
+            <View style={globalStyles.flexRowAndAlignCenter}>
+              <Entypo name="dots-three-vertical" size={26} />
+              <Text style={detailsStyle.title}>Details</Text>
+            </View>
+          </View>
+        </>
       );
     };
 
     const dataProcess = () => {
-      let { normal, actual, y, label } = item;
-
-      let percentageRemaining = (((normal - actual) / normal) * 100).toFixed(0);
-      let percentageUsed = 100 - percentageRemaining;
-      if (percentageUsed > 100) {
+      let percentageUsed = ((y / totalOptimal) * 100).toFixed(0);
+      console.log("this is the y ", y);
+      console.log("this is the optimal value ", totalOptimal);
+      let percentageRemaining = 100 - percentageUsed;
+      if (percentageUsed >= 100) {
         percentageRemaining = 0;
       }
 
-      console.log(y);
+      console.log("this is the value of y hahah ", y);
+
       let finalDataChart = [
         {
           id: 1,
-          y: percentageRemaining == 0 ? Number(0) : Number(y),
+          y: Number(percentageRemaining),
           color: COLORS.MEDUIMGREY,
           label: `${percentageRemaining}%`,
           name: "Remaining",
-          total: Number(150 - Number(y)),
+          total:
+            percentageRemaining != 0
+              ? Math.abs(Number(totalOptimal - y))
+              : Number(0),
         },
         {
           id: 2,
@@ -114,16 +155,7 @@ const Details = ({ navigation, route }) => {
             data={data}
             innerRadius={60}
             radius={SIZES.BASE * 25}
-            labelRadius={({ innerRadius }) =>
-              (SIZES.BASE * 30 + innerRadius) / 2.5
-            }
-            style={{
-              labels: {
-                fill: "black",
-                fontWeight: "bold",
-                fontSize: SIZES.BASE * 3.5,
-              },
-            }}
+            labelRadius={20000}
             colorScale={colorScales}
           />
         </View>
@@ -181,6 +213,7 @@ const Details = ({ navigation, route }) => {
                   fontSize: SIZESS.base * 1.85,
                 }}
               >
+                {console.log("this is the item ", item)}
                 {item.total} DH - {item.label}
               </Text>
             </View>
@@ -203,6 +236,7 @@ const Details = ({ navigation, route }) => {
     return (
       <View style={detailsStyle.containerChart}>
         {renderTitleAndIcon()}
+        {renderOptimalIncome()}
         {chart()}
         {renderGuideExpensesSummary()}
       </View>
