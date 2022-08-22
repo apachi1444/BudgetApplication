@@ -23,6 +23,8 @@ import {
   renderAppropriateOptimalIncomes,
   renderAppropriateSpendings,
   renderCurrentBudget,
+  returnFinalChartData,
+  returnPercentageUsedAndRemaining,
 } from "../logic";
 import { renderFinalDate } from "../../../global/functions/time";
 import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
@@ -127,34 +129,16 @@ const Details = ({ navigation, route }) => {
     };
 
     const dataProcess = () => {
-      let percentageUsed = ((y / totalOptimal) * 100).toFixed(0);
-      let percentageRemaining = 100 - percentageUsed;
-      if (percentageUsed >= 100) {
-        percentageRemaining = 0;
-      }
+      let { percentageRemaining, percentageUsed } =
+        returnPercentageUsedAndRemaining(y, totalOptimal);
 
-      let finalDataChart = [
-        {
-          id: 1,
-          y: Number(percentageRemaining),
-          color: COLORS.MEDUIMGREY,
-          label: `${percentageRemaining}%`,
-          name: "Remaining",
-          total:
-            percentageRemaining != 0
-              ? Math.abs(Number(totalOptimal - y))
-              : Number(0),
-        },
-        {
-          id: 2,
-          total: Number(y),
-          y: Number(percentageUsed),
-          color: COLORS.SECONDARY,
-          label: `${percentageUsed}%`,
-          name: "Used",
-        },
-      ];
-      return finalDataChart;
+      const data = returnFinalChartData(
+        y,
+        totalOptimal,
+        percentageUsed,
+        percentageRemaining
+      );
+      return data;
     };
 
     const chart = () => {
@@ -451,6 +435,7 @@ const Details = ({ navigation, route }) => {
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
       {totalIncomes != 0 && (
         <ScrollView>
+          {renderHeader()}
           {renderRectangleDetailsChart()}
           {renderRectangleDetailsList()}
         </ScrollView>

@@ -25,6 +25,7 @@ import {
   wantsSpendings,
 } from "../logic";
 import DetailsOptimalIncomes from "./detailsOptimalIncomes";
+import { Ionicons } from "@expo/vector-icons";
 
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
@@ -185,8 +186,8 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
             {totalIncomes == 0 && (
               <View style={styles.mainContainerEmpty}>
                 {totalNeeds == 0 && totalSaves == 0 && totalWants == 0 && (
-                  <Text style={styles.textNoHistory}>
-                    You Have No Income And Spendings For The Momenet
+                  <Text style={[styles.textNoHistory, { color: "red" }]}>
+                    No Incomes And Spendings
                   </Text>
                 )}
                 {totalNeeds != 0 ||
@@ -229,11 +230,9 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                     handleModal(true);
                   }}
                 >
-                  <View>
-                    <Text style={{ color: "white" }}>
-                      Click Here More Details About Incomes
-                    </Text>
-                  </View>
+                  <Text style={{ color: "white" }}>
+                    Click Here More Details About Incomes
+                  </Text>
                   <DetailsOptimalIncomes
                     isModalVisible={isModalVisible}
                     handleModal={handleModal}
@@ -251,6 +250,33 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                   labelRadius={50000}
                   colorScale={colorScales}
                 />
+              </View>
+              {renderGuideExpensesSummary()}
+            </View>
+          )}
+        {totalIncomes != 0 &&
+          totalNeeds == 0 &&
+          totalSaves == 0 &&
+          totalWants == 0 && (
+            <View style={styles.mainContainer}>
+              <View
+                style={{
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginVertical: SIZES.BASE * 4,
+                }}
+              >
+                <Ionicons name="sad" size={35} />
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 20,
+                    marginLeft: "2%",
+                  }}
+                >
+                  No Spendings For The Moment
+                </Text>
               </View>
               {renderGuideExpensesSummary()}
             </View>

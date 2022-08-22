@@ -12,7 +12,7 @@ export const categories = [
   {
     id: 2,
     name: "Fourc",
-    icon: "fast-food",
+    icon: "briefcase",
     color: COLORS.RED,
     imageUrl:
       "/Users/Admin/Desktop/budgetproject/src/assets/images/fastFood.png",
@@ -20,7 +20,7 @@ export const categories = [
   {
     id: 3,
     name: "Street",
-    icon: "fast-food",
+    icon: "grid",
     color: COLORS.LIGHTGREY,
     imageUrl:
       "/Users/Admin/Desktop/budgetproject/src/assets/images/fastFood.png",
@@ -28,7 +28,7 @@ export const categories = [
   {
     id: 4,
     name: "Insurance",
-    icon: "fast-food",
+    icon: "arrow-up",
     color: COLORS.BLACK,
     imageUrl:
       "/Users/Admin/Desktop/budgetproject/src/assets/images/fastFood.png",
@@ -36,7 +36,7 @@ export const categories = [
   {
     id: 5,
     name: "Fast",
-    icon: "fast-food",
+    icon: "calendar",
     color: COLORS.GOOGLE,
     imageUrl:
       "/Users/Admin/Desktop/budgetproject/src/assets/images/fastFood.png",

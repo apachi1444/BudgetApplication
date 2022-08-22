@@ -120,16 +120,16 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
     let percentageWant = (
       (totalWants / totalOptimamWantsIncomes) *
       100
-    ).toFixed(0);
+    ).toFixed(1);
 
     let percentageNeed = (
       (totalNeeds / totalOptimalNeedsIncomes) *
       100
-    ).toFixed(0);
+    ).toFixed(1);
     let percentageSave = (
       (totalSaves / totalOptimalSavesIncomes) *
       100
-    ).toFixed(0);
+    ).toFixed(1);
 
     let finalGuideDataExpenses = [
       {
@@ -193,3 +193,42 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
       finalGuideDataExpensesSummary,
     };
   };
+
+export const returnPercentageUsedAndRemaining = (y, totalOptimal) => {
+  let percentageUsed = ((y / totalOptimal) * 100).toFixed(1);
+  let percentageRemaining = 100 - percentageUsed;
+  if (percentageUsed >= 100) {
+    percentageRemaining = 0;
+  }
+  return { percentageRemaining, percentageUsed };
+};
+
+export const returnFinalChartData = (
+  y,
+  totalOptimal,
+  percentageUsed,
+  percentageRemaining
+) => {
+  let data = [
+    {
+      id: 1,
+      y: Number(percentageRemaining),
+      color: COLORS.MEDUIMGREY,
+      label: `${percentageRemaining}%`,
+      name: "Remaining",
+      total:
+        percentageRemaining != 0
+          ? Math.abs(Number(totalOptimal - y))
+          : Number(0),
+    },
+    {
+      id: 2,
+      total: Number(y),
+      y: Number(percentageUsed),
+      color: COLORS.SECONDARY,
+      label: `${percentageUsed}%`,
+      name: "Used",
+    },
+  ];
+  return data;
+};

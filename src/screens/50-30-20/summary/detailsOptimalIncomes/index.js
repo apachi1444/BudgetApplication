@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
 import { SIZES } from "../../../../consts/theme";
@@ -7,6 +7,7 @@ import { returnOptimalIncomes } from "../../logic";
 import COLORS from "../../../../consts/color";
 import { globalStyles } from "../../../../global/styles/globalStyles";
 import { styleModal } from "./style";
+import { needs, saves, wants } from "../../../../consts/percentages";
 
 const DetailsOptimalIncomes = (props) => {
   const { isModalVisible, handleModal, totalIncomes, totals } = props;
@@ -20,19 +21,25 @@ const DetailsOptimalIncomes = (props) => {
       totalOptimal: totalOptimamWantsIncomes,
       key: 1,
       name: "Wants",
+      percentage: wants,
       current: totals[0],
+      icon: "grid",
     },
     {
       totalOptimal: totalOptimalNeedsIncomes,
       key: 2,
+      percentage: needs,
       name: "Needs",
       current: totals[1],
+      icon: "fast-food",
     },
     {
       totalOptimal: totalOptimalSavesIncomes,
+      percentage: saves,
       key: 3,
       name: "Saves",
       current: totals[2],
+      icon: "briefcase",
     },
   ];
 
@@ -54,13 +61,15 @@ const DetailsOptimalIncomes = (props) => {
               style={globalStyles.flexRowAndAlignCenterAndSpaceBetweenJustify}
             >
               <Ionicons
-                name="fast-food"
+                name={item.icon}
                 style={{
                   color: COLORS.WHITE,
                   fontSize: 30,
                 }}
               />
-              <Text style={styleModal.titleCategory}>{item.name}</Text>
+              <Text style={styleModal.titleCategory}>
+                {item.name} - {item.percentage}%
+              </Text>
             </View>
             <Text style={styleModal.title}>Current Spendings </Text>
             <Text style={styleModal.price}>{item.current} DH </Text>
@@ -82,11 +91,13 @@ const DetailsOptimalIncomes = (props) => {
             backgroundColor: "white",
           }}
         >
-          <View
+          <ScrollView
             style={{
               width: "100%",
               backgroundColor: "transparent",
-              flex: 1,
+              // flex: 1,
+              borderTopRightRadius: SIZES.BASE * 15,
+              borderTopLeftRadius: SIZES.BASE * 3,
             }}
           >
             <TouchableOpacity
@@ -103,7 +114,7 @@ const DetailsOptimalIncomes = (props) => {
             {array.map((item) => {
               return renderItem(item);
             })}
-          </View>
+          </ScrollView>
         </Modal>
       </View>
     );
