@@ -136,6 +136,12 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
   },
 
+  flexRowAndAlignCenterAndSpaceBetweenJustify: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
   headerContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",

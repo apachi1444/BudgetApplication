@@ -19,12 +19,12 @@ import { calculateAllIncomes } from "../../../global/functions/store";
 import {
   needsSpendings,
   returnColorAppropriateBorder,
-  returnOptimalIncomes,
   returnOverpassedOrRemaining,
   returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesSummary,
   savesSpedings,
   wantsSpendings,
 } from "../logic";
+import DetailsOptimalIncomes from "./detailsOptimalIncomes";
 
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
@@ -46,11 +46,10 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   const totalSaves = savesSpedings(data);
   const totalNeeds = needsSpendings(data);
 
-  const {
-    totalOptimamWantsIncomes,
-    totalOptimalNeedsIncomes,
-    totalOptimalSavesIncomes,
-  } = returnOptimalIncomes(totalIncomes);
+  const arraySpendings = [totalWants, totalNeeds, totalSaves];
+
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status
@@ -218,7 +217,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                   alignItems: "center",
                 }}
               >
-                <View
+                <TouchableOpacity
                   style={{
                     backgroundColor: COLORS.PRIMARY,
                     marginTop: SIZES.BASE * 2,
@@ -226,11 +225,22 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                     marginBottom: -SIZES.BASE * 6,
                     borderRadius: SIZES.BASE * 2,
                   }}
+                  onPress={() => {
+                    handleModal(true);
+                  }}
                 >
-                  <Text style={{ color: "white" }}>
-                    Click Here More Details About Incomes
-                  </Text>
-                </View>
+                  <View>
+                    <Text style={{ color: "white" }}>
+                      Click Here More Details About Incomes
+                    </Text>
+                  </View>
+                  <DetailsOptimalIncomes
+                    isModalVisible={isModalVisible}
+                    handleModal={handleModal}
+                    totalIncomes={totalIncomes}
+                    totals={arraySpendings}
+                  />
+                </TouchableOpacity>
                 <VictoryPie
                   data={finalGuideDataExpenses}
                   labels={(datum) => {

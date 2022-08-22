@@ -14,16 +14,11 @@ import { Formik } from "formik";
 import SelectDropdown from "react-native-select-dropdown";
 
 import { useSelector, useDispatch } from "react-redux";
-import {
-  calculateAllIncomes,
-  calculateAllSpendings,
-  calculateBudgetSpendingsAndIncomes,
-} from "../../global/functions/store";
+import { calculateBudgetSpendingsAndIncomes } from "../../global/functions/store";
 import { add as addTypeTransaction } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { addTransaction as addCategory } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
 import { FormSchema } from "../../consts/schemas";
-// import { addPlanned } from "../../redux/features/spendings/plannedPayments";
 import { returnNewDate } from "../../global/functions/time";
 import { categories } from "../../consts/categories";
 
