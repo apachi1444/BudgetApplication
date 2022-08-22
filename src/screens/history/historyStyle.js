@@ -84,6 +84,13 @@ export const historyStyle = StyleSheet.create({
     };
   },
 
+  containerEditAndDeleteButtons: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: "-41%",
+    alignSelf: "center",
+    right: "4%",
+  },
   viewMyBudgetTitle: (color) => {
     return {
       flexDirection: "row",

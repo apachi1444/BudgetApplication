@@ -5,16 +5,32 @@ import COLORS from "../../../consts/color";
 import { SIZES } from "../../../consts/theme";
 import { renderFinalDate } from "../../../global/functions/time";
 import { globalStyles } from "../../../global/styles/globalStyles";
-import { windowHeight } from "../../../utils/dimensions";
 import { historyStyle } from "../historyStyle";
-import { concatenateIncomesAndSpendingsOneCategory } from "../logic";
+import {
+  calculateBudgetAndIncomesAndSpendings,
+  concatenateIncomesAndSpendingsOneCategory,
+  renderInformationsAboutBudgetIncomesAndSpendings,
+} from "../logic";
 import { allHistoryStyle } from "./allHistoryCategoriesStyle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTransaction } from "../../../redux/features/user/userSpendingsAndIncomesCategories";
+import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 const AllHistoryCategories = (props) => {
-  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
+  const { finalDate, firstDate, singleDate, timeOptionSelected } = props;
 
+  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
+  const dispatch = useDispatch();
   const renderOneCategory = (item) => {
-    let arrayIncomesSpendings = concatenateIncomesAndSpendingsOneCategory(item);
+    const { finalListIncomes, finalListSpendings } =
+      renderInformationsAboutBudgetIncomesAndSpendings(
+        list,
+        timeOptionSelected,
+        singleDate,
+        firstDate,
+        finalDate
+      );
+
+    let arrayIncomesSpendings = finalListSpendings.concat(finalListIncomes);
     const iconCategory = item.icon;
     const categoryRecordsLength = arrayIncomesSpendings.length;
 
@@ -46,7 +62,7 @@ const AllHistoryCategories = (props) => {
             <View>
               <Text
                 style={{
-                  color: COLORS.RED,
+                  color: color,
                   fontWeight: "bold",
                   fontSize: SIZES.BASE * 3,
                 }}
@@ -97,17 +113,21 @@ const AllHistoryCategories = (props) => {
           );
         };
         const renderEditAndDeleteButton = () => {
-          const deleteItem = () => {};
+          const deleteItem = () => {
+            dispatch(deleteTransaction(item));
+            dispatch(deleteGuide(item));
+          };
           const updateItem = () => {};
           const renderIcon = (name) => {
             return (
               <TouchableOpacity
-                style={{
-                  backgroundColor: COLORS.RED,
-                  borderRadius: SIZES.BASE * 4,
-                  padding: SIZES.BASE * 1.5,
-                  marginHorizontal: windowHeight * 0.005,
-                }}
+                style={[
+                  allHistoryStyle.containerEditAndDeleteButtons,
+                  {
+                    backgroundColor: color,
+                  },
+                ]}
+                onPress={name == "trash" ? deleteItem : updateItem}
               >
                 <Ionicons
                   name={name}
@@ -118,13 +138,9 @@ const AllHistoryCategories = (props) => {
             );
           };
           return (
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
+            <View style={globalStyles.flexRowAndAlignCenter}>
               {renderIcon("trash")}
-              {renderIcon("pencil-outline")}
+              {/* {renderIcon("pencil-outline")} */}
             </View>
           );
         };
@@ -149,12 +165,7 @@ const AllHistoryCategories = (props) => {
                 {renderPrice()}
               </View>
               <View
-                style={{
-                  flexDirection: "row",
-                  marginVertical: "3%",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
+                style={allHistoryStyle.containerDateAndEditAndDeleteButtons}
               >
                 {renderDate()}
                 {renderEditAndDeleteButton()}

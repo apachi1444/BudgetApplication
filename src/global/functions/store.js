@@ -39,17 +39,6 @@ export const images = {
     insurance: require("../../assets/images/insurance.jpg"),
   },
 };
-export const calculateTotalSpendingsAllCategories = (list) => {
-  let totals = {};
-  categories.map((category) => {
-    totals[category] = 0;
-  });
-  list.map((item) => {
-    let totalSpendings = total(item.elements);
-  });
-
-  return totals;
-};
 
 export const renderMessageTimeRemaining = () => {
   let categoryPlannedPayment = "";
@@ -66,16 +55,6 @@ export const renderMessageTimeRemaining = () => {
   finalString += " " + categoryPlannedPayment;
 
   return { finalString, categoryPlannedPayment };
-};
-
-export const calculateAllIncomes = (list) => {
-  let total = 0;
-  list.map((item) => {
-    item.incomeElements.map((income) => {
-      total += income.price;
-    });
-  });
-  return total;
 };
 
 export const calculateSpendingsWants = (list) => {
@@ -111,4 +90,40 @@ export const calculateAllSpendings = (list) => {
     calculateSpendingsSaves(list) +
     calculateSpendingsWants(list)
   );
+};
+
+export const calculateAllIncomes = (list) => {
+  let total = 0;
+  console.log("hahaaa", list);
+  list.map((item) => {
+    item.incomeElements.map((income) => {
+      total += income.price;
+    });
+  });
+  return total;
+};
+export const calculateAllIncomesCategories = (list) => {
+  let total = 0;
+  list.map((item) => {
+    item.incomeElements.map((income) => {
+      total += income.price;
+    });
+  });
+  return total;
+};
+export const calculateAllSpendingsCategories = (list) => {
+  let total = 0;
+  list.map((item) => {
+    item.spendingElements.map((spending) => {
+      total += spending.price * spending.numberTimesPaid;
+    });
+  });
+  return total;
+};
+
+export const calculateBudgetSpendingsAndIncomes = (list) => {
+  let totalIncomes = calculateAllIncomesCategories(list);
+  let totalSpendings = calculateAllSpendingsCategories(list);
+  let currentBudget = totalIncomes - totalSpendings;
+  return { currentBudget, totalIncomes, totalSpendings };
 };

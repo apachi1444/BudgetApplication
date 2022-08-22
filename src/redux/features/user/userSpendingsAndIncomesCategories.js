@@ -21,7 +21,13 @@ export const userSpendingsAndIncomesCategories = createSlice({
   reducers: {
     addTransaction: (state, action) => {
       state.map((item) => {
-        let { category, transaction } = action.payload;
+        let { category, transaction, period } = action.payload;
+        let numberTimesPaid = 0;
+        if (period != 0) {
+          numberTimesPaid = 0;
+        } else {
+          numberTimesPaid = 1;
+        }
         if (item.title == category) {
           let finalList =
             transaction == "Income"
@@ -29,6 +35,7 @@ export const userSpendingsAndIncomesCategories = createSlice({
               : item.spendingElements;
           finalList.push({
             key: finalList.length + 1,
+            numberTimesPaid,
             ...action.payload,
           });
         }
@@ -43,13 +50,15 @@ export const userSpendingsAndIncomesCategories = createSlice({
             if (elem.key == key) {
               let newDate = returnNewDate(date, period);
               elem.date = newDate;
+              elem.numberTimesPaid++;
             }
           });
         }
       });
     },
+
     updateTransactionPlanned: (state, action) => {
-      const { id, period, key, date } = action.payload;
+      const { id, period, key, date, numberTimesPaid } = action.payload;
       console.log(action.payload);
       state.map((item) => {
         if (item.id == id) {
@@ -62,11 +71,11 @@ export const userSpendingsAndIncomesCategories = createSlice({
         }
       });
     },
+
     deleteTransaction: (state, action) => {
-      console.log("this is the action payload ", action.payload);
       state = state.map((item) => {
-        let { id, transaction, key } = action.payload;
-        if (item.id == id) {
+        let { category, transaction, key } = action.payload;
+        if (item.title == category) {
           if (transaction == "Income") {
             item.incomeElements = item.incomeElements.filter(
               (income) => income.key != key

@@ -9,22 +9,23 @@ import {
   FlatList,
 } from "react-native";
 import { VictoryPie } from "victory-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { globalStyles } from "../../../global/styles/globalStyles";
-import { guideData } from "./../../../consts/guideData";
 import COLORS from "../../../consts/color";
 import { guideStyle as styles } from "./guide_50_30_20_summaryStyle";
 import { SIZES, SIZESS } from "../../../consts/theme";
 import { ScrollView } from "react-native-gesture-handler";
-import { needs, saves, wants } from "../../../consts/percentages";
 import { calculateAllIncomes } from "../../../global/functions/store";
 import {
   needsSpendings,
   returnColorAppropriateBorder,
+  returnOptimalIncomes,
   returnOverpassedOrRemaining,
+  returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesSummary,
   savesSpedings,
   wantsSpendings,
-} from "../guide";
+} from "../logic";
+
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
   useEffect(() => {
@@ -41,82 +42,27 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const totalIncomes = calculateAllIncomes(data);
 
-  const totalOptimalSavesIncomes = (totalIncomes * 0.2).toFixed(0);
-  const totalOptimamWantsIncomes = (totalIncomes * 0.3).toFixed(0);
-  const totalOptimalNeedsIncomes = (totalIncomes * 0.5).toFixed(0);
-
   const totalWants = wantsSpendings(data);
   const totalSaves = savesSpedings(data);
   const totalNeeds = needsSpendings(data);
 
+  const {
+    totalOptimamWantsIncomes,
+    totalOptimalNeedsIncomes,
+    totalOptimalSavesIncomes,
+  } = returnOptimalIncomes(totalIncomes);
+
   const processCategoryDataToDisplay = () => {
     // Filter expenses with "Confirmed" status
 
-    let percentageWant = (
-      (totalWants / totalOptimamWantsIncomes) *
-      100
-    ).toFixed(0);
-
-    let percentageNeed = (
-      (totalNeeds / totalOptimalNeedsIncomes) *
-      100
-    ).toFixed(0);
-    let percentageSave = (
-      (totalSaves / totalOptimalSavesIncomes) *
-      100
-    ).toFixed(0);
-    let finalGuideDataExpenses = [
-      {
-        y: totalWants,
-        color: COLORS.WANTS,
-        label: `${percentageWant}%`,
-      },
-      {
-        y: totalSaves,
-        color: COLORS.SAVES,
-        label: `${percentageSave}%`,
-      },
-      {
-        color: COLORS.NEEDS,
-        y: totalNeeds,
-        label: `${percentageNeed}%`,
-      },
-    ];
-    let finalGuideDataExpensesSummary = [
-      {
-        id: 1,
-        name: "Wants",
-        y: totalWants,
-        // label: `${percentageWant}%`,
-        color: COLORS.WANTS,
-        normal: wants,
-        difference: `${wants - percentageWant}`,
-        actual: percentageWant,
-        totalOptimal: totalOptimamWantsIncomes,
-      },
-      {
-        id: 2,
-        name: "Saves",
-        y: totalSaves,
-        // label: `${percentageSave}%`,
-        actual: percentageSave,
-        color: COLORS.SAVES,
-        normal: saves,
-        difference: `${saves - percentageSave}`,
-        totalOptimal: totalOptimalSavesIncomes,
-      },
-      {
-        totalOptimal: totalOptimalNeedsIncomes,
-        id: 3,
-        name: "Needs",
-        actual: percentageNeed,
-        // label: `${percentageNeed}%`,
-        y: totalNeeds,
-        color: COLORS.NEEDS,
-        normal: needs,
-        difference: `${needs - percentageNeed}`,
-      },
-    ];
+    const { finalGuideDataExpenses, finalGuideDataExpensesSummary } =
+      returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesSummary(
+        totalIncomes,
+        data,
+        totalWants,
+        totalSaves,
+        totalNeeds
+      );
 
     return {
       finalGuideDataExpenses,
@@ -125,7 +71,6 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   };
 
   const renderNavigationToTheDetailsCategoryChoosen = (item) => {
-    console.log("this is the item ", item);
     navigation.navigate("Details", { item });
   };
 
@@ -229,7 +174,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           <Text style={styles.bottomText}>Let's Learn About Finance </Text>
         </View>
 
-        <View style={styles.mainContainer}>
+        <View style={styles.mainContainerTitle}>
           <View
             style={{
               justifyContent: "center",
@@ -273,6 +218,19 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                   alignItems: "center",
                 }}
               >
+                <View
+                  style={{
+                    backgroundColor: COLORS.PRIMARY,
+                    marginTop: SIZES.BASE * 2,
+                    padding: SIZES.BASE * 2,
+                    marginBottom: -SIZES.BASE * 6,
+                    borderRadius: SIZES.BASE * 2,
+                  }}
+                >
+                  <Text style={{ color: "white" }}>
+                    Click Here More Details About Incomes
+                  </Text>
+                </View>
                 <VictoryPie
                   data={finalGuideDataExpenses}
                   labels={(datum) => {

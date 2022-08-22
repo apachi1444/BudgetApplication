@@ -156,4 +156,20 @@ export const plannedPaymentsStyle = StyleSheet.create({
     fontSize: SIZES.BASE * 3,
     fontWeight: "400",
   },
+  containerEmptyContent: {
+    backgroundColor: COLORS.PRIMARY,
+    margin: "5%",
+    padding: "5%",
+    paddingVertical: "15%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: SIZES.BASE * 5,
+  },
+  textEmptyContent: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
+    marginLeft: "5%",
+  },
 });

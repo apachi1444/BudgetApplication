@@ -147,13 +147,14 @@ export const detailsStyle = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.LIGHTGREY,
+    backgroundColor: COLORS.BOTTOMBAR,
     borderRadius: SIZES.BASE * 3,
+    borderWidth: 0.5,
   },
   textDateChoosen: {
     fontSize: 20,
     fontWeight: "bold",
     color: COLORS.PRIMARY,
-    marginLeft: "2%",
+    marginLeft: SIZES.BASE,
   },
 });

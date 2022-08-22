@@ -38,6 +38,14 @@ export const guideStyle = StyleSheet.create({
     margin: SIZES.BASE * 3,
     padding: SIZES.BASE * 1,
     borderRadius: SIZES.BASE * 5,
+    marginBottom: SIZES.BASE * 10,
+    // height: windowHeight * 0.5,
+  },
+  mainContainerTitle: {
+    backgroundColor: COLORS.LIGHTGREY,
+    margin: SIZES.BASE * 3,
+    padding: SIZES.BASE * 1,
+    borderRadius: SIZES.BASE * 5,
     // height: windowHeight * 0.5,
   },
   mainContainerEmpty: {

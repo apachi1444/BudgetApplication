@@ -24,14 +24,12 @@ import { categories } from "../../consts/categories";
 import { deleteTransaction } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 
 import {
-  calculateBudgetAllTime,
   calculateBudgetAndIncomesAndSpendings,
-  calculateBudgetInterval,
-  calculateBudgetSingleDay,
   concatenateIncomesAndSpendings,
   renderColorCircleBudget,
   renderInformationsAboutBudgetIncomesAndSpendings,
 } from "./logic";
+import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 const displayData = async () => {
   try {
     var aa = await AsyncStorage.getItem("user");
@@ -545,6 +543,11 @@ const History = ({ navigation }) => {
     let finalArray = concatenateIncomesAndSpendings(title, data);
     let allHistory = finalArray;
 
+    console.log(
+      "this is the final array that we must use in the end ",
+      finalArray
+    );
+
     const renderHistoryItem = (item) => {
       const { transaction } = item;
 
@@ -619,6 +622,7 @@ const History = ({ navigation }) => {
         const renderEditAndDeleteButton = () => {
           const deleteItem = () => {
             dispatch(deleteTransaction(item));
+            dispatch(deleteGuide(item));
           };
           const updateItem = () => {};
           const renderIcon = (name) => {
@@ -642,17 +646,9 @@ const History = ({ navigation }) => {
             );
           };
           return (
-            <View
-              style={{
-                flexDirection: "row",
-                position: "absolute",
-                bottom: "-41%",
-                alignSelf: "center",
-                right: "4%",
-              }}
-            >
+            <View style={historyStyle.containerEditAndDeleteButtons}>
               {renderIcon("trash")}
-              {renderIcon("pencil-outline")}
+              {/* {renderIcon("pencil-outline")} */}
             </View>
           );
         };
@@ -685,10 +681,7 @@ const History = ({ navigation }) => {
     return (
       <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
-        {console.log(
-          "this is the length of the all history ",
-          allHistory.length
-        )}
+
         {allHistory.length > 0 && title != "All" && (
           <View>
             {allHistory.map((item, index) => {
@@ -697,7 +690,12 @@ const History = ({ navigation }) => {
           </View>
         )}
         {allHistory.length > 0 && title == "All" && (
-          <AllHistoryCategories list={data} concat={allHistory} />
+          <AllHistoryCategories
+            timeOptionSelected={timeOptionSelected}
+            finalDate={finalDate}
+            firstDate={firstDate}
+            singleDate={singleDate}
+          />
         )}
         {allHistory.length == 0 && (
           <View>

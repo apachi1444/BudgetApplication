@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
   View,
   Animated,
-  Button,
   TouchableHighlight,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "@expo/vector-icons/FontAwesome";
 import Modal from "react-native-modal";
 import COLORS from "../consts/color";
-import { SIZES } from "../consts/theme";
 import Add from "./add/add";
-import { windowHeight, windowWidth } from "../utils/dimensions";
+import { windowWidth } from "../utils/dimensions";
 
 const SIZE = windowWidth * 0.19;
 

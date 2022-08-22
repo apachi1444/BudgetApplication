@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   calculateAllIncomes,
   calculateAllSpendings,
+  calculateBudgetSpendingsAndIncomes,
 } from "../../global/functions/store";
 import { add as addTypeTransaction } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { addTransaction as addCategory } from "../../redux/features/user/userSpendingsAndIncomesCategories";
@@ -42,12 +43,9 @@ const Add = ({ handleModal }) => {
   const [titleIncomeError, setTitleIncomeError] = useState(true);
   const [periodError, setPeriodError] = useState(true);
 
-  let list = useSelector((state) => state.userSpendingsAndIncomes);
+  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
-  const totalSpendings = calculateAllSpendings(list);
-  const totalIncomes = calculateAllIncomes(list);
-
-  const currentBudget = totalIncomes - totalSpendings;
+  const { currentBudget } = calculateBudgetSpendingsAndIncomes(list);
 
   const [category, setCategory] = useState(categories[0].name);
   const [categoryIncome, setCategoryIncome] = useState(categories[0].name);

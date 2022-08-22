@@ -100,6 +100,12 @@ export const allHistoryStyle = StyleSheet.create({
     };
   },
 
+  containerEditAndDeleteButtons: {
+    borderRadius: SIZES.BASE * 4,
+    padding: SIZES.BASE * 1.5,
+    marginHorizontal: windowHeight * 0.005,
+  },
+
   viewMyBudgetTitle: (color) => {
     return {
       flexDirection: "row",
@@ -108,6 +114,14 @@ export const allHistoryStyle = StyleSheet.create({
       marginBottom: SIZES.BASE * 2,
     };
   },
+
+  containerDateAndEditAndDeleteButtons: {
+    flexDirection: "row",
+    marginVertical: "3%",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
   myBudgetTitle: (color) => {
     return {
       fontSize: 20,

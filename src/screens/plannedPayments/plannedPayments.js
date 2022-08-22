@@ -8,22 +8,22 @@ import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 
-import { warningZoneRemainingDays } from "../../consts/plannedPayments";
-import { total } from "../../global/functions/store";
 import { useSelector, useDispatch } from "react-redux";
-// import {
-//   deletePlan,
-//   updatePlan,
-// } from "../../redux/features/spendings/plannedPayments";
 import {
   deleteTransaction,
   updateTransaction,
 } from "../../redux/features/user/userSpendingsAndIncomesCategories";
-import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import {
+  convertDateToMilliseconds,
+  renderDifferenceBetweenDatesMilliseconds,
+  returnColorMessageAppriopriate,
+  returnDaysRemainingYearsRemainingAndNewDaysRemaining,
   returnfilteredNonEmptyCategories,
-  spendingElementsContainsNonEmptyPeriods,
+  returnTimeRemaining,
+  returnTotalSpendingWithNonNullPeriod,
 } from "./logic";
+import { returnYearMonthDay } from "../../global/functions/time";
+import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 const PlannedPayments = ({ navigation }) => {
   let finalList = useSelector(
     (state) => state.userSpendingsAndIncomesCategories
@@ -52,7 +52,9 @@ const PlannedPayments = ({ navigation }) => {
   const renderItem = ({ item }) => {
     const { id, title, spendingElements } = item;
 
-    let totalSpendings = total(spendingElements);
+    let totalSpendings = returnTotalSpendingWithNonNullPeriod(
+      filteredNonEmptyCategories
+    );
 
     const renderTitleAndImageAndPriceHeader = () => (
       <View style={plannedPaymentsStyle.containerTitleImageTotalPrice}>
@@ -76,50 +78,33 @@ const PlannedPayments = ({ navigation }) => {
     );
 
     const renderLineDetailEachItem = (element) => {
-      let { date, key, period, price } = element;
-      let year = date.getFullYear();
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
+      let { date, period } = element;
 
-      const newDateAfterPeriod = new Date(
-        period * 24 * 60 * 60 * 1000 + date.getTime()
-      );
+      const periodMilliseconds = convertDateToMilliseconds(period);
+      const newDateAfterPeriod = new Date(periodMilliseconds + date.getTime());
 
-      let yearNewDateAfterPeriod = newDateAfterPeriod.getFullYear();
-      let monthNewDateAfterPeriod = newDateAfterPeriod.getMonth() + 1;
-      let dayNewDateAfterPeriod = newDateAfterPeriod.getDate();
+      const {
+        year: yearNewDateAfterPeriod,
+        month: monthNewDateAfterPeriod,
+        day: dayNewDateAfterPeriod,
+      } = returnYearMonthDay(newDateAfterPeriod);
 
       let finalStringDate = `${yearNewDateAfterPeriod}-${monthNewDateAfterPeriod}-${dayNewDateAfterPeriod}`;
 
-      let differenceBetweenDatesMilliSeconds = new Date() - newDateAfterPeriod;
-      if (differenceBetweenDatesMilliSeconds < 0) {
-        differenceBetweenDatesMilliSeconds *= -1;
-      }
+      const differenceBetweenDatesMilliSeconds =
+        renderDifferenceBetweenDatesMilliseconds(newDateAfterPeriod);
 
-      let daysRemaining =
-        differenceBetweenDatesMilliSeconds / (1000 * 60 * 60 * 24);
+      const { yearsRemaining, newDaysRemaining } =
+        returnDaysRemainingYearsRemainingAndNewDaysRemaining(
+          differenceBetweenDatesMilliSeconds
+        );
 
-      let yearsRemaining = Math.ceil(daysRemaining) / 365;
-      yearsRemaining = Math.floor(yearsRemaining);
-      let newDaysRemaining = daysRemaining;
-      if (yearsRemaining >= 1) {
-        newDaysRemaining =
-          Math.ceil(daysRemaining) - 365 * Math.floor(yearsRemaining);
-      }
+      let { color, message } = returnColorMessageAppriopriate(
+        date,
+        newDaysRemaining,
+        yearsRemaining
+      );
 
-      let remaining = new Date(year, month, day) - new Date() > 0;
-      let color = COLORS.GREEN;
-      let message = "Remaining";
-      if (!remaining) {
-        color = COLORS.RED;
-        message = "Passed";
-      } else if (
-        remaining &&
-        newDaysRemaining < warningZoneRemainingDays &&
-        yearsRemaining == 0
-      ) {
-        color = COLORS.ORANGE;
-      }
       const renderTitleAndPriceAndPeriodAndButtons = () => {
         const renderPriceAndTitle = () => {
           return (
@@ -181,17 +166,10 @@ const PlannedPayments = ({ navigation }) => {
           };
 
           const renderTimeRemaining = () => {
-            let stringYear = yearsRemaining == 1 ? "year" : "years";
-            let finalString = "";
-            if (yearsRemaining != 0 && newDaysRemaining == 0) {
-              finalString = `${yearsRemaining} ${stringYear}`;
-            } else if (yearsRemaining != 0 && newDaysRemaining != 0) {
-              finalString = `${yearsRemaining} ${stringYear} ${newDaysRemaining.toFixed(
-                0
-              )} days`;
-            } else {
-              finalString = `${newDaysRemaining.toFixed(0)} days`;
-            }
+            let finalString = returnTimeRemaining(
+              yearsRemaining,
+              newDaysRemaining
+            );
 
             return (
               <View
@@ -220,23 +198,10 @@ const PlannedPayments = ({ navigation }) => {
         };
         const renderDeleteAndEditButtons = () => {
           let { date, key, period, transaction, type } = element;
-          console.log(
-            "this is the element that we have in our planned payments ",
-            element
-          );
-          const deleteItem = () => {
-            dispatch(
-              deleteTransaction({
-                id,
-                period,
-                key,
-                transaction,
-                date,
-              })
-            );
 
-            dispatch(deleteGuide(id, period, key, transaction, date, type));
-            console.log("haha after deleting from the store");
+          const deleteItem = () => {
+            dispatch(deleteTransaction(element));
+            dispatch(deleteGuide(element));
           };
           const updateItem = () => {
             dispatch(
@@ -308,27 +273,9 @@ const PlannedPayments = ({ navigation }) => {
 
   const renderEmptyContent = () => {
     return (
-      <View
-        style={{
-          backgroundColor: COLORS.PRIMARY,
-          margin: "5%",
-          padding: "5%",
-          paddingVertical: "15%",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: SIZES.BASE * 5,
-        }}
-      >
+      <View style={plannedPaymentsStyle.containerEmptyContent}>
         <Ionicons name="sad" size={26} color="white" />
-        <Text
-          style={{
-            color: "white",
-            fontWeight: "bold",
-            fontSize: 20,
-            marginLeft: "5%",
-          }}
-        >
+        <Text style={plannedPaymentsStyle.textEmptyContent}>
           No Planned Payments
         </Text>
       </View>
@@ -344,6 +291,7 @@ const PlannedPayments = ({ navigation }) => {
         translucent={false}
       />
       {renderHeader()}
+
       {filteredNonEmptyCategories.length == 0 && renderEmptyContent()}
       <FlatList data={filteredNonEmptyCategories} renderItem={renderItem} />
     </View>

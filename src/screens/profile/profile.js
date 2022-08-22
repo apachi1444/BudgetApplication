@@ -5,21 +5,16 @@ import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
 import { profileStyles } from "./profileStyle";
 import { windowWidth } from "../../utils/dimensions";
-import {
-  calculateAllIncomes,
-  calculateAllSpendings,
-} from "../../global/functions/store";
+import { calculateBudgetSpendingsAndIncomes } from "../../global/functions/store";
 
 import { useSelector } from "react-redux";
 // import { displayData } from "../../global/async-storage";
 
 export default ProfileUser = ({ navigation }) => {
-  let list = useSelector((state) => state.userSpendingsAndIncomes);
+  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
-  const totalSpendings = calculateAllSpendings(list);
-  const totalIncomes = calculateAllIncomes(list);
-
-  const currentBudget = totalIncomes - totalSpendings;
+  const { totalIncomes, totalSpendings, currentBudget } =
+    calculateBudgetSpendingsAndIncomes(list);
 
   const editProfile = () => {
     navigation.navigate("EditProfile");
@@ -67,9 +62,6 @@ export default ProfileUser = ({ navigation }) => {
   };
 
   const renderImageUserAndNamUser = () => {
-    // const email = await displayData();
-    // const result = await displayData();
-    // console.log("this is the result moter ", result);
     return (
       <>
         <Avatar.Image

@@ -11,6 +11,7 @@ export const renderFinalDate = (date) => {
 };
 
 export const compareTwoDates = (date1, date2) => {
+  console.log(date1, date2);
   return (
     date1.getFullYear() == date2.getFullYear() &&
       date1.getMonth() == date2.getMonth(),
@@ -37,4 +38,11 @@ export const compareFirstTargetFinalDates = (first, target, final) => {
   const comparaisonDay = firstDay <= targetDay && targetDay <= finalDay;
 
   return comparaisonDay && comparaisonMonth && comparaisonYear;
+};
+
+export const returnYearMonthDay = (date) => {
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  return { year, month, day };
 };

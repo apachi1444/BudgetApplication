@@ -17,34 +17,43 @@ import { Ionicons, Entypo } from "@expo/vector-icons";
 import { detailsStyle } from "./detailsStyle";
 import COLORS from "../../../consts/color";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
-import { concatenateIncomesAndSpendings } from "../../history/logic";
-import { concatenateIncomesAndSpendingsOneCategory } from "./../../history/logic";
-import { concatenateIncomesAndSpendingsOneTypeTransaction } from "../logic";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  concatenateIncomesAndSpendingsOneTypeTransactionAndTotalSpendingAndTotalIncomes,
+  renderAppropriateOptimalIncomes,
+  renderAppropriateSpendings,
+  renderCurrentBudget,
+} from "../logic";
 import { renderFinalDate } from "../../../global/functions/time";
+import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import { deleteTransaction } from "../../../redux/features/user/userSpendingsAndIncomesCategories";
+import { calculateAllIncomes } from "../../../global/functions/store";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
+  const dispatch = useDispatch();
   let data = useSelector((state) => {
     return state.userSpendingsAndIncomes;
   });
+
   let { name } = item;
 
   let final = data.filter((item) => {
-    return item.title == name;
+    return item.type == name;
   });
-
-  let finalArrayIncomesSpendings =
-    concatenateIncomesAndSpendingsOneTypeTransaction(final[0]);
-
-  console.log(
-    "this is the final array of all the history items ",
-    finalArrayIncomesSpendings
-  );
 
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(true);
+  const totalIncomes = calculateAllIncomes(data);
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  let { finalArrayContainingSpendingsAndIncomes, totalSpendings } =
+    concatenateIncomesAndSpendingsOneTypeTransactionAndTotalSpendingAndTotalIncomes(
+      final[0],
+      date
+    );
+
+  let currentBudget = renderCurrentBudget(totalSpendings, totalIncomes);
 
   let finalStringDate =
     date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
@@ -80,7 +89,8 @@ const Details = ({ navigation, route }) => {
   };
 
   const renderRectangleDetailsChart = () => {
-    let { y, totalOptimal } = item;
+    let y = renderAppropriateSpendings(item.name, data);
+    let totalOptimal = renderAppropriateOptimalIncomes(item.type, totalIncomes);
     const renderOptimalIncome = () => {
       return (
         <View
@@ -99,11 +109,15 @@ const Details = ({ navigation, route }) => {
         </View>
       );
     };
+
     const renderTitleAndIcon = () => {
       return (
         <>
           <View style={detailsStyle.titleAndIcon}>
-            <View style={globalStyles.flexRowAndAlignCenter}>
+            <View
+              style={globalStyles.flexRowAndAlignCenter}
+              onStartShouldSetResponder={() => renderDetailsOptimalIncomes()}
+            >
               <Entypo name="dots-three-vertical" size={26} />
               <Text style={detailsStyle.title}>Details</Text>
             </View>
@@ -302,7 +316,10 @@ const Details = ({ navigation, route }) => {
           );
         };
         const renderEditAndDeleteButton = () => {
-          const deleteItem = () => {};
+          const deleteItem = () => {
+            dispatch(deleteGuide(item));
+            dispatch(deleteTransaction(item));
+          };
           const updateItem = () => {};
           const renderIcon = (name) => {
             return (
@@ -371,10 +388,23 @@ const Details = ({ navigation, route }) => {
           {show && (
             <View
               style={{
-                justifyContent: "center",
+                justifyContent: "space-between",
+                flexDirection: "row",
                 alignItems: "flex-end",
               }}
             >
+              <View style={detailsStyle.containerChoosenDate}>
+                <Ionicons name="calculator" size={25} color={COLORS.PRIMARY} />
+                <Text style={detailsStyle.textDateChoosen}>
+                  {currentBudget} DH
+                </Text>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+              </View>
               <View
                 style={detailsStyle.containerChoosenDate}
                 onStartShouldSetResponder={() => showDatePicker()}
@@ -406,7 +436,7 @@ const Details = ({ navigation, route }) => {
         {show && (
           <View style={detailsStyle.containerHistoryDetails}>
             <FlatList
-              data={finalArrayIncomesSpendings}
+              data={finalArrayContainingSpendingsAndIncomes}
               renderItem={(item) => renderHistoryItem(item)}
               keyExtractor={(item) => `${item.id}`}
               showsVerticalScrollIndicator={true}
@@ -419,11 +449,49 @@ const Details = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
-      <ScrollView>
-        {renderHeader()}
-        {renderRectangleDetailsChart()}
-        {renderRectangleDetailsList()}
-      </ScrollView>
+      {totalIncomes != 0 && (
+        <ScrollView>
+          {renderRectangleDetailsChart()}
+          {renderRectangleDetailsList()}
+        </ScrollView>
+      )}
+      {totalIncomes == 0 && (
+        <View>
+          {renderHeader()}
+          <View
+            style={[
+              detailsStyle.containerChart,
+              {
+                justifyContent: "center",
+                alignItems: "center",
+                padding: SIZES.BASE * 3,
+              },
+            ]}
+          >
+            <Text>Unfortunately u have deleted all your Incomes !</Text>
+            <Text
+              style={{
+                marginVertical: SIZES.BASE * 2,
+                fontSize: 20,
+                color: "red",
+                fontWeight: "bold",
+              }}
+            >
+              Add An Income To Enable This Feature
+            </Text>
+            <Text
+              style={{
+                marginVertical: SIZES.BASE * 4,
+                fontSize: 20,
+                color: COLORS.PRIMARY,
+                fontWeight: "bold",
+              }}
+            >
+              Click On The Plus Button Below
+            </Text>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

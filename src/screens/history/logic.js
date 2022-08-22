@@ -5,7 +5,7 @@ import {
   compareTwoDates,
 } from "../../global/functions/time";
 
-export const calculateBudgetAllTime = (list) => {
+export const returnFilteredListAllTime = (list) => {
   let finalListSpendings = [];
   let finalListIncomes = [];
   list.map((item) => {
@@ -19,7 +19,7 @@ export const calculateBudgetAllTime = (list) => {
   return { finalListSpendings, finalListIncomes };
 };
 
-export const calculateBudgetInterval = (start, end, list) => {
+export const returnFilteredListInterval = (start, end, list) => {
   let finalFilteredListSpendings = [];
   let finalFilteredListIncomes = [];
   list.map((item) => {
@@ -41,7 +41,7 @@ export const calculateBudgetInterval = (start, end, list) => {
   return { finalFilteredListIncomes, finalFilteredListSpendings };
 };
 
-export const calculateBudgetSingleDay = (day, list) => {
+export const returnFilteredListSingleDay = (day, list) => {
   let finalFilteredListSpendings = [];
   let finalFilteredListIncomes = [];
   list.map((item) => {
@@ -120,21 +120,21 @@ export const renderInformationsAboutBudgetIncomesAndSpendings = (
 ) => {
   if (timeOptionSelected == 2) {
     const { finalFilteredListIncomes, finalFilteredListSpendings } =
-      calculateBudgetInterval(firstDate, finalDate, list);
+      returnFilteredListInterval(firstDate, finalDate, list);
     return {
       finalListIncomes: finalFilteredListIncomes,
       finalListSpendings: finalFilteredListSpendings,
     };
   } else if (timeOptionSelected == 1) {
     const { finalListIncomes, finalListSpendings } =
-      calculateBudgetAllTime(list);
+      returnFilteredListAllTime(list);
     return {
       finalListIncomes,
       finalListSpendings,
     };
   } else {
     const { finalFilteredListIncomes, finalFilteredListSpendings } =
-      calculateBudgetSingleDay(singleDate, list);
+      returnFilteredListSingleDay(singleDate, list);
     return {
       finalListIncomes: finalFilteredListIncomes,
       finalListSpendings: finalFilteredListSpendings,
