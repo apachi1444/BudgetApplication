@@ -20,14 +20,17 @@ import {
   updateTransaction,
 } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import {
+  returnfilteredNonEmptyCategories,
+  spendingElementsContainsNonEmptyPeriods,
+} from "./logic";
 const PlannedPayments = ({ navigation }) => {
   let finalList = useSelector(
     (state) => state.userSpendingsAndIncomesCategories
   );
   const dispatch = useDispatch();
-  const filteredNonEmptyCategories = finalList.filter((item) => {
-    return item?.spendingElements.length != 0;
-  });
+  const filteredNonEmptyCategories =
+    returnfilteredNonEmptyCategories(finalList);
 
   const renderHeader = () => {
     return (

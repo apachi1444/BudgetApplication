@@ -1,6 +1,6 @@
 import { Text, View, Image, ImageBackground } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { Avatar, Caption, Title } from "react-native-paper";
+import { Avatar, Title } from "react-native-paper";
 import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
 import { profileStyles } from "./profileStyle";
@@ -8,17 +8,14 @@ import { windowWidth } from "../../utils/dimensions";
 import {
   calculateAllIncomes,
   calculateAllSpendings,
-  total,
 } from "../../global/functions/store";
 
 import { useSelector } from "react-redux";
+// import { displayData } from "../../global/async-storage";
 
 export default ProfileUser = ({ navigation }) => {
   let list = useSelector((state) => state.userSpendingsAndIncomes);
-  let listCategories = useSelector(
-    (state) => state.userSpendingsAndIncomesCategories
-  );
-  console.log("this is the list coming from the store ", list);
+
   const totalSpendings = calculateAllSpendings(list);
   const totalIncomes = calculateAllIncomes(list);
 
@@ -70,6 +67,9 @@ export default ProfileUser = ({ navigation }) => {
   };
 
   const renderImageUserAndNamUser = () => {
+    // const email = await displayData();
+    // const result = await displayData();
+    // console.log("this is the result moter ", result);
     return (
       <>
         <Avatar.Image

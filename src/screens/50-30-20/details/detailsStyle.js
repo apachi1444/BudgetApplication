@@ -95,6 +95,7 @@ export const detailsStyle = StyleSheet.create({
     marginVertical: SIZES.BASE * 2,
     backgroundColor: COLORS.BOTTOMBAR,
     padding: SIZES.BASE * 3.5,
+    paddingHorizontal: SIZES.BASE,
     borderRadius: SIZES.BASE * 3.5,
   },
   containerHistoryItemWithButtons: {
@@ -142,15 +143,17 @@ export const detailsStyle = StyleSheet.create({
 
   containerChoosenDate: {
     marginHorizontal: SIZES.BASE * 4,
-    marginVertical: -SIZES.BASE * 3,
-    padding: SIZES.BASE * 1,
-    justifyContent: "flex-end",
+    padding: SIZES.BASE * 2,
+    justifyContent: "center",
     flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.LIGHTGREY,
+    borderRadius: SIZES.BASE * 3,
   },
   textDateChoosen: {
     fontSize: 20,
-    fontWeight: "bold ",
+    fontWeight: "bold",
     color: COLORS.PRIMARY,
-    marginRight: "4%",
+    marginLeft: "2%",
   },
 });

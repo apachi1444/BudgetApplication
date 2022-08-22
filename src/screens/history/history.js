@@ -14,7 +14,6 @@ import { SIZES } from "./../../consts/theme";
 import { globalStyles } from "../../global/styles/globalStyles";
 import { historyStyle } from "./historyStyle";
 import { windowHeight } from "../../utils/dimensions";
-import { categoriesData } from "../../consts/categoriesData";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";

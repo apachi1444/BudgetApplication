@@ -18,6 +18,10 @@ import { detailsStyle } from "./detailsStyle";
 import COLORS from "../../../consts/color";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
+import { concatenateIncomesAndSpendings } from "../../history/logic";
+import { concatenateIncomesAndSpendingsOneCategory } from "./../../history/logic";
+import { concatenateIncomesAndSpendingsOneTypeTransaction } from "../logic";
+import { renderFinalDate } from "../../../global/functions/time";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
@@ -26,20 +30,22 @@ const Details = ({ navigation, route }) => {
   });
   let { name } = item;
 
-  console.log("this is the data from the store in the details page ", data);
-  console.log("this is the item qsdf ", item);
-
-  let final = data.map((item) => {
-    if (item.title == name) {
-      return item;
-    }
+  let final = data.filter((item) => {
+    return item.title == name;
   });
 
-  console.log("this is the final array ", final);
+  let finalArrayIncomesSpendings =
+    concatenateIncomesAndSpendingsOneTypeTransaction(final[0]);
+
+  console.log(
+    "this is the final array of all the history items ",
+    finalArrayIncomesSpendings
+  );
 
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(true);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
   let finalStringDate =
     date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
 
@@ -52,7 +58,6 @@ const Details = ({ navigation, route }) => {
   };
 
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
     setDate(date);
     hideDatePicker();
   };
@@ -109,14 +114,10 @@ const Details = ({ navigation, route }) => {
 
     const dataProcess = () => {
       let percentageUsed = ((y / totalOptimal) * 100).toFixed(0);
-      console.log("this is the y ", y);
-      console.log("this is the optimal value ", totalOptimal);
       let percentageRemaining = 100 - percentageUsed;
       if (percentageUsed >= 100) {
         percentageRemaining = 0;
       }
-
-      console.log("this is the value of y hahah ", y);
 
       let finalDataChart = [
         {
@@ -213,7 +214,6 @@ const Details = ({ navigation, route }) => {
                   fontSize: SIZESS.base * 1.85,
                 }}
               >
-                {console.log("this is the item ", item)}
                 {item.total} DH - {item.label}
               </Text>
             </View>
@@ -244,19 +244,41 @@ const Details = ({ navigation, route }) => {
   };
 
   const renderRectangleDetailsList = () => {
-    const renderHistoryItem = (item) => {
+    const renderHistoryItem = ({ item }) => {
+      const { title, price, date, transaction } = item;
       const renderTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
           return (
-            <View style={detailsStyle.containerCheckboxAndImageAndTitle}>
-              <Text style={detailsStyle.titleHistoryItem}>haha</Text>
+            <View style={globalStyles.flexRowAndAlignCenter}>
+              {/* <Ionicons
+                name={
+                  transaction == "Income"
+                    ? "arrow-up-circle"
+                    : "arrow-down-circle"
+                }
+                color={transaction == "Spending" ? COLORS.RED : COLORS.GREEN}
+                size={SIZES.BASE * 7}
+              /> */}
+              <Text style={detailsStyle.titleHistoryItem}>{title}</Text>
             </View>
           );
         };
         const renderPrice = () => {
+          const finalSign = transaction == "Income" ? "+" : "-";
           return (
             <View>
-              <Text style={detailsStyle.priceHistoryItem}> 500 DH</Text>
+              <Text
+                style={[
+                  detailsStyle.priceHistoryItem,
+                  {
+                    color: transaction == "Income" ? COLORS.GREEN : COLORS.RED,
+                  },
+                ]}
+              >
+                {" "}
+                {finalSign}
+                {price} DH
+              </Text>
             </View>
           );
         };
@@ -269,7 +291,9 @@ const Details = ({ navigation, route }) => {
                 marginLeft: "2%",
               }}
             >
-              <Text style={detailsStyle.dateHistoryItem}>12/08/2023</Text>
+              <Text style={detailsStyle.dateHistoryItem}>
+                {renderFinalDate(date)}
+              </Text>
               <Ionicons
                 name="calendar-outline"
                 style={detailsStyle.iconDateHistoryItem}
@@ -283,7 +307,13 @@ const Details = ({ navigation, route }) => {
           const renderIcon = (name) => {
             return (
               <TouchableOpacity
-                style={detailsStyle.containerIcon}
+                style={[
+                  detailsStyle.containerIcon,
+                  {
+                    backgroundColor:
+                      transaction == "Income" ? COLORS.GREEN : COLORS.RED,
+                  },
+                ]}
                 onPress={name == "trash" ? deleteItem : updateItem}
               >
                 <Ionicons
@@ -297,7 +327,7 @@ const Details = ({ navigation, route }) => {
           return (
             <View style={detailsStyle.containerEditDeleteButtonHistoryItem}>
               {renderIcon("trash")}
-              {renderIcon("pencil-outline")}
+              {/* {renderIcon("pencil-outline")} */}
             </View>
           );
         };
@@ -340,19 +370,30 @@ const Details = ({ navigation, route }) => {
           </View>
           {show && (
             <View
-              style={detailsStyle.containerChoosenDate}
-              onStartShouldSetResponder={() => showDatePicker()}
+              style={{
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
             >
-              <Text style={detailsStyle.textDateChoosen}>
-                {finalStringDate}
-              </Text>
-              <Ionicons name="filter" size={25} color={COLORS.PRIMARY} />
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-              />
+              <View
+                style={detailsStyle.containerChoosenDate}
+                onStartShouldSetResponder={() => showDatePicker()}
+              >
+                <Ionicons
+                  name="calendar-outline"
+                  size={25}
+                  color={COLORS.PRIMARY}
+                />
+                <Text style={detailsStyle.textDateChoosen}>
+                  {finalStringDate}
+                </Text>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+              </View>
             </View>
           )}
         </>
@@ -364,8 +405,12 @@ const Details = ({ navigation, route }) => {
 
         {show && (
           <View style={detailsStyle.containerHistoryDetails}>
-            {renderHistoryItem()}
-            {renderHistoryItem()}
+            <FlatList
+              data={finalArrayIncomesSpendings}
+              renderItem={(item) => renderHistoryItem(item)}
+              keyExtractor={(item) => `${item.id}`}
+              showsVerticalScrollIndicator={true}
+            />
           </View>
         )}
       </>

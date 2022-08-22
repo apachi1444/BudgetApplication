@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   PanResponder,
 } from "react-native";
+import { displayData } from "../../global/async-storage";
+
 import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
@@ -106,7 +108,15 @@ const WelcomePage = ({ navigation }) => {
         </Text>
 
         <TouchableOpacity
-          onPressIn={() => navigation.navigate("AuthStack")}
+          onPressIn={async () => {
+            let userLoggedIn = await displayData();
+
+            if (!userLoggedIn) {
+              navigation.navigate("AuthStack");
+            } else {
+              navigation.navigate("AuthStack");
+            }
+          }}
           style={welcomePageStyle.buttonInsideSecondContainer}
         >
           <Text>Start Now</Text>

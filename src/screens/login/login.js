@@ -10,7 +10,7 @@ import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 import Input from "../../components/input/input";
 import { openDatabase } from "react-native-sqlite-storage";
-
+import { displayData, storeData } from "../../global/async-storage/index";
 export default ({ navigation }) => {
   const [email, setEmail] = useState("");
   // var db = openDatabase(
@@ -20,7 +20,6 @@ export default ({ navigation }) => {
   //     createFromLocation: "~mine.db",
   //   },
   //   () => {},
-  //   (error) => console.log(error)
   // );
 
   // useEffect(() => {
@@ -29,7 +28,6 @@ export default ({ navigation }) => {
   //       "SELECT name FROM sqlite_master WHERE type='table' AND name='table_user'",
   //       [],
   //       function (tx, res) {
-  //         console.log("item:", res.rows.length);
   //         if (res.rows.length == 0) {
   //           txn.executeSql("DROP TABLE IF EXISTS table_user", []);
   //           txn.executeSql(
@@ -43,32 +41,7 @@ export default ({ navigation }) => {
   // }, []);
 
   const [password, setPassword] = useState("");
-  const storeData = async (value) => {
-    try {
-      let { email, password } = value;
 
-      await AsyncStorage.setItem("email", email);
-      await AsyncStorage.setItem("password", password);
-    } catch (e) {
-      // saving error
-    }
-  };
-
-  const displayData = async () => {
-    try {
-      var aa = await AsyncStorage.getItem("user");
-      console.log("sdqfqsdfqsdf");
-      console.log(JSON.parse(aa));
-    } catch (e) {}
-  };
-
-  const count1 = useSelector((state) => {
-    return state.userSpending;
-  });
-
-  const dispatch = useDispatch();
-  const [incrementAmount, setIncremenetAmount] = useState(0);
-  const addValue = Number(incrementAmount) || 0;
   const renderInputs = () => {
     return (
       <View>
@@ -128,6 +101,16 @@ export default ({ navigation }) => {
       <>
         <View
           onStartShouldSetResponder={() => {
+            // let userLoggedIn = await displayData();
+            // console.log("klsdqjfklsqdjfklsqdjf", userLoggedIn);
+            // if (!userLoggedIn) {
+            //   await storeData({ email, password });
+            // }
+            // const aa = await disp();
+            // console.log(
+            //   "this is the value coming from the displaying data ",
+            //   aa
+            // );
             navigation.navigate("UserProfile");
           }}
           disabled={!isValid}
