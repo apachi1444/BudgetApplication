@@ -7,8 +7,7 @@ import { renderFinalDate } from "../../../global/functions/time";
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { historyStyle } from "../historyStyle";
 import {
-  calculateBudgetAndIncomesAndSpendings,
-  concatenateIncomesAndSpendingsOneCategory,
+  filterListDependingOnCategory,
   renderInformationsAboutBudgetIncomesAndSpendings,
 } from "../logic";
 import { allHistoryStyle } from "./allHistoryCategoriesStyle";
@@ -32,7 +31,13 @@ const AllHistoryCategories = (props) => {
 
     let arrayIncomesSpendings = finalListSpendings.concat(finalListIncomes);
     const iconCategory = item.icon;
-    const categoryRecordsLength = arrayIncomesSpendings.length;
+
+    const finalFilteredListIncomesAndSpendings = filterListDependingOnCategory(
+      item.title,
+      arrayIncomesSpendings
+    );
+
+    const categoryRecordsLength = finalFilteredListIncomesAndSpendings.length;
 
     const renderRecordLine = (item) => {
       const finalDate = renderFinalDate(item?.date);
@@ -220,7 +225,7 @@ const AllHistoryCategories = (props) => {
       <View style={allHistoryStyle.containerCategory}>
         {renderImageAndTitle()}
 
-        {arrayIncomesSpendings.length == 0 && (
+        {categoryRecordsLength == 0 && (
           <View style={allHistoryStyle.noResultText}>
             <Ionicons name="sad" size={25} />
             <Text style={{ marginLeft: "5%" }}>
@@ -229,7 +234,7 @@ const AllHistoryCategories = (props) => {
           </View>
         )}
 
-        {arrayIncomesSpendings.length > 0 &&
+        {categoryRecordsLength > 0 &&
           arrayIncomesSpendings.map((item, index) => {
             return renderRecordLine(item);
           })}

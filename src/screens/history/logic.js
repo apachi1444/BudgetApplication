@@ -10,7 +10,9 @@ export const returnFilteredListAllTime = (list) => {
   let finalListIncomes = [];
   list.map((item) => {
     item.spendingElements.map((spending) => {
-      finalListSpendings.push(spending);
+      if (spending.numberTimesPaid != 0) {
+        finalListSpendings.push(spending);
+      }
     });
     item.incomeElements.map((income) => {
       finalListIncomes.push(income);
@@ -26,7 +28,8 @@ export const returnFilteredListInterval = (start, end, list) => {
     item.spendingElements.map((spending) => {
       const { date } = spending;
       const comparaisonDates = compareFirstTargetFinalDates(start, date, end);
-      if (comparaisonDates) {
+
+      if (comparaisonDates && spending.numberTimesPaid != 0) {
         finalFilteredListSpendings.push(spending);
       }
     });
@@ -48,7 +51,7 @@ export const returnFilteredListSingleDay = (day, list) => {
     item.spendingElements.map((spending) => {
       const { date } = spending;
       const comparaisonBothDates = compareTwoDates(date, day);
-      if (comparaisonBothDates) {
+      if (comparaisonBothDates && spending.numberTimesPaid != 0) {
         finalFilteredListSpendings.push(spending);
       }
     });
@@ -73,27 +76,20 @@ export const calculateBudgetAndIncomesAndSpendings = (
   return { currentBudget, totalIncomes, totalSpendings };
 };
 
-export const concatenateIncomesAndSpendingsOneCategory = (item) => {
-  let finalArrayContainingSpendingsAndIncomes = [];
-  item.incomeElements.map((incomeElement) => {
-    finalArrayContainingSpendingsAndIncomes.push({
-      ...incomeElement,
-      color: item.color,
-    });
+export const filterListDependingOnCategory = (category, list) => {
+  let finalFilteredListIncomesAndSpendings = [];
+  list.map((item) => {
+    if (item.category === category) {
+      finalFilteredListIncomesAndSpendings.push(item);
+    }
   });
-  item.spendingElements.map((spendingElement) => {
-    finalArrayContainingSpendingsAndIncomes.push({
-      ...spendingElement,
-      color: item.color,
-    });
-  });
-  return finalArrayContainingSpendingsAndIncomes;
+  return finalFilteredListIncomesAndSpendings;
 };
 
 export const concatenateIncomesAndSpendings = (title, list) => {
   let finalArrayContainingSpendingsAndIncomes = [];
   list.map((item) => {
-    if (item.title == title || title == "All") {
+    if (item.category == title || title == "All") {
       item.incomeElements.map((incomeElement) => {
         finalArrayContainingSpendingsAndIncomes.push({
           ...incomeElement,

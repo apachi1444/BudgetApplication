@@ -11,10 +11,12 @@ export const storeData = async (value) => {
 
 export const displayData = async () => {
   try {
-    var userInSystem = await AsyncStorage.getItem("email");
-    if (userInSystem != null) {
-      return true;
+    var email = await AsyncStorage.getItem("email");
+    var password = await AsyncStorage.getItem("password");
+    var userLoggedInOrNot = false;
+    if (email != null) {
+      userLoggedInOrNot = true;
     }
-    return false;
+    return { email, password, userLoggedInOrNot };
   } catch (e) {}
 };

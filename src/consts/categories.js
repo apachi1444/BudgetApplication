@@ -21,7 +21,7 @@ export const categories = [
     id: 3,
     name: "Street",
     icon: "grid",
-    color: COLORS.LIGHTGREY,
+    color: COLORS.LIGHTORANGE,
     imageUrl:
       "/Users/Admin/Desktop/budgetproject/src/assets/images/fastFood.png",
   },

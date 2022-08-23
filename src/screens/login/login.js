@@ -100,17 +100,13 @@ export default ({ navigation }) => {
     return (
       <>
         <View
-          onStartShouldSetResponder={() => {
-            // let userLoggedIn = await displayData();
-            // console.log("klsdqjfklsqdjfklsqdjf", userLoggedIn);
-            // if (!userLoggedIn) {
-            //   await storeData({ email, password });
-            // }
-            // const aa = await disp();
-            // console.log(
-            //   "this is the value coming from the displaying data ",
-            //   aa
-            // );
+          onStartShouldSetResponder={async () => {
+            let userLoggedIn = await displayData();
+            console.log("user Logged Or not", userLoggedIn);
+            if (!userLoggedIn) {
+              await storeData({ email, password });
+            }
+
             navigation.navigate("UserProfile");
           }}
           disabled={!isValid}

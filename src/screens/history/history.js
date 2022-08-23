@@ -83,8 +83,6 @@ const History = ({ navigation }) => {
 
   const data = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
-  let categoriesDetails = concatenateIncomesAndSpendings("All", data);
-
   const [firstDate, setFirstDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
   const [singleDate, setSingleDate] = useState(new Date());
@@ -149,7 +147,6 @@ const History = ({ navigation }) => {
   const renderCalendarRectangle = () => {
     const renderDateInputsInterval = () => {
       const renderFirstDateInput = () => {
-        displayData();
         return (
           <View
             onStartShouldSetResponder={() => {

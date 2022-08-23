@@ -78,9 +78,11 @@ const PlannedPayments = ({ navigation }) => {
     );
 
     const renderLineDetailEachItem = (element) => {
-      let { date, period } = element;
+      let { date, period, numberTimesPaid } = element;
 
-      const periodMilliseconds = convertDateToMilliseconds(period);
+      const periodMilliseconds = convertDateToMilliseconds(
+        period * (numberTimesPaid + 1)
+      );
       const newDateAfterPeriod = new Date(periodMilliseconds + date.getTime());
 
       const {
@@ -198,6 +200,7 @@ const PlannedPayments = ({ navigation }) => {
         };
         const renderDeleteAndEditButtons = () => {
           let { date, key, period, transaction, type } = element;
+          console.log("this is the element dude");
 
           const deleteItem = () => {
             dispatch(deleteTransaction(element));

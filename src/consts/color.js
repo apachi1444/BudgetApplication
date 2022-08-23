@@ -21,6 +21,7 @@ const COLORS = {
   WANTS: "#3A1412",
   NEEDS: "#ED2D7B",
   SAVES: "#BE9275",
+  LIGHTORANGE: "#FF9F1F",
 };
 
 export default COLORS;

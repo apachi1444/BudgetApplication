@@ -49,27 +49,28 @@ export const userSpendingsAndIncomesCategories = createSlice({
           item.spendingElements.map((elem) => {
             if (elem.key == key) {
               let newDate = returnNewDate(date, period);
-              elem.date = newDate;
+              elem.newDate = newDate;
               elem.numberTimesPaid++;
             }
           });
         }
       });
+      console.log("this is the new state ", state);
     },
 
     updateTransactionPlanned: (state, action) => {
-      const { id, period, key, date, numberTimesPaid } = action.payload;
-      console.log(action.payload);
-      state.map((item) => {
-        if (item.id == id) {
-          item.spendingElements.map((elem) => {
-            if (elem.key == key) {
-              let newDate = returnNewDate(date, period);
-              elem.date = newDate;
-            }
-          });
-        }
-      });
+      // const { id, period, key, date, numberTimesPaid } = action.payload;
+      // console.log(action.payload);
+      // state.map((item) => {
+      //   if (item.id == id) {
+      //     item.spendingElements.map((elem) => {
+      //       if (elem.key == key) {
+      //         let newDate = returnNewDate(date, period);
+      //         elem.date = newDate;
+      //       }
+      //     });
+      //   }
+      // });
     },
 
     deleteTransaction: (state, action) => {

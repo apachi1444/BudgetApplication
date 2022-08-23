@@ -6,9 +6,9 @@ import { SIZES } from "../../consts/theme";
 import { profileStyles } from "./profileStyle";
 import { windowWidth } from "../../utils/dimensions";
 import { calculateBudgetSpendingsAndIncomes } from "../../global/functions/store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useSelector } from "react-redux";
-// import { displayData } from "../../global/async-storage";
 
 export default ProfileUser = ({ navigation }) => {
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
@@ -20,7 +20,8 @@ export default ProfileUser = ({ navigation }) => {
     navigation.navigate("EditProfile");
   };
 
-  const logOut = () => {
+  const logOut = async () => {
+    await AsyncStorage.clear();
     navigation.goBack();
   };
   const openDrawer = () => {
@@ -55,6 +56,7 @@ export default ProfileUser = ({ navigation }) => {
               style={profileStyles.logoutIcon}
               size={SIZES.BASE * 7}
             />
+            {/* <Text>{renderEmailUser()}</Text> */}
           </View>
         </View>
       </>
