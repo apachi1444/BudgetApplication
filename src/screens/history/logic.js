@@ -89,7 +89,7 @@ export const filterListDependingOnCategory = (category, list) => {
 export const concatenateIncomesAndSpendings = (title, list) => {
   let finalArrayContainingSpendingsAndIncomes = [];
   list.map((item) => {
-    if (item.category == title || title == "All") {
+    if (item.title == title || title == "All") {
       item.incomeElements.map((incomeElement) => {
         finalArrayContainingSpendingsAndIncomes.push({
           ...incomeElement,
@@ -151,4 +151,30 @@ export const renderColorCircleBudget = (name, price) => {
     default:
       break;
   }
+};
+
+export const returnListSpendingWithNonNullPeriod = (list, title) => {
+  let total = [];
+  list.map((item) => {
+    if (item.title == title || title == "All") {
+      item.spendingElements.map((spendingElement) => {
+        if (spendingElement.numberTimesPaid != 0) {
+          total.push(spendingElement);
+        }
+      });
+    }
+  });
+  return total;
+};
+
+export const returnListIncomes = (list, title) => {
+  let total = [];
+  list.map((item) => {
+    if (item.title === title || title === "All") {
+      item.incomeElements.map((incomeElement) => {
+        total.push(incomeElement);
+      });
+    }
+  });
+  return total;
 };

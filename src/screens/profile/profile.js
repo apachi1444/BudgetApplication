@@ -9,9 +9,27 @@ import { calculateBudgetSpendingsAndIncomes } from "../../global/functions/store
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { findUser } from "../../global/async-storage";
 
 export default ProfileUser = ({ navigation }) => {
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
+
+  const [email, setEmail] = useState("yessine");
+
+  useEffect(() => {
+    (async () => {
+      const value = await findUser();
+      const obj = JSON.parse(value);
+      console.log(obj.email, "lkjsdf");
+      setEmail(obj.email);
+    })();
+
+    // this is for the cleanup function
+    return () => {
+      console.log("i m unmounting");
+    };
+  }, []);
 
   const { totalIncomes, totalSpendings, currentBudget } =
     calculateBudgetSpendingsAndIncomes(list);
@@ -71,7 +89,7 @@ export default ProfileUser = ({ navigation }) => {
           size={130}
         />
 
-        <Text style={profileStyles.nameUser}>Yessine Jaoua</Text>
+        <Text style={profileStyles.nameUser}>{email}</Text>
       </>
     );
   };

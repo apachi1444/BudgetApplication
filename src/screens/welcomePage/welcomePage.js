@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import {
   Animated,
   View,
@@ -7,10 +9,25 @@ import {
   TouchableOpacity,
   PanResponder,
 } from "react-native";
-import { displayData } from "../../global/async-storage";
+import { displayData, findUser } from "../../global/async-storage";
 
 import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
+  async function extractUser() {
+    const result = await findUser();
+    console.log("this is the result from the welcome page ", result);
+    return result;
+  }
+  useLayoutEffect(() => {
+    (async () => {
+      const value = await findUser();
+      const obj = JSON.parse(value);
+      if (obj.email != "") {
+        navigation.navigate("AuthStack");
+      }
+    })();
+  }, []);
+
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
   const opacityRef = useRef(new Animated.Value(0)).current;
 

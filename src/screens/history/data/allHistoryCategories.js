@@ -9,11 +9,14 @@ import { historyStyle } from "../historyStyle";
 import {
   filterListDependingOnCategory,
   renderInformationsAboutBudgetIncomesAndSpendings,
+  returnListIncomes,
+  returnListSpendingWithNonNullPeriod,
 } from "../logic";
 import { allHistoryStyle } from "./allHistoryCategoriesStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTransaction } from "../../../redux/features/user/userSpendingsAndIncomesCategories";
 import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import { displayDeleteAlert } from "../../../components/alertDelete";
 const AllHistoryCategories = (props) => {
   const { finalDate, firstDate, singleDate, timeOptionSelected } = props;
 
@@ -32,9 +35,13 @@ const AllHistoryCategories = (props) => {
     let arrayIncomesSpendings = finalListSpendings.concat(finalListIncomes);
     const iconCategory = item.icon;
 
+    const listSpendings = returnListSpendingWithNonNullPeriod(list, "All");
+    const listIncomes = returnListIncomes(list, "All");
+    let allHistory = listSpendings.concat(listIncomes);
+
     const finalFilteredListIncomesAndSpendings = filterListDependingOnCategory(
       item.title,
-      arrayIncomesSpendings
+      allHistory
     );
 
     const categoryRecordsLength = finalFilteredListIncomesAndSpendings.length;
@@ -72,7 +79,7 @@ const AllHistoryCategories = (props) => {
                   fontSize: SIZES.BASE * 3,
                 }}
               >
-                {item?.price} DH
+                {item?.price * item.numberTimesPaid} DH
               </Text>
             </View>
           );
@@ -132,7 +139,11 @@ const AllHistoryCategories = (props) => {
                     backgroundColor: color,
                   },
                 ]}
-                onPress={name == "trash" ? deleteItem : updateItem}
+                onPress={
+                  name == "trash"
+                    ? () => displayDeleteAlert(deleteItem)
+                    : updateItem
+                }
               >
                 <Ionicons
                   name={name}

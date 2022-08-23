@@ -1,16 +1,13 @@
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { useSelector, useDispatch } from "react-redux";
-import React, { useRef, useState, useEffect } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import React, { useState } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { loginStyle as styles } from "./loginStyle";
 import COLORS from "../../consts/color";
 import { globalStyles } from "../../global/styles/globalStyles";
 import Input from "../../components/input/input";
-import { openDatabase } from "react-native-sqlite-storage";
-import { displayData, storeData } from "../../global/async-storage/index";
+import { findUser, handleSubmit } from "../../global/async-storage/index";
+import { useLayoutEffect } from "react";
 export default ({ navigation }) => {
   const [email, setEmail] = useState("");
   // var db = openDatabase(
@@ -39,6 +36,16 @@ export default ({ navigation }) => {
   //     );
   //   });
   // }, []);
+
+  useLayoutEffect(() => {
+    (async () => {
+      const value = await findUser();
+      const obj = JSON.parse(value);
+      if (obj.email != "") {
+        navigation.navigate("UserProfile");
+      }
+    })();
+  }, []);
 
   const [password, setPassword] = useState("");
 
@@ -100,13 +107,8 @@ export default ({ navigation }) => {
     return (
       <>
         <View
-          onStartShouldSetResponder={async () => {
-            let userLoggedIn = await displayData();
-            console.log("user Logged Or not", userLoggedIn);
-            if (!userLoggedIn) {
-              await storeData({ email, password });
-            }
-
+          onStartShouldSetResponder={() => {
+            handleSubmit(email, password);
             navigation.navigate("UserProfile");
           }}
           disabled={!isValid}

@@ -23,7 +23,11 @@ import {
   returnTotalSpendingWithNonNullPeriod,
 } from "./logic";
 import { returnYearMonthDay } from "../../global/functions/time";
-import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import {
+  deleteGuide,
+  updateTypeTransaction,
+} from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import { displayDeleteAlert } from "../../components/alertDelete";
 const PlannedPayments = ({ navigation }) => {
   let finalList = useSelector(
     (state) => state.userSpendingsAndIncomesCategories
@@ -51,9 +55,9 @@ const PlannedPayments = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     const { id, title, spendingElements } = item;
-
     let totalSpendings = returnTotalSpendingWithNonNullPeriod(
-      filteredNonEmptyCategories
+      filteredNonEmptyCategories,
+      id
     );
 
     const renderTitleAndImageAndPriceHeader = () => (
@@ -200,7 +204,6 @@ const PlannedPayments = ({ navigation }) => {
         };
         const renderDeleteAndEditButtons = () => {
           let { date, key, period, transaction, type } = element;
-          console.log("this is the element dude");
 
           const deleteItem = () => {
             dispatch(deleteTransaction(element));
@@ -215,12 +218,25 @@ const PlannedPayments = ({ navigation }) => {
                 date,
               })
             );
+            dispatch(
+              updateTypeTransaction({
+                id,
+                period,
+                key,
+                date,
+              })
+            );
           };
+
           const renderIcon = (name) => {
             return (
               <TouchableOpacity
                 style={plannedPaymentsStyle.button}
-                onPress={name == "trash" ? deleteItem : updateItem}
+                onPress={
+                  name == "trash"
+                    ? () => displayDeleteAlert(deleteItem)
+                    : updateItem
+                }
               >
                 <Ionicons
                   name={name}

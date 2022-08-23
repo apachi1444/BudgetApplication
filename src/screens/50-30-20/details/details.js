@@ -30,6 +30,7 @@ import { renderFinalDate } from "../../../global/functions/time";
 import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { deleteTransaction } from "../../../redux/features/user/userSpendingsAndIncomesCategories";
 import { calculateAllIncomes } from "../../../global/functions/store";
+import { displayDeleteAlert } from "../../../components/alertDelete";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
@@ -315,7 +316,11 @@ const Details = ({ navigation, route }) => {
                       transaction == "Income" ? COLORS.GREEN : COLORS.RED,
                   },
                 ]}
-                onPress={name == "trash" ? deleteItem : updateItem}
+                onPress={
+                  name == "trash"
+                    ? () => displayDeleteAlert(deleteItem)
+                    : updateItem
+                }
               >
                 <Ionicons
                   name={name}

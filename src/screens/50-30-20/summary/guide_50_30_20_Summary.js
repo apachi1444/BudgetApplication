@@ -43,7 +43,9 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const totalIncomes = calculateAllIncomes(data);
 
+  console.log(data);
   const totalWants = wantsSpendings(data);
+  console.log(totalWants);
   const totalSaves = savesSpedings(data);
   const totalNeeds = needsSpendings(data);
 

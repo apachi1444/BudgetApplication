@@ -28,6 +28,11 @@ const CustomDrawer = (props) => {
     navigation.goBack();
   };
 
+  const logOut = async () => {
+    await AsyncStorage.clear();
+    navigation.popUp();
+  };
+
   const showLanguages = () => {
     Alert.alert(
       "Change Applicatino Language",
@@ -177,26 +182,25 @@ const CustomDrawer = (props) => {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <View
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 5,
+            marginTop: 10,
+          }}
+          onStartShouldSetResponder={logOut}
+        >
+          <Ionicons name="log-out-outline" size={30} />
+          <Text
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              padding: 5,
-              marginTop: 10,
+              fontSize: 18,
+              marginLeft: 20,
             }}
           >
-            <Ionicons name="log-out-outline" size={30} />
-            <Text
-              style={{
-                fontSize: 18,
-                marginLeft: 20,
-              }}
-            >
-              Log Out
-            </Text>
-          </View>
-        </TouchableOpacity>
+            Log Out
+          </Text>
+        </View>
       </View>
     </View>
   );

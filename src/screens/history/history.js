@@ -28,8 +28,13 @@ import {
   concatenateIncomesAndSpendings,
   renderColorCircleBudget,
   renderInformationsAboutBudgetIncomesAndSpendings,
+  returnListIncomes,
+  returnListSpendingWithNonNullPeriod,
+  returnTotalIncomes,
+  returnTotalSpendingWithNonNullPeriod,
 } from "./logic";
 import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import { displayDeleteAlert } from "../../components/alertDelete";
 const displayData = async () => {
   try {
     var aa = await AsyncStorage.getItem("user");
@@ -291,6 +296,9 @@ const History = ({ navigation }) => {
       finalDate
     );
 
+  console.log("this is the final list of incomes ", finalListIncomes);
+  console.log("this is the final list of spendings ", finalListSpendings);
+
   const { currentBudget, totalIncomes, totalSpendings } =
     calculateBudgetAndIncomesAndSpendings(finalListIncomes, finalListSpendings);
 
@@ -537,13 +545,9 @@ const History = ({ navigation }) => {
   };
 
   const renderHistoryCategory = () => {
-    let finalArray = concatenateIncomesAndSpendings(title, data);
-    let allHistory = finalArray;
-
-    console.log(
-      "this is the final array that we must use in the end ",
-      finalArray
-    );
+    const listSpendings = returnListSpendingWithNonNullPeriod(list, title);
+    const listIncomes = returnListIncomes(list, title);
+    let allHistory = listSpendings.concat(listIncomes);
 
     const renderHistoryItem = (item) => {
       const { transaction } = item;
@@ -574,7 +578,7 @@ const History = ({ navigation }) => {
                   fontSize: SIZES.BASE * 3,
                 }}
               >
-                {item.price} DH
+                {item.price * item.numberTimesPaid} DH
               </Text>
             </View>
           );
@@ -632,7 +636,11 @@ const History = ({ navigation }) => {
                   padding: SIZES.BASE * 1.5,
                   marginHorizontal: windowHeight * 0.005,
                 }}
-                onPress={name == "trash" ? deleteItem : updateItem}
+                onPress={
+                  name == "trash"
+                    ? () => displayDeleteAlert(deleteItem)
+                    : updateItem
+                }
               >
                 <Ionicons
                   name={name}

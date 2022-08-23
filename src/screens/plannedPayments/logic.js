@@ -37,14 +37,19 @@ export const returnTimeRemaining = (yearsRemaining, newDaysRemaining) => {
   return finalString;
 };
 
-export const returnTotalSpendingWithNonNullPeriod = (list) => {
+export const returnTotalSpendingWithNonNullPeriod = (list, id) => {
   let total = 0;
   list.map((item) => {
-    item.spendingElements.map((spendingElement) => {
-      if (spendingElement.period != 0) {
-        total += spendingElement.price * (spendingElement.numberTimesPaid + 1);
-      }
-    });
+    console.log("item id ", item.id);
+    console.log("our id ", id);
+    if (item.id == id) {
+      item.spendingElements.map((spendingElement) => {
+        if (spendingElement.period != 0) {
+          total +=
+            spendingElement.price * (spendingElement.numberTimesPaid + 1);
+        }
+      });
+    }
   });
   return total;
 };

@@ -469,7 +469,7 @@ const Add = ({ handleModal }) => {
             initialValues={{
               title: "",
               amount: "",
-              period: "",
+              period: 0,
               titleIncome: "",
               amountIncome: "",
             }}
@@ -505,7 +505,7 @@ const Add = ({ handleModal }) => {
             initialValues={{
               title: "",
               amount: "",
-              period: "",
+              period: 0,
               titleIncome: "",
               amountIncome: "",
             }}

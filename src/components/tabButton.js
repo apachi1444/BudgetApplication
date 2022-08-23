@@ -125,6 +125,7 @@ export const TabButton = (props) => {
         <View>
           <Modal
             presentationStyle="overFullScreen"
+            animationIn="bounceInLeft"
             isVisible={isModalVisible}
             style={{
               justifyContent: "center",

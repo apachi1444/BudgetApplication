@@ -5,7 +5,8 @@ import { listCategories } from "../../consts/spendingCategories";
 export const total = (list) => {
   let total = 0;
   list.map((item) => {
-    total += item.price;
+    console.log("this is the item qsdfqsdf ", item);
+    total += item.price * item.numberTimesPaid;
   });
   return total;
 };
@@ -16,22 +17,6 @@ export const renderDatePlannedPayment = (item) => {
     date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
 
   return finalStringSingleDate;
-};
-
-export const calculateTimeRemaining = (dateSpending, normalDateSpending) => {
-  let finalStringSpendingDate =
-    dateSpending.getFullYear() +
-    " - " +
-    (dateSpending.getMonth() + 1) +
-    " - " +
-    dateSpending.getDate();
-
-  let finalStringNormalSpendingDate =
-    normalDateSpending.getFullYear() +
-    " - " +
-    (normalDateSpending.getMonth() + 1) +
-    " - " +
-    normalDateSpending.getDate();
 };
 
 export const images = {
