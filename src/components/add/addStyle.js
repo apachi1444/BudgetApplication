@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
-import { windowWidth } from "../../utils/dimensions";
 
 export const addStyle = StyleSheet.create({
   containerCloseButton: {
@@ -52,6 +51,7 @@ export const addStyle = StyleSheet.create({
     borderRadius: SIZES.BASE * 4,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   iconCashCurrentBudget: {
     color: COLORS.RED,

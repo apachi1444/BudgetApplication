@@ -24,6 +24,7 @@ const Input = (props) => {
     onBlur,
     isNumeric,
     setter,
+    setterValue,
   } = props;
   var borderRed;
 
@@ -39,13 +40,15 @@ const Input = (props) => {
       })
     : {};
 
-  touched && !error
-    ? (borderRed = {
-        borderColor: COLORS.GREEN,
-        borderWidth: 2,
-      })
-    : {};
+  const changeBorderColorAndSetter = () => {
+    borderRed = {
+      borderColor: COLORS.GREEN,
+      borderWidth: 2,
+    };
+    setterValue(value);
+  };
 
+  touched && !error ? changeBorderColorAndSetter() : {};
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <>

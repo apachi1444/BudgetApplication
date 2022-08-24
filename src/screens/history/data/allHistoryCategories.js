@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteTransaction } from "../../../redux/features/user/userSpendingsAndIncomesCategories";
 import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../../components/alertDelete";
+import { calculateFinalPriceTransaction } from "../../../global/functions/store";
 const AllHistoryCategories = (props) => {
   const { finalDate, firstDate, singleDate, timeOptionSelected } = props;
 
@@ -43,9 +44,13 @@ const AllHistoryCategories = (props) => {
       item.title,
       allHistory
     );
+    console.log(
+      "this is the list of all history ",
+      finalFilteredListIncomesAndSpendings
+    );
 
     const categoryRecordsLength = finalFilteredListIncomesAndSpendings.length;
-
+    console.log(categoryRecordsLength);
     const renderRecordLine = (item) => {
       const finalDate = renderFinalDate(item?.date);
       const nameIconArrow =
@@ -79,7 +84,7 @@ const AllHistoryCategories = (props) => {
                   fontSize: SIZES.BASE * 3,
                 }}
               >
-                {item?.price * item.numberTimesPaid} DH
+                {calculateFinalPriceTransaction(item)} DH
               </Text>
             </View>
           );

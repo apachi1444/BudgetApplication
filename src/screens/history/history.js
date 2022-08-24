@@ -25,16 +25,14 @@ import { deleteTransaction } from "../../redux/features/user/userSpendingsAndInc
 
 import {
   calculateBudgetAndIncomesAndSpendings,
-  concatenateIncomesAndSpendings,
   renderColorCircleBudget,
   renderInformationsAboutBudgetIncomesAndSpendings,
   returnListIncomes,
   returnListSpendingWithNonNullPeriod,
-  returnTotalIncomes,
-  returnTotalSpendingWithNonNullPeriod,
 } from "./logic";
 import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../components/alertDelete";
+import { calculateFinalPriceTransaction } from "../../global/functions/store";
 const displayData = async () => {
   try {
     var aa = await AsyncStorage.getItem("user");
@@ -578,7 +576,7 @@ const History = ({ navigation }) => {
                   fontSize: SIZES.BASE * 3,
                 }}
               >
-                {item.price * item.numberTimesPaid} DH
+                {calculateFinalPriceTransaction(item)} DH
               </Text>
             </View>
           );

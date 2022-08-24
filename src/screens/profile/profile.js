@@ -5,7 +5,10 @@ import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
 import { profileStyles } from "./profileStyle";
 import { windowWidth } from "../../utils/dimensions";
-import { calculateBudgetSpendingsAndIncomes } from "../../global/functions/store";
+import {
+  calculateBudgetSpendingsAndIncomes,
+  returnNewFormDisplayPrice,
+} from "../../global/functions/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useSelector } from "react-redux";
@@ -127,7 +130,9 @@ export default ProfileUser = ({ navigation }) => {
           </View>
           <View style={profileStyles.textsInsideSpecificContainer}>
             <Title>Total Incomes</Title>
-            <Text style={profileStyles.caption}>{totalIncomes} DH</Text>
+            <Text style={profileStyles.caption}>
+              {returnNewFormDisplayPrice(totalIncomes)} DH
+            </Text>
           </View>
         </View>
 
@@ -149,7 +154,9 @@ export default ProfileUser = ({ navigation }) => {
           </View>
           <View style={profileStyles.textsInsideSpecificContainer}>
             <Title style={{ color: "white" }}>Total Spendings</Title>
-            <Text style={profileStyles.caption}>{totalSpendings} DH</Text>
+            <Text style={profileStyles.caption}>
+              {returnNewFormDisplayPrice(totalSpendings)} DH
+            </Text>
           </View>
         </View>
       </View>

@@ -13,11 +13,6 @@ import { displayData, findUser } from "../../global/async-storage";
 
 import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
-  async function extractUser() {
-    const result = await findUser();
-    console.log("this is the result from the welcome page ", result);
-    return result;
-  }
   useLayoutEffect(() => {
     (async () => {
       const value = await findUser();

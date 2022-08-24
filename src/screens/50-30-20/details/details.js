@@ -29,7 +29,10 @@ import {
 import { renderFinalDate } from "../../../global/functions/time";
 import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { deleteTransaction } from "../../../redux/features/user/userSpendingsAndIncomesCategories";
-import { calculateAllIncomes } from "../../../global/functions/store";
+import {
+  calculateAllIncomes,
+  calculateFinalPriceTransaction,
+} from "../../../global/functions/store";
 import { displayDeleteAlert } from "../../../components/alertDelete";
 
 const Details = ({ navigation, route }) => {
@@ -276,7 +279,7 @@ const Details = ({ navigation, route }) => {
               >
                 {" "}
                 {finalSign}
-                {price} DH
+                {calculateFinalPriceTransaction(item)} DH
               </Text>
             </View>
           );

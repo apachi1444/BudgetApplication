@@ -5,7 +5,14 @@ import { listCategories } from "../../consts/spendingCategories";
 export const total = (list) => {
   let total = 0;
   list.map((item) => {
-    console.log("this is the item qsdfqsdf ", item);
+    total += item.price;
+  });
+  return total;
+};
+
+export const totalSpendingsFunction = (list) => {
+  let total = 0;
+  list.map((item) => {
     total += item.price * item.numberTimesPaid;
   });
   return total;
@@ -79,7 +86,6 @@ export const calculateAllSpendings = (list) => {
 
 export const calculateAllIncomes = (list) => {
   let total = 0;
-  console.log("hahaaa", list);
   list.map((item) => {
     item.incomeElements.map((income) => {
       total += income.price;
@@ -111,4 +117,30 @@ export const calculateBudgetSpendingsAndIncomes = (list) => {
   let totalSpendings = calculateAllSpendingsCategories(list);
   let currentBudget = totalIncomes - totalSpendings;
   return { currentBudget, totalIncomes, totalSpendings };
+};
+
+export const calculateFinalPriceTransaction = (item) => {
+  if (item.transaction == "Income") {
+    return item?.price;
+  } else {
+    return item?.price * item.numberTimesPaid;
+  }
+};
+
+export const returnNewFormDisplayPrice = (price) => {
+  let priceString = price.toString();
+  // let priceString = Array.from(price.toString()).reverse().join("");
+  // var parts = priceString.match(/.{1,3}/g);
+  let compteur = 0;
+  let blocks = [];
+  for (let i = priceString.length - 1; i >= 0; i--) {
+    compteur++;
+    if (compteur == 3 || i == 0) {
+      blocks.unshift(priceString.slice(i, i + compteur));
+      compteur = 0;
+    }
+  }
+
+  var new_value = blocks.join(" ");
+  return new_value;
 };

@@ -78,7 +78,10 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const renderGuideExpensesSummary = () => {
     let { finalGuideDataExpensesSummary } = processCategoryDataToDisplay();
-
+    console.log(
+      "this is the final guide data expesens susmmary ",
+      finalGuideDataExpensesSummary
+    );
     const renderItem = ({ item }) => {
       let difference = item.difference;
       let colorAppropriate = returnColorAppropriateBorder(difference);
@@ -261,6 +264,12 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           totalSaves == 0 &&
           totalWants == 0 && (
             <View style={styles.mainContainer}>
+              <DetailsOptimalIncomes
+                isModalVisible={isModalVisible}
+                handleModal={handleModal}
+                totalIncomes={totalIncomes}
+                totals={arraySpendings}
+              />
               <View
                 style={{
                   justifyContent: "center",

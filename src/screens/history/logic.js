@@ -1,5 +1,5 @@
 import COLORS from "../../consts/color";
-import { total } from "../../global/functions/store";
+import { total, totalSpendingsFunction } from "../../global/functions/store";
 import {
   compareFirstTargetFinalDates,
   compareTwoDates,
@@ -70,7 +70,7 @@ export const calculateBudgetAndIncomesAndSpendings = (
   listIncomes,
   listSpendings
 ) => {
-  const totalSpendings = total(listSpendings);
+  const totalSpendings = totalSpendingsFunction(listSpendings);
   const totalIncomes = total(listIncomes);
   const currentBudget = totalIncomes - totalSpendings;
   return { currentBudget, totalIncomes, totalSpendings };
@@ -78,7 +78,9 @@ export const calculateBudgetAndIncomesAndSpendings = (
 
 export const filterListDependingOnCategory = (category, list) => {
   let finalFilteredListIncomesAndSpendings = [];
+  console.log("category of the user ", category);
   list.map((item) => {
+    console.log("category of the item ", category);
     if (item.category === category) {
       finalFilteredListIncomesAndSpendings.push(item);
     }

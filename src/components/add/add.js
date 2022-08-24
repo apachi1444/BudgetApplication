@@ -1,11 +1,10 @@
 import React, { useRef, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View, Switch } from "react-native";
 import { globalStyles } from "../../global/styles/globalStyles";
 import { addStyle } from "./addStyle";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../consts/color";
 import { SIZES } from "../../consts/theme";
-
 import { typeTransactions } from "../../consts/spendingCategories";
 import { windowHeight } from "../../utils/dimensions";
 import { ScrollView } from "react-native-gesture-handler";
@@ -14,12 +13,14 @@ import { Formik } from "formik";
 import SelectDropdown from "react-native-select-dropdown";
 
 import { useSelector, useDispatch } from "react-redux";
-import { calculateBudgetSpendingsAndIncomes } from "../../global/functions/store";
+import {
+  calculateBudgetSpendingsAndIncomes,
+  returnNewFormDisplayPrice,
+} from "../../global/functions/store";
 import { add as addTypeTransaction } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { addTransaction as addCategory } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 import { convertNumberTypeTransactionToName } from "../../global/functions/converter";
 import { FormSchema } from "../../consts/schemas";
-import { returnNewDate } from "../../global/functions/time";
 import { categories } from "../../consts/categories";
 
 const Add = ({ handleModal }) => {
@@ -38,9 +39,20 @@ const Add = ({ handleModal }) => {
   const [titleIncomeError, setTitleIncomeError] = useState(true);
   const [periodError, setPeriodError] = useState(true);
 
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
   const { currentBudget } = calculateBudgetSpendingsAndIncomes(list);
+
+  const [amount, setAmount] = useState(0);
+  const [amountIncome, setAmountIncome] = useState(0);
+
+  const [title, setTitle] = useState("");
+  const [titleIncome, setTitleIncome] = useState("");
+
+  const [period, setPeriod] = useState(0);
 
   const [category, setCategory] = useState(categories[0].name);
   const [categoryIncome, setCategoryIncome] = useState(categories[0].name);
@@ -109,7 +121,9 @@ const Add = ({ handleModal }) => {
             name="cash-outline"
             style={addStyle.iconCashCurrentBudget}
           />
-          <Text style={addStyle.currentBudgetNumber}>{currentBudget} DH</Text>
+          <Text style={addStyle.currentBudgetNumber}>
+            {returnNewFormDisplayPrice(currentBudget)} DH
+          </Text>
         </View>
       </View>
     );
@@ -131,6 +145,7 @@ const Add = ({ handleModal }) => {
           touched={props.touched.title}
           isNumeric={false}
           setter={setTitleError}
+          setterValue={setTitle}
         />
       </View>
     );
@@ -151,6 +166,7 @@ const Add = ({ handleModal }) => {
           touched={props.touched.titleIncome}
           isNumeric={false}
           setter={setTitleIncomeError}
+          setterValue={setTitleIncome}
         />
       </View>
     );
@@ -175,6 +191,7 @@ const Add = ({ handleModal }) => {
           touched={props.touched.amountIncome}
           isNumeric={true}
           setter={setAmountIncomeError}
+          setterValue={setAmountIncome}
         />
       </View>
     );
@@ -199,6 +216,7 @@ const Add = ({ handleModal }) => {
           touched={props.touched.amount}
           isNumeric={true}
           setter={setAmountError}
+          setterValue={setAmount}
         />
       </View>
     );
@@ -256,20 +274,34 @@ const Add = ({ handleModal }) => {
   const renderSetPeriodInputFormTextInput = (props) => {
     return (
       <View style={addStyle.containerInput}>
-        <Text style={addStyle.title}>Set Period</Text>
-        <Text style={addStyle.subTitle}>Choose Your period of payment</Text>
-        <Input
-          nameIcon="alarm"
-          placeholder="Type 0 if it is a non planned Spending"
-          isPassword={false}
-          onChangeText={props.handleChange("period")}
-          value={props.values.period}
-          onBlur={props.handleBlur("period")}
-          error={props.errors.period}
-          touched={props.touched.period}
-          isNumeric={true}
-          setter={setPeriodError}
-        />
+        <View style={globalStyles.flexRowAndAlignCenterAndSpaceBetweenJustify}>
+          <Text style={addStyle.title}>Set Period</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: COLORS.SECONDARY }}
+            thumbColor={isEnabled ? COLORS.PRIMARY : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        </View>
+        {isEnabled && (
+          <>
+            <Text style={addStyle.subTitle}>Choose Your period of payment</Text>
+            <Input
+              nameIcon="alarm"
+              placeholder="Type 0 if it is a non planned Spending"
+              isPassword={false}
+              onChangeText={props.handleChange("period")}
+              value={props.values.period}
+              onBlur={props.handleBlur("period")}
+              error={props.errors.period}
+              touched={props.touched.period}
+              isNumeric={true}
+              setter={setPeriodError}
+              setterValue={setPeriod}
+            />
+          </>
+        )}
       </View>
     );
   };
@@ -316,7 +348,7 @@ const Add = ({ handleModal }) => {
       );
     };
     return (
-      <View style={addStyle.containerInput}>
+      <View style={[addStyle.containerInput, { marginTop: SIZES.BASE * 2 }]}>
         <Text style={addStyle.title}>Classify Your {title}</Text>
         <View style={addStyle.containerCategories}>
           <FlatList
@@ -331,36 +363,24 @@ const Add = ({ handleModal }) => {
     );
   };
 
-  const Period = (props) => {
-    return renderSetPeriodInputFormTextInput(props);
-  };
+  // const Period = (props) => {
+  //   return renderSetPeriodInputFormTextInput(props);
+  // };
 
   const formikRef = useRef(null);
 
   const renderButtonDoneForm = (props) => {
-    let amount = props.values.amount;
-    let title = props.values.title;
-    let period = props.values.period;
     let doneSpending =
-      category != null && !periodError && !titleError && !amountError;
+      category != null &&
+      (!periodError || isEnabled == false) &&
+      !titleError &&
+      !amountError;
 
     const dispatch = useDispatch();
     return (
       <View
         onStartShouldSetResponder={() => {
           if (doneSpending) {
-            let newDate = returnNewDate(new Date(), period);
-            if (period != 0) {
-              // dispatch();
-              // addPlanned({
-              //   title: title,
-              //   price: Number(amount),
-              //   category: category,
-              //   date: newDate,
-              //   duration: period,
-              // })
-            }
-
             dispatch(
               addCategory({
                 transaction: convertNumberTypeTransactionToName(choosenPart),
@@ -399,8 +419,6 @@ const Add = ({ handleModal }) => {
   };
 
   const renderButtonDoneFormIncome = (props) => {
-    let amount = props.values.amountIncome;
-    let title = props.values.titleIncome;
     let doneIncome =
       categoryIncome != null &&
       !amountIncomeError != "" &&
@@ -415,9 +433,9 @@ const Add = ({ handleModal }) => {
               addCategory({
                 transaction: convertNumberTypeTransactionToName(choosenPart),
                 date: new Date(),
-                title: title,
-                price: Number(amount),
-                category: category,
+                title: titleIncome,
+                price: Number(amountIncome),
+                category: categoryIncome,
                 type: type,
               })
             );
@@ -426,9 +444,9 @@ const Add = ({ handleModal }) => {
               addTypeTransaction({
                 transaction: convertNumberTypeTransactionToName(choosenPart),
                 date: new Date(),
-                title: title,
-                price: Number(amount),
-                category: category,
+                title: titleIncome,
+                price: Number(amountIncome),
+                category: categoryIncome,
                 type: type,
               })
             );
