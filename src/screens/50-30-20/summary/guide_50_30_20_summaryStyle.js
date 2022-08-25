@@ -70,12 +70,21 @@ export const guideStyle = StyleSheet.create({
   },
   containerOneExpenseSummary: {
     flexDirection: "row",
-    height: 40,
     paddingHorizontal: SIZESS.radius,
+    paddingVertical: SIZES.BASE,
     borderRadius: 10,
     backgroundColor: COLORS.BOTTOMBAR,
     marginBottom: SIZESS.base * 2,
     borderWidth: 2,
     marginHorizontal: SIZES.BASE * 2,
+  },
+  containerModal: {
+    backgroundColor: COLORS.PRIMARY,
+    marginTop: SIZES.BASE * 2,
+    padding: SIZES.BASE * 2,
+    marginBottom: -SIZES.BASE * 6,
+    borderRadius: SIZES.BASE * 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

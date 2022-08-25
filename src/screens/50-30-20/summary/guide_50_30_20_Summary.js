@@ -12,10 +12,16 @@ import { VictoryPie } from "victory-native";
 import { useSelector } from "react-redux";
 import { globalStyles } from "../../../global/styles/globalStyles";
 import COLORS from "../../../consts/color";
-import { guideStyle as styles } from "./guide_50_30_20_summaryStyle";
+import {
+  guideStyle,
+  guideStyle as styles,
+} from "./guide_50_30_20_summaryStyle";
 import { SIZES, SIZESS } from "../../../consts/theme";
 import { ScrollView } from "react-native-gesture-handler";
-import { calculateAllIncomes } from "../../../global/functions/store";
+import {
+  calculateAllIncomes,
+  returnNewFormDisplayPrice,
+} from "../../../global/functions/store";
 import {
   needsSpendings,
   returnColorAppropriateBorder,
@@ -38,14 +44,14 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   });
 
   let data = useSelector((state) => {
-    return state.userSpendingsAndIncomes;
+    return state.userSpendingsAndIncomesCategories;
   });
+
+  console.log("this is data ", data);
 
   const totalIncomes = calculateAllIncomes(data);
 
-  console.log(data);
   const totalWants = wantsSpendings(data);
-  console.log(totalWants);
   const totalSaves = savesSpedings(data);
   const totalNeeds = needsSpendings(data);
 
@@ -78,10 +84,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const renderGuideExpensesSummary = () => {
     let { finalGuideDataExpensesSummary } = processCategoryDataToDisplay();
-    console.log(
-      "this is the final guide data expesens susmmary ",
-      finalGuideDataExpensesSummary
-    );
+
     const renderItem = ({ item }) => {
       let difference = item.difference;
       let colorAppropriate = returnColorAppropriateBorder(difference);
@@ -122,13 +125,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           </View>
 
           {/* Expenses */}
-          <View
-            style={{
-              justifyContent: "center",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
+          <View style={globalStyles.containerOneContainerSummary}>
             <Text
               style={{
                 color: colorAppropriate,
@@ -136,7 +133,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                 fontSize: SIZESS.base * 1.85,
               }}
             >
-              {item.y} DH - {difference} % {text}
+              {returnNewFormDisplayPrice(item.y)} DH - {difference} % {text}
             </Text>
           </View>
         </TouchableOpacity>
@@ -152,6 +149,27 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           showsVerticalScrollIndicator={true}
         />
       </View>
+    );
+  };
+
+  const renderModalDetailsOptimalSpendings = () => {
+    return (
+      <TouchableOpacity
+        style={guideStyle.containerModal}
+        onPress={() => {
+          handleModal(true);
+        }}
+      >
+        <Text style={{ color: "white" }}>
+          Click Here More Details About Incomes
+        </Text>
+        <DetailsOptimalIncomes
+          isModalVisible={isModalVisible}
+          handleModal={handleModal}
+          totalIncomes={totalIncomes}
+          totals={arraySpendings}
+        />
+      </TouchableOpacity>
     );
   };
 
@@ -223,28 +241,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
                   alignItems: "center",
                 }}
               >
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: COLORS.PRIMARY,
-                    marginTop: SIZES.BASE * 2,
-                    padding: SIZES.BASE * 2,
-                    marginBottom: -SIZES.BASE * 6,
-                    borderRadius: SIZES.BASE * 2,
-                  }}
-                  onPress={() => {
-                    handleModal(true);
-                  }}
-                >
-                  <Text style={{ color: "white" }}>
-                    Click Here More Details About Incomes
-                  </Text>
-                  <DetailsOptimalIncomes
-                    isModalVisible={isModalVisible}
-                    handleModal={handleModal}
-                    totalIncomes={totalIncomes}
-                    totals={arraySpendings}
-                  />
-                </TouchableOpacity>
+                {renderModalDetailsOptimalSpendings()}
                 <VictoryPie
                   data={finalGuideDataExpenses}
                   labels={(datum) => {
@@ -264,12 +261,9 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           totalSaves == 0 &&
           totalWants == 0 && (
             <View style={styles.mainContainer}>
-              <DetailsOptimalIncomes
-                isModalVisible={isModalVisible}
-                handleModal={handleModal}
-                totalIncomes={totalIncomes}
-                totals={arraySpendings}
-              />
+              <View style={{ padding: 20, paddingVertical: SIZES.BASE * 5 }}>
+                {renderModalDetailsOptimalSpendings()}
+              </View>
               <View
                 style={{
                   justifyContent: "center",

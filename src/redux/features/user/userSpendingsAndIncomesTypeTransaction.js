@@ -15,7 +15,7 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
   initialState: initialState,
   reducers: {
     add: (state, action) => {
-      let { type, transaction, period } = action.payload;
+      let { type, transaction, period, date } = action.payload;
       let numberTimesPaid = 0;
       if (period != 0) {
         numberTimesPaid = 0;
@@ -23,7 +23,6 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
         numberTimesPaid = 1;
       }
       state.map((item) => {
-        console.log(item, "haha");
         if (item.type == type) {
           let finalList =
             transaction == "Income"
@@ -39,8 +38,6 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
     },
     deleteGuide: (state, action) => {
       state = state.map((item) => {
-        console.log("this is the guide ", state);
-        console.log("this is the action payload ", action.payload);
         let { transaction, key, id, type } = action.payload;
         if (item.type == type) {
           if (transaction == "Income") {
@@ -56,8 +53,7 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
       });
     },
     updateTypeTransaction: (state, action) => {
-      const { id, period, key, date } = action.payload;
-      console.log(action.payload);
+      const { id, key } = action.payload;
       state.map((item) => {
         if (item.id == id) {
           item.spendingElements.map((elem) => {
@@ -67,7 +63,6 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
           });
         }
       });
-      console.log("this is the new state ", state);
     },
   },
 });

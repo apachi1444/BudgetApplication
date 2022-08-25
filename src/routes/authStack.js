@@ -5,6 +5,7 @@ import Login from "./../screens/login/login";
 import SignUp from "./../screens/signup/signup";
 import ProfileUserStack from "./profileUserStack";
 import { DrawerNavigator } from "./drawerNavigationStack";
+import { findUser } from "../global/async-storage";
 const AuthStack = createNativeStackNavigator();
 
 export default function () {
@@ -22,10 +23,9 @@ export default function () {
     })();
   }, []);
 
-  console.log("this is the value of the boolean ", loggedIn);
   return (
     <AuthStack.Navigator>
-      {!loggedIn == false && (
+      {loggedIn == false && (
         <>
           <AuthStack.Screen
             name="LoginPage"

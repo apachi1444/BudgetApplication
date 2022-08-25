@@ -20,6 +20,11 @@
       "versionCode": 1,
       "package": "com.yessinejaoua.budgetproject"
     },
-    "web": {}
+    "web": {},
+    "extra": {
+      "eas": {
+        "projectId": "7edd2b16-1261-4a04-b347-1f3ef58a8893"
+      }
+    }
   }
 }

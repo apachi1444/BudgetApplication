@@ -8,6 +8,8 @@ import COLORS from "../../../../consts/color";
 import { globalStyles } from "../../../../global/styles/globalStyles";
 import { styleModal } from "./style";
 import { needs, saves, wants } from "../../../../consts/percentages";
+import { need, save, want } from "../../../../consts/indexes";
+import { returnNewFormDisplayPrice } from "../../../../global/functions/store";
 
 const DetailsOptimalIncomes = (props) => {
   const { isModalVisible, handleModal, totalIncomes, totals } = props;
@@ -22,7 +24,7 @@ const DetailsOptimalIncomes = (props) => {
       key: 1,
       name: "Wants",
       percentage: wants,
-      current: totals[0],
+      current: totals[want],
       icon: "grid",
     },
     {
@@ -30,7 +32,7 @@ const DetailsOptimalIncomes = (props) => {
       key: 2,
       percentage: needs,
       name: "Needs",
-      current: totals[1],
+      current: totals[need],
       icon: "fast-food",
     },
     {
@@ -38,25 +40,16 @@ const DetailsOptimalIncomes = (props) => {
       percentage: saves,
       key: 3,
       name: "Saves",
-      current: totals[2],
+      current: totals[save],
       icon: "briefcase",
     },
   ];
-
-  console.log(totals);
 
   const renderModal = () => {
     const renderItem = (item) => {
       return (
         <>
-          <View
-            style={{
-              backgroundColor: COLORS.PRIMARY,
-              padding: SIZES.BASE * 4,
-              margin: SIZES.BASE * 3,
-              borderRadius: SIZES.BASE * 3,
-            }}
-          >
+          <View style={styleModal.containerOneDetail}>
             <View
               style={globalStyles.flexRowAndAlignCenterAndSpaceBetweenJustify}
             >
@@ -72,9 +65,13 @@ const DetailsOptimalIncomes = (props) => {
               </Text>
             </View>
             <Text style={styleModal.title}>Current Spendings </Text>
-            <Text style={styleModal.price}>{item.current} DH </Text>
+            <Text style={styleModal.price}>
+              {returnNewFormDisplayPrice(item.current)} DH{" "}
+            </Text>
             <Text style={styleModal.title}>Optimal Spending </Text>
-            <Text style={styleModal.price}>{item.totalOptimal} DH </Text>
+            <Text style={styleModal.price}>
+              {returnNewFormDisplayPrice(item.totalOptimal)} DH{" "}
+            </Text>
           </View>
         </>
       );
@@ -111,6 +108,15 @@ const DetailsOptimalIncomes = (props) => {
             >
               <Ionicons name="close-circle-outline" size={90} />
             </TouchableOpacity>
+
+            <View style={styleModal.containerOneDetail}>
+              <Text style={styleModal.title}>Total Incomes :</Text>
+
+              <Text style={styleModal.totalIncome}>
+                {returnNewFormDisplayPrice(totalIncomes)} DH
+              </Text>
+            </View>
+
             {array.map((item) => {
               return renderItem(item);
             })}

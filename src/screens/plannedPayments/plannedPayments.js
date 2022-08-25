@@ -32,6 +32,8 @@ const PlannedPayments = ({ navigation }) => {
   let finalList = useSelector(
     (state) => state.userSpendingsAndIncomesCategories
   );
+
+  console.log("this is the final list ", finalList);
   const dispatch = useDispatch();
   const filteredNonEmptyCategories =
     returnfilteredNonEmptyCategories(finalList);

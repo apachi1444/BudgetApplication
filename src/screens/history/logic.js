@@ -26,16 +26,27 @@ export const returnFilteredListInterval = (start, end, list) => {
   let finalFilteredListIncomes = [];
   list.map((item) => {
     item.spendingElements.map((spending) => {
+      // spending.date = new Date(spending.date);
+      // const { date } = spending;
       const { date } = spending;
-      const comparaisonDates = compareFirstTargetFinalDates(start, date, end);
-
+      const comparaisonDates = compareFirstTargetFinalDates(
+        start,
+        new Date(date),
+        end
+      );
+      console.log("sdf", comparaisonDates);
+      console.log("this is only one spending ", spending);
       if (comparaisonDates && spending.numberTimesPaid != 0) {
         finalFilteredListSpendings.push(spending);
       }
     });
     item.incomeElements.map((income) => {
       const { date } = income;
-      const comparaisonDates = compareFirstTargetFinalDates(start, date, end);
+      const comparaisonDates = compareFirstTargetFinalDates(
+        start,
+        new Date(date),
+        end
+      );
       if (comparaisonDates) {
         finalFilteredListIncomes.push(income);
       }
@@ -50,14 +61,14 @@ export const returnFilteredListSingleDay = (day, list) => {
   list.map((item) => {
     item.spendingElements.map((spending) => {
       const { date } = spending;
-      const comparaisonBothDates = compareTwoDates(date, day);
+      const comparaisonBothDates = compareTwoDates(new Date(date), day);
       if (comparaisonBothDates && spending.numberTimesPaid != 0) {
         finalFilteredListSpendings.push(spending);
       }
     });
     item.incomeElements.map((income) => {
       const { date } = income;
-      const comparaisonBothDates = compareTwoDates(date, day);
+      const comparaisonBothDates = compareTwoDates(new Date(date), day);
       if (comparaisonBothDates) {
         finalFilteredListIncomes.push(income);
       }
@@ -71,6 +82,8 @@ export const calculateBudgetAndIncomesAndSpendings = (
   listSpendings
 ) => {
   const totalSpendings = totalSpendingsFunction(listSpendings);
+
+  // console.warn(totalSpendings);
   const totalIncomes = total(listIncomes);
   const currentBudget = totalIncomes - totalSpendings;
   return { currentBudget, totalIncomes, totalSpendings };
@@ -78,9 +91,7 @@ export const calculateBudgetAndIncomesAndSpendings = (
 
 export const filterListDependingOnCategory = (category, list) => {
   let finalFilteredListIncomesAndSpendings = [];
-  console.log("category of the user ", category);
   list.map((item) => {
-    console.log("category of the item ", category);
     if (item.category === category) {
       finalFilteredListIncomesAndSpendings.push(item);
     }
@@ -117,8 +128,11 @@ export const renderInformationsAboutBudgetIncomesAndSpendings = (
   finalDate
 ) => {
   if (timeOptionSelected == 2) {
+    console.log("qsdfsqdfsqdfsd");
+    console.log(typeof firstDate, typeof finalDate);
     const { finalFilteredListIncomes, finalFilteredListSpendings } =
       returnFilteredListInterval(firstDate, finalDate, list);
+    console.log(finalFilteredListSpendings);
     return {
       finalListIncomes: finalFilteredListIncomes,
       finalListSpendings: finalFilteredListSpendings,

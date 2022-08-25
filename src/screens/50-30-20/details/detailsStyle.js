@@ -150,6 +150,7 @@ export const detailsStyle = StyleSheet.create({
     backgroundColor: COLORS.BOTTOMBAR,
     borderRadius: SIZES.BASE * 3,
     borderWidth: 0.5,
+    width: windowWidth * 0.4,
   },
   textDateChoosen: {
     fontSize: 20,

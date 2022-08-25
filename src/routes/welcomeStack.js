@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { useState } from "react";
 import { useLayoutEffect } from "react";
+import { findUser } from "../global/async-storage";
 import authStack from "./authStack";
 import welcomePageStack from "./welcomePageStack";
 

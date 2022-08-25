@@ -44,10 +44,6 @@ const AllHistoryCategories = (props) => {
       item.title,
       allHistory
     );
-    console.log(
-      "this is the list of all history ",
-      finalFilteredListIncomesAndSpendings
-    );
 
     const categoryRecordsLength = finalFilteredListIncomesAndSpendings.length;
     console.log(categoryRecordsLength);

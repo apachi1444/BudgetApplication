@@ -1,39 +1,33 @@
-import { total } from "../../global/functions/store";
+import {
+  calculateFinalPriceTransaction,
+  total,
+} from "../../global/functions/store";
 import { compareTwoDates } from "../../global/functions/time";
 
 export const concatenateIncomesAndSpendingsOneTypeTransactionAndTotalSpendingAndTotalIncomes =
   (item, day) => {
-    let finalArrayContainingSpendingsAndIncomes = [];
+    let finalArrayContainingSpendings = [];
 
-    let totalIncomes = 0;
     let totalSpendings = 0;
-    item.incomeElements.map((incomeElement) => {
-      const { date } = incomeElement;
-      const comparaisonBothDates = compareTwoDates(date, day);
 
-      if (comparaisonBothDates) {
-        totalIncomes += incomeElement.price;
-        finalArrayContainingSpendingsAndIncomes.push({
-          id: finalArrayContainingSpendingsAndIncomes.length + 1,
-          ...incomeElement,
-        });
-      }
-    });
-    item.spendingElements.map((spendingElement) => {
-      const { date } = spendingElement;
-      const comparaisonBothDates = compareTwoDates(date, day);
-      if (comparaisonBothDates) {
-        totalSpendings += spendingElement.price;
-        finalArrayContainingSpendingsAndIncomes.push({
-          id: finalArrayContainingSpendingsAndIncomes.length + 1,
-          ...spendingElement,
-        });
-      }
-    });
+    if (item.spendingElements.length > 0) {
+      item.spendingElements.map((spendingElement) => {
+        const { date } = spendingElement;
+        console.log(day, "lksdjfklj");
+        const comparaisonBothDates = compareTwoDates(day);
+        if (comparaisonBothDates) {
+          totalSpendings += calculateFinalPriceTransaction(spendingElement);
+          finalArrayContainingSpendings.push({
+            id: finalArrayContainingSpendings.length + 1,
+            ...spendingElement,
+          });
+        }
+      });
+    }
+
     return {
-      finalArrayContainingSpendingsAndIncomes,
+      finalArrayContainingSpendings,
       totalSpendings,
-      totalIncomes,
     };
   };
 
@@ -74,9 +68,9 @@ export const wantsSpendings = (data) => {
 };
 
 export const returnOptimalIncomes = (totalIncomes) => {
-  const totalOptimalSavesIncomes = (totalIncomes * 0.2).toFixed(0);
-  const totalOptimamWantsIncomes = (totalIncomes * 0.3).toFixed(0);
-  const totalOptimalNeedsIncomes = (totalIncomes * 0.5).toFixed(0);
+  const totalOptimalSavesIncomes = (totalIncomes * (saves / 100)).toFixed(0);
+  const totalOptimamWantsIncomes = (totalIncomes * (wants / 100)).toFixed(0);
+  const totalOptimalNeedsIncomes = (totalIncomes * (needs / 100)).toFixed(0);
   return {
     totalOptimamWantsIncomes,
     totalOptimalNeedsIncomes,
@@ -231,4 +225,52 @@ export const returnFinalChartData = (
     },
   ];
   return data;
+};
+
+export const returnListIncomes = (data, day) => {
+  let finalArrayContainingIncomes = [];
+  let totalIncomesDaySelected = 0;
+  data.map((item) => {
+    item.incomeElements.map((incomeElement) => {
+      const { date } = incomeElement;
+      const comparaisonBothDates = compareTwoDates(new Date(date), day);
+      if (comparaisonBothDates) {
+        totalIncomesDaySelected += incomeElement.price;
+        finalArrayContainingIncomes.push({
+          id: finalArrayContainingIncomes.length + 1,
+          ...incomeElement,
+        });
+      }
+    });
+  });
+
+  return { finalArrayContainingIncomes, totalIncomesDaySelected };
+};
+
+export const returnListSpendingsAndTotalSpendings = (item, day) => {
+  let finalArrayContainingSpendings = [];
+  let totalSpendings = 0;
+  item.spendingElements.map((spendingElement) => {
+    const { date } = spendingElement;
+    const comparaisonBothDates = compareTwoDates(new Date(date), day);
+    if (comparaisonBothDates && spendingElement.numberTimesPaid != 0) {
+      totalSpendings += spendingElement.numberTimesPaid * spendingElement.price;
+      finalArrayContainingSpendings.push({
+        id: finalArrayContainingSpendings.length + 1,
+        ...spendingElement,
+      });
+    }
+  });
+
+  return { finalArrayContainingSpendings, totalSpendings };
+};
+
+export const returnFinalStringDate = (date) => {
+  return (
+    new Date(date).getFullYear() +
+    " - " +
+    (new Date(date).getMonth() + 1) +
+    " - " +
+    new Date(date).getDate()
+  );
 };

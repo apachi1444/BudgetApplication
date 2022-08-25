@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { categories } from "../../consts/categories";
-import { listCategories } from "../../consts/spendingCategories";
+import { need, save, want } from "../../consts/indexes";
+import { compareTwoDates } from "./time";
 
 export const total = (list) => {
   let total = 0;
@@ -50,7 +49,7 @@ export const renderMessageTimeRemaining = () => {
 };
 
 export const calculateSpendingsWants = (list) => {
-  let spendingObject = list[0];
+  let spendingObject = list[want];
   let totalSpendings = 0;
   spendingObject.spendingElements.map((item) => {
     totalSpendings += item.price;
@@ -59,7 +58,7 @@ export const calculateSpendingsWants = (list) => {
 };
 
 export const calculateSpendingsNeeds = (list) => {
-  let spendingObject = list[1];
+  let spendingObject = list[need];
   let totalSpendings = 0;
   spendingObject.spendingElements.map((item) => {
     totalSpendings += item.price;
@@ -68,7 +67,7 @@ export const calculateSpendingsNeeds = (list) => {
 };
 
 export const calculateSpendingsSaves = (list) => {
-  let spendingObject = list[2];
+  let spendingObject = list[save];
   let totalSpendings = 0;
   spendingObject.spendingElements.map((item) => {
     totalSpendings += item.price;
@@ -92,6 +91,16 @@ export const calculateAllIncomes = (list) => {
     });
   });
   return total;
+};
+
+export const returnListAllIncomes = () => {
+  let finalArrayIncomes = [];
+  list.map((item) => {
+    item.incomeElements.map((income) => {
+      total += income.price;
+    });
+  });
+  return finalArrayIncomes;
 };
 export const calculateAllIncomesCategories = (list) => {
   let total = 0;

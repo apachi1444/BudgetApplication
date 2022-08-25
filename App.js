@@ -17,11 +17,11 @@ export default function App() {
   return (
     <>
       <Provider store={store}>
-        <PersistGate loading={<LoadingMarkup />} persistor={persistor}>
-          <NavigationContainer theme={theme}>
-            <WelcomeStack></WelcomeStack>
-          </NavigationContainer>
-        </PersistGate>
+        {/* <PersistGate loading={<LoadingMarkup />} persistor={persistor}> */}
+        <NavigationContainer theme={theme}>
+          <WelcomeStack></WelcomeStack>
+        </NavigationContainer>
+        {/* </PersistGate> */}
       </Provider>
     </>
   );

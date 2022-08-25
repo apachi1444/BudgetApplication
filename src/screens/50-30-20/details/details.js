@@ -25,6 +25,10 @@ import {
   renderCurrentBudget,
   returnFinalChartData,
   returnPercentageUsedAndRemaining,
+  returnListIncomes,
+  returnListSpendings,
+  returnListSpendingsAndTotalSpendings,
+  returnFinalStringDate,
 } from "../logic";
 import { renderFinalDate } from "../../../global/functions/time";
 import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
@@ -32,6 +36,7 @@ import { deleteTransaction } from "../../../redux/features/user/userSpendingsAnd
 import {
   calculateAllIncomes,
   calculateFinalPriceTransaction,
+  returnNewFormDisplayPrice,
 } from "../../../global/functions/store";
 import { displayDeleteAlert } from "../../../components/alertDelete";
 
@@ -53,16 +58,21 @@ const Details = ({ navigation, route }) => {
   const totalIncomes = calculateAllIncomes(data);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  let { finalArrayContainingSpendingsAndIncomes, totalSpendings } =
-    concatenateIncomesAndSpendingsOneTypeTransactionAndTotalSpendingAndTotalIncomes(
-      final[0],
-      date
-    );
 
-  let currentBudget = renderCurrentBudget(totalSpendings, totalIncomes);
+  let { finalArrayContainingSpendings, totalSpendings } =
+    returnListSpendingsAndTotalSpendings(final[0], new Date(date));
 
-  let finalStringDate =
-    date.getFullYear() + " - " + (date.getMonth() + 1) + " - " + date.getDate();
+  let { finalArrayContainingIncomes, totalIncomesDaySelected } =
+    returnListIncomes(data, new Date(date));
+  let finalArrayContainingSpendingsAndIncomes =
+    finalArrayContainingSpendings.concat(finalArrayContainingIncomes);
+  console.log("this iqsdfklsjdqlfk", finalArrayContainingSpendingsAndIncomes);
+  let currentBudget = renderCurrentBudget(
+    totalSpendings,
+    totalIncomesDaySelected
+  );
+
+  let finalStringDate = returnFinalStringDate(date);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -110,7 +120,8 @@ const Details = ({ navigation, route }) => {
           }}
         >
           <Text style={[detailsStyle.title, { color: "white" }]}>
-            Optimal {item.name} Income : {totalOptimal} DH
+            Optimal {item.name} Income :
+            {returnNewFormDisplayPrice(totalOptimal)} DH
           </Text>
         </View>
       );
@@ -203,20 +214,14 @@ const Details = ({ navigation, route }) => {
             </View>
 
             {/* Expenses */}
-            <View
-              style={{
-                justifyContent: "center",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
+            <View style={globalStyles.containerOneContainerSummary}>
               <Text
                 style={{
                   fontWeight: "bold",
                   fontSize: SIZESS.base * 1.85,
                 }}
               >
-                {item.total} DH - {item.label}
+                {returnNewFormDisplayPrice(item.total)} DH - {item.label}
               </Text>
             </View>
           </TouchableOpacity>
@@ -247,6 +252,7 @@ const Details = ({ navigation, route }) => {
 
   const renderRectangleDetailsList = () => {
     const renderHistoryItem = ({ item }) => {
+      console.log("this is the item of our flat list ", item);
       const { title, price, date, transaction } = item;
       const renderTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
@@ -294,7 +300,7 @@ const Details = ({ navigation, route }) => {
               }}
             >
               <Text style={detailsStyle.dateHistoryItem}>
-                {renderFinalDate(date)}
+                {renderFinalDate(new Date(date))}
               </Text>
               <Ionicons
                 name="calendar-outline"
@@ -382,13 +388,13 @@ const Details = ({ navigation, route }) => {
               style={{
                 justifyContent: "space-between",
                 flexDirection: "row",
-                alignItems: "flex-end",
+                alignItems: "center",
               }}
             >
               <View style={detailsStyle.containerChoosenDate}>
                 <Ionicons name="calculator" size={25} color={COLORS.PRIMARY} />
                 <Text style={detailsStyle.textDateChoosen}>
-                  {currentBudget} DH
+                  {returnNewFormDisplayPrice(currentBudget)} DH
                 </Text>
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
@@ -427,6 +433,10 @@ const Details = ({ navigation, route }) => {
 
         {show && (
           <View style={detailsStyle.containerHistoryDetails}>
+            {console.log(
+              "this is the final array of incoems and spendings ",
+              finalArrayContainingSpendingsAndIncomes
+            )}
             <FlatList
               data={finalArrayContainingSpendingsAndIncomes}
               renderItem={(item) => renderHistoryItem(item)}

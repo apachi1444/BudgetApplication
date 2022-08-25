@@ -16,7 +16,6 @@ import { historyStyle } from "./historyStyle";
 import { windowHeight } from "../../utils/dimensions";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useSelector, useDispatch } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import AllHistoryCategories from "./data/allHistoryCategories";
 import { renderFinalDate } from "../../global/functions/time";
 import { categories } from "../../consts/categories";
@@ -33,13 +32,7 @@ import {
 import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../components/alertDelete";
 import { calculateFinalPriceTransaction } from "../../global/functions/store";
-const displayData = async () => {
-  try {
-    var aa = await AsyncStorage.getItem("user");
-  } catch (e) {
-    console.warn("this is the error moth", e);
-  }
-};
+import { NUMBERCATEGORIESATFIRST } from "../../consts/consts";
 
 const renderProfileInformations = (navigation) => {
   return (
@@ -145,8 +138,7 @@ const History = ({ navigation }) => {
     hideFinalDatePicker();
   };
 
-  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
-
+  let list = useSelector((state) => state.userSpendingsAndIncomes);
   const renderCalendarRectangle = () => {
     const renderDateInputsInterval = () => {
       const renderFirstDateInput = () => {
@@ -294,8 +286,11 @@ const History = ({ navigation }) => {
       finalDate
     );
 
-  console.log("this is the final list of incomes ", finalListIncomes);
-  console.log("this is the final list of spendings ", finalListSpendings);
+  console.log(
+    "this is the list of the final list incomes and spendings ",
+    finalListIncomes,
+    finalListSpendings
+  );
 
   const { currentBudget, totalIncomes, totalSpendings } =
     calculateBudgetAndIncomesAndSpendings(finalListIncomes, finalListSpendings);
@@ -466,7 +461,10 @@ const History = ({ navigation }) => {
         </TouchableOpacity>
       );
     };
-    const categoriesWithOnly6Elements = categories.slice(0, 6);
+    const categoriesWithOnly6Elements = categories.slice(
+      0,
+      NUMBERCATEGORIESATFIRST
+    );
     return (
       <View>
         <View>
@@ -545,8 +543,8 @@ const History = ({ navigation }) => {
   const renderHistoryCategory = () => {
     const listSpendings = returnListSpendingWithNonNullPeriod(list, title);
     const listIncomes = returnListIncomes(list, title);
-    let allHistory = listSpendings.concat(listIncomes);
 
+    let allHistory = listSpendings.concat(listIncomes);
     const renderHistoryItem = (item) => {
       const { transaction } = item;
 

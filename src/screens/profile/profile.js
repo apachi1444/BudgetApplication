@@ -17,14 +17,12 @@ import { findUser } from "../../global/async-storage";
 
 export default ProfileUser = ({ navigation }) => {
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
-
   const [email, setEmail] = useState("yessine");
 
   useEffect(() => {
     (async () => {
       const value = await findUser();
       const obj = JSON.parse(value);
-      console.log(obj.email, "lkjsdf");
       setEmail(obj.email);
     })();
 
@@ -106,7 +104,9 @@ export default ProfileUser = ({ navigation }) => {
             style={profileStyles.imageBudget}
           />
           <View style={profileStyles.viewTextInside}>
-            <Text style={profileStyles.textInside}>{currentBudget} DH</Text>
+            <Text style={profileStyles.textInside}>
+              {returnNewFormDisplayPrice(currentBudget)} DH
+            </Text>
           </View>
         </View>
         <View style={profileStyles.viewMyBudgetTitle}>
@@ -210,55 +210,6 @@ export default ProfileUser = ({ navigation }) => {
           />
         </View>
       </>
-    );
-  };
-
-  const renderTotalSpendingAndIncomesOldVersion = () => {
-    return (
-      <View style={profileStyles.incomesAndSpendings}>
-        <View
-          style={
-            profileStyles.specificContainerInsideIncomesAndSpendingsContainer
-          }
-        >
-          <View>
-            <FontAwesome name="close" size={25} />
-          </View>
-
-          <View style={profileStyles.textsInsideSpecificContainer}>
-            <Text>incomes</Text>
-            <Text style={profileStyles.textPriceOfSpecificContainer}>
-              {" "}
-              600.12 DH
-            </Text>
-          </View>
-        </View>
-        <View
-          style={
-            profileStyles.specificContainerInsideIncomesAndSpendingsContainer
-          }
-        >
-          <View>
-            <FontAwesome name="close" size={25} />
-          </View>
-
-          <View style={profileStyles.textsInsideSpecificContainer}>
-            <Text>spendings</Text>
-            <Text style={profileStyles.textPriceOfSpecificContainer}>
-              {" "}
-              600.12 DH
-            </Text>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  const renderDivider = () => {
-    return (
-      <View style={profileStyles.divider}>
-        <Text> Hahah</Text>
-      </View>
     );
   };
 

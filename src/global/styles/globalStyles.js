@@ -163,6 +163,12 @@ export const globalStyles = StyleSheet.create({
     height: SIZES.BASE * 8,
     borderRadius: SIZES.BASE * 4,
   },
+  containerOneContainerSummary: {
+    width: windowWidth * 0.51,
+    textAlign: "right",
+    alignSelf: "center",
+    alignItems: "flex-end",
+  },
 });
 
 // export const images = {

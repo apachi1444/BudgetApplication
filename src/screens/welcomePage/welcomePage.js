@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { useEffect } from "react";
 import { useLayoutEffect } from "react";
 import {
   Animated,
@@ -9,12 +8,15 @@ import {
   TouchableOpacity,
   PanResponder,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { displayData, findUser } from "../../global/async-storage";
 
 import { welcomePageStyle } from "./welcomePageStyle";
 const WelcomePage = ({ navigation }) => {
   useLayoutEffect(() => {
     (async () => {
+      await AsyncStorage.clear();
       const value = await findUser();
       const obj = JSON.parse(value);
       if (obj.email != "") {

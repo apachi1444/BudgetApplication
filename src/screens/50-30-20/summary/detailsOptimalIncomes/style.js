@@ -18,4 +18,14 @@ export const styleModal = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  totalIncome: {
+    fontWeight: "bold",
+    fontSize: 25,
+  },
+  containerOneDetail: {
+    backgroundColor: COLORS.PRIMARY,
+    padding: SIZES.BASE * 4,
+    margin: SIZES.BASE * 3,
+    borderRadius: SIZES.BASE * 3,
+  },
 });
