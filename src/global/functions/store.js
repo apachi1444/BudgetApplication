@@ -1,5 +1,5 @@
 import { need, save, want } from "../../consts/indexes";
-import { compareTwoDates } from "./time";
+import { compareFirstTargetFinalDates, compareTwoDates } from "./time";
 
 export const total = (list) => {
   let total = 0;
@@ -102,6 +102,7 @@ export const returnListAllIncomes = () => {
   });
   return finalArrayIncomes;
 };
+
 export const calculateAllIncomesCategories = (list) => {
   let total = 0;
   list.map((item) => {
@@ -111,6 +112,7 @@ export const calculateAllIncomesCategories = (list) => {
   });
   return total;
 };
+
 export const calculateAllSpendingsCategories = (list) => {
   let total = 0;
   list.map((item) => {
@@ -119,6 +121,12 @@ export const calculateAllSpendingsCategories = (list) => {
     });
   });
   return total;
+};
+
+export const calculateSpendingsAndIncomes = (list) => {
+  const spendings = calculateAllSpendingsCategories(list);
+  const incomes = calculateAllIncomesCategories(list);
+  return { spendings, incomes };
 };
 
 export const calculateBudgetSpendingsAndIncomes = (list) => {
@@ -152,4 +160,173 @@ export const returnNewFormDisplayPrice = (price) => {
 
   var new_value = blocks.join(" ");
   return new_value;
+};
+
+export const doComparaisonAllTime = (spending) => {
+  return spending.numberTimesPaid != 0;
+};
+
+export const doComparaisonSingleDaySpending = (
+  compareTwoDates,
+  spending,
+  single
+) => {
+  const { date } = spending;
+  const comparaisonDates = compareTwoDates(new Date(date), single);
+
+  return comparaisonDates && spending.numberTimesPaid != 0;
+};
+
+export const doComparaisonSingleDayIncome = (
+  compareTwoDates,
+  income,
+  single
+) => {
+  const { date } = income;
+  const comparaisonDates = compareTwoDates(new Date(date), single);
+
+  return comparaisonDates;
+};
+
+export const doComparaisonInterval = (
+  compareFirstTargetFinalDates,
+  spending,
+  start,
+  end
+) => {
+  const { date } = spending;
+  const comparaisonDates = compareFirstTargetFinalDates(
+    start,
+    new Date(date),
+    end
+  );
+
+  return comparaisonDates && spending.numberTimesPaid != 0;
+};
+
+export const doComparaisonIntervalIncome = (
+  compareFirstTargetFinalDates,
+  income,
+  start,
+  end
+) => {
+  const { date } = income;
+  const comparaisonDates = compareFirstTargetFinalDates(
+    start,
+    new Date(date),
+    end
+  );
+
+  return comparaisonDates;
+};
+
+export const returnFilteredListInterval = (start, end, list, title) => {
+  let finalList = [];
+  list = list.map((item) => {
+    const spendings = item.spendingElements.filter((spending) => {
+      if (title == "All" || item.title == title) {
+        return doComparaisonInterval(
+          compareFirstTargetFinalDates,
+          spending,
+          start,
+          end
+        );
+      }
+    });
+
+    const incomes = item.incomeElements.filter((income) => {
+      if (title == "All" || item.title == title) {
+        return doComparaisonIntervalIncome(
+          compareFirstTargetFinalDates,
+          income,
+          start,
+          end
+        );
+      }
+    });
+    finalList.push({ ...item, spendings, incomes });
+  });
+  return finalList;
+};
+export const returnFilteredListAllTime = (list, title) => {
+  let finalList = [];
+  list.map((item) => {
+    const spendings = item.spendingElements.filter((spending) => {
+      if (title == "All" || item.title == title) {
+        return doComparaisonAllTime(spending);
+      }
+    });
+    const incomes = item.incomeElements.filter((income) => {
+      if (title == "All" || item.title == title) {
+        return true;
+      }
+    });
+    finalList.push({ ...item, spendings, incomes });
+  });
+  return finalList;
+};
+
+export const returnFilteredListSingleDay = (day, list, title) => {
+  let finalList = [];
+  list = list.map((item) => {
+    const spendings = item.spendingElements.filter((spending) => {
+      if (title == "All" || item.title == title) {
+        return doComparaisonSingleDaySpending(compareTwoDates, spending, day);
+      }
+    });
+
+    const incomes = item.incomeElements.filter((income) => {
+      if (title == "All" || item.title == title) {
+        return doComparaisonSingleDayIncome(compareTwoDates, income, day);
+      }
+    });
+    finalList.push({ ...item, spendings, incomes });
+  });
+  return finalList;
+};
+
+export const filterResultsDependingOnCategoryAndDate = (
+  list,
+  timeOptionSelected,
+  title,
+  singleDate,
+  firstDate,
+  finalDate
+) => {
+  if (timeOptionSelected == 2) {
+    return returnFilteredListInterval(firstDate, finalDate, list, title);
+  } else if (timeOptionSelected == 1) {
+    return returnFilteredListAllTime(list, title);
+  } else {
+    return returnFilteredListSingleDay(singleDate, list, title);
+  }
+};
+
+export const returnFinalLength = (list) => {
+  let total = 0;
+  list.map((item) => {
+    total += item.incomes.length;
+    total += item.spendings.length;
+  });
+
+  return total;
+};
+
+export const returnFinalLengthSpecificCategory = (item) => {
+  return item.incomes.length + item.spendings.length;
+};
+
+export const concatenateIncomesAndSpendings = (item) => {
+  return item.incomes.concat(item.spendings);
+};
+
+export const returnFinalListSpecificCategory = (list, title) => {
+  let finalList = [];
+  list.map((item) => {
+    if (item.title == title) {
+      item.spendings.map((spending) => finalList.push(spending));
+      item.incomes.map((income) => finalList.push(income));
+    }
+  });
+  return finalList;
 };

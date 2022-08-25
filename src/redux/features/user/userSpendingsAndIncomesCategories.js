@@ -48,7 +48,7 @@ export const userSpendingsAndIncomesCategories = createSlice({
         if (item.id == id) {
           item.spendingElements.map((elem) => {
             if (elem.key == key) {
-              let newDate = returnNewDate(date, period);
+              let newDate = returnNewDate(new Date(date), period);
               elem.newDate = newDate;
               elem.numberTimesPaid++;
             }

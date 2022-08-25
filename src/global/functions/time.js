@@ -6,7 +6,11 @@ export const returnNewDate = (date, numberDays) => {
 
 export const renderFinalDate = (date) => {
   return (
-    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+    new Date(date).getFullYear() +
+    "-" +
+    (new Date(date).getMonth() + 1) +
+    "-" +
+    new Date(date).getDate()
   );
 };
 
@@ -43,8 +47,8 @@ export const compareFirstTargetFinalDates = (first, target, final) => {
 };
 
 export const returnYearMonthDay = (date) => {
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
+  let year = new Date(date).getFullYear();
+  let month = new Date(date).getMonth() + 1;
+  let day = new Date(date).getDate();
   return { year, month, day };
 };

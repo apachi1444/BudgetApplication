@@ -7,7 +7,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
 
 const persistConfig = {
-  key: "root",
+  key: "yours",
   storage: AsyncStorage,
 };
 const rootReducer = combineReducers({
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       immutableCheck: false,

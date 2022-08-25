@@ -33,7 +33,6 @@ const PlannedPayments = ({ navigation }) => {
     (state) => state.userSpendingsAndIncomesCategories
   );
 
-  console.log("this is the final list ", finalList);
   const dispatch = useDispatch();
   const filteredNonEmptyCategories =
     returnfilteredNonEmptyCategories(finalList);
@@ -89,7 +88,9 @@ const PlannedPayments = ({ navigation }) => {
       const periodMilliseconds = convertDateToMilliseconds(
         period * (numberTimesPaid + 1)
       );
-      const newDateAfterPeriod = new Date(periodMilliseconds + date.getTime());
+      const newDateAfterPeriod = new Date(
+        periodMilliseconds + new Date(date).getTime()
+      );
 
       const {
         year: yearNewDateAfterPeriod,

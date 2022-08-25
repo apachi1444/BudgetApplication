@@ -6,53 +6,44 @@ import { SIZES } from "../../../consts/theme";
 import { renderFinalDate } from "../../../global/functions/time";
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { historyStyle } from "../historyStyle";
-import {
-  filterListDependingOnCategory,
-  renderInformationsAboutBudgetIncomesAndSpendings,
-  returnListIncomes,
-  returnListSpendingWithNonNullPeriod,
-} from "../logic";
 import { allHistoryStyle } from "./allHistoryCategoriesStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTransaction } from "../../../redux/features/user/userSpendingsAndIncomesCategories";
 import { deleteGuide } from "../../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../../components/alertDelete";
-import { calculateFinalPriceTransaction } from "../../../global/functions/store";
+import {
+  calculateFinalPriceTransaction,
+  concatenateIncomesAndSpendings,
+  filterResultsDependingOnCategoryAndDate,
+  returnFinalLengthSpecificCategory,
+} from "../../../global/functions/store";
 const AllHistoryCategories = (props) => {
   const { finalDate, firstDate, singleDate, timeOptionSelected } = props;
 
-  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
+  let data = useSelector((state) => state.userSpendingsAndIncomesCategories);
   const dispatch = useDispatch();
+  const finalList = filterResultsDependingOnCategoryAndDate(
+    data,
+    timeOptionSelected,
+    "All",
+    singleDate,
+    firstDate,
+    finalDate
+  );
   const renderOneCategory = (item) => {
-    const { finalListIncomes, finalListSpendings } =
-      renderInformationsAboutBudgetIncomesAndSpendings(
-        list,
-        timeOptionSelected,
-        singleDate,
-        firstDate,
-        finalDate
-      );
-
-    let arrayIncomesSpendings = finalListSpendings.concat(finalListIncomes);
+    // let arrayIncomesSpendings = finalListSpendings.concat(finalListIncomes);
+    let categoryRecordsLength = returnFinalLengthSpecificCategory(item);
     const iconCategory = item.icon;
 
-    const listSpendings = returnListSpendingWithNonNullPeriod(list, "All");
-    const listIncomes = returnListIncomes(list, "All");
-    let allHistory = listSpendings.concat(listIncomes);
-
-    const finalFilteredListIncomesAndSpendings = filterListDependingOnCategory(
-      item.title,
-      allHistory
-    );
-
-    const categoryRecordsLength = finalFilteredListIncomesAndSpendings.length;
-    console.log(categoryRecordsLength);
     const renderRecordLine = (item) => {
       const finalDate = renderFinalDate(item?.date);
+      console.log("this is the item in our rectangle ", { ...item });
       const nameIconArrow =
         item.transaction == "Spending"
           ? "arrow-down-circle"
           : "arrow-up-circle";
+
+      console.log(item.title, "hahahah");
       const color = item.transaction == "Spending" ? COLORS.RED : COLORS.GREEN;
       const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
@@ -232,30 +223,31 @@ const AllHistoryCategories = (props) => {
         </View>
       );
     };
+    {
+      if (categoryRecordsLength != 0) {
+        let incomesAndSpendings = concatenateIncomesAndSpendings(item);
+        return (
+          <View style={allHistoryStyle.containerCategory}>
+            {renderImageAndTitle()}
 
-    return (
-      <View style={allHistoryStyle.containerCategory}>
-        {renderImageAndTitle()}
-
-        {categoryRecordsLength == 0 && (
-          <View style={allHistoryStyle.noResultText}>
-            <Ionicons name="sad" size={25} />
-            <Text style={{ marginLeft: "5%" }}>
-              There is no data for the moment
-            </Text>
+            {incomesAndSpendings.map((item) => {
+              return renderRecordLine(item);
+            })}
           </View>
-        )}
-
-        {categoryRecordsLength > 0 &&
-          arrayIncomesSpendings.map((item, index) => {
-            return renderRecordLine(item);
-          })}
-      </View>
-    );
+        );
+      } else {
+        <View style={allHistoryStyle.noResultText}>
+          <Ionicons name="sad" size={25} />
+          <Text style={{ marginLeft: "5%" }}>
+            There is no data for the moment
+          </Text>
+        </View>;
+      }
+    }
   };
   return (
     <ScrollView>
-      {list.map((item) => {
+      {finalList.map((item) => {
         return renderOneCategory(item);
       })}
     </ScrollView>

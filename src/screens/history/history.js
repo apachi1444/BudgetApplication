@@ -25,13 +25,15 @@ import { deleteTransaction } from "../../redux/features/user/userSpendingsAndInc
 import {
   calculateBudgetAndIncomesAndSpendings,
   renderColorCircleBudget,
-  renderInformationsAboutBudgetIncomesAndSpendings,
-  returnListIncomes,
-  returnListSpendingWithNonNullPeriod,
 } from "./logic";
 import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../components/alertDelete";
-import { calculateFinalPriceTransaction } from "../../global/functions/store";
+import {
+  calculateFinalPriceTransaction,
+  filterResultsDependingOnCategoryAndDate,
+  returnFinalLength,
+  returnFinalListSpecificCategory,
+} from "../../global/functions/store";
 import { NUMBERCATEGORIESATFIRST } from "../../consts/consts";
 
 const renderProfileInformations = (navigation) => {
@@ -73,16 +75,23 @@ const renderOneCircle = (name, price) => {
 
 const History = ({ navigation }) => {
   const [viewMode, setViewMode] = useState("list");
+
   const [selectedCategory, setSelectedCategory] = useState(null);
+
   const [showMoreToggle, setShowMoreToggle] = useState(false);
+
   const [title, setSelectedTitle] = useState("All");
 
   const data = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
   const [firstDate, setFirstDate] = useState(new Date());
+
   const [finalDate, setFinalDate] = useState(new Date());
+
   const [singleDate, setSingleDate] = useState(new Date());
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
   const [isFinalDatePickerVisible, setFinalDatePickerVisibility] =
     useState(false);
 
@@ -138,7 +147,6 @@ const History = ({ navigation }) => {
     hideFinalDatePicker();
   };
 
-  let list = useSelector((state) => state.userSpendingsAndIncomes);
   const renderCalendarRectangle = () => {
     const renderDateInputsInterval = () => {
       const renderFirstDateInput = () => {
@@ -276,24 +284,20 @@ const History = ({ navigation }) => {
       </>
     );
   };
-
-  const { finalListIncomes, finalListSpendings } =
-    renderInformationsAboutBudgetIncomesAndSpendings(
-      list,
-      timeOptionSelected,
-      singleDate,
-      firstDate,
-      finalDate
-    );
-
-  console.log(
-    "this is the list of the final list incomes and spendings ",
-    finalListIncomes,
-    finalListSpendings
+  const finalList = filterResultsDependingOnCategoryAndDate(
+    data,
+    timeOptionSelected,
+    title,
+    singleDate,
+    firstDate,
+    finalDate
   );
 
-  const { currentBudget, totalIncomes, totalSpendings } =
-    calculateBudgetAndIncomesAndSpendings(finalListIncomes, finalListSpendings);
+  const {
+    currentBudget,
+    incomes: totalIncomes,
+    spendings: totalSpendings,
+  } = calculateBudgetAndIncomesAndSpendings(finalList);
 
   const renderSwitchTimeIntervals = () => {
     const renderOneTime = (number, text) => {
@@ -541,13 +545,19 @@ const History = ({ navigation }) => {
   };
 
   const renderHistoryCategory = () => {
-    const listSpendings = returnListSpendingWithNonNullPeriod(list, title);
-    const listIncomes = returnListIncomes(list, title);
+    // const listSpendings = returnListSpendingWithNonNullPeriod(data, title);
+    // const listIncomes = returnListIncomes(data, title);
 
-    let allHistory = listSpendings.concat(listIncomes);
+    // let allHistory = listSpendings.concat(listIncomes);
+    let allHistory = finalList;
+    let finalLength = returnFinalLength(allHistory);
+    let historySpecificCategory = returnFinalListSpecificCategory(
+      allHistory,
+      title
+    );
     const renderHistoryItem = (item) => {
       const { transaction } = item;
-
+      console.log(item, "jajaja");
       const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
           return (
@@ -683,14 +693,14 @@ const History = ({ navigation }) => {
       <View style={{ padding: SIZES.PADDING }}>
         {renderHistoryTitleCategory()}
 
-        {allHistory.length > 0 && title != "All" && (
+        {finalLength > 0 && title != "All" && (
           <View>
-            {allHistory.map((item, index) => {
+            {historySpecificCategory.map((item) => {
               return renderHistoryItem(item);
             })}
           </View>
         )}
-        {allHistory.length > 0 && title == "All" && (
+        {finalLength > 0 && title == "All" && (
           <AllHistoryCategories
             timeOptionSelected={timeOptionSelected}
             finalDate={finalDate}
@@ -698,7 +708,7 @@ const History = ({ navigation }) => {
             singleDate={singleDate}
           />
         )}
-        {allHistory.length == 0 && (
+        {finalLength == 0 && (
           <View>
             <Text style={historyStyle.textInsideCategoryContent}>
               No Results for the moment
