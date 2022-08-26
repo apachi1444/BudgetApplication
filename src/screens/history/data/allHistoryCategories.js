@@ -22,7 +22,7 @@ const AllHistoryCategories = (props) => {
 
   let data = useSelector((state) => state.userSpendingsAndIncomesCategories);
   const dispatch = useDispatch();
-  const finalList = filterResultsDependingOnCategoryAndDate(
+  const { finalList } = filterResultsDependingOnCategoryAndDate(
     data,
     timeOptionSelected,
     "All",

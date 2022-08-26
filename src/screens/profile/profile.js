@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { findUser } from "../../global/async-storage";
+import StatusBarCustomized from "../../components/statusBar";
 
 export default ProfileUser = ({ navigation }) => {
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
@@ -215,6 +216,7 @@ export default ProfileUser = ({ navigation }) => {
 
   return (
     <>
+      <StatusBarCustomized />
       <View style={profileStyles.container}>
         {renderLogOutIconAndDrawer()}
 

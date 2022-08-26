@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { displayData, findUser } from "../../global/async-storage";
 
 import { welcomePageStyle } from "./welcomePageStyle";
+import StatusBarCustomized from "../../components/statusBar";
 const WelcomePage = ({ navigation }) => {
   useLayoutEffect(() => {
     (async () => {
@@ -74,6 +75,7 @@ const WelcomePage = ({ navigation }) => {
 
   return (
     <View style={welcomePageStyle.container}>
+      <StatusBarCustomized />
       <View style={welcomePageStyle.firstContainer}>
         <View>
           <Animated.View style={value.getLayout()}>

@@ -33,8 +33,10 @@ import {
   filterResultsDependingOnCategoryAndDate,
   returnFinalLength,
   returnFinalListSpecificCategory,
+  returnNewFormDisplayPrice,
 } from "../../global/functions/store";
 import { NUMBERCATEGORIESATFIRST } from "../../consts/consts";
+import StatusBarCustomized from "../../components/statusBar";
 
 const renderProfileInformations = (navigation) => {
   return (
@@ -63,7 +65,9 @@ const renderOneCircle = (name, price) => {
           style={historyStyle.imageBudget}
         />
         <View style={historyStyle.viewTextInside}>
-          <Text style={historyStyle.textInside(color)}>{price}DH</Text>
+          <Text style={historyStyle.textInside(color)}>
+            {returnNewFormDisplayPrice(price)}DH
+          </Text>
         </View>
       </View>
       <View style={historyStyle.viewMyBudgetTitle(color)}>
@@ -284,20 +288,17 @@ const History = ({ navigation }) => {
       </>
     );
   };
-  const finalList = filterResultsDependingOnCategoryAndDate(
-    data,
-    timeOptionSelected,
-    title,
-    singleDate,
-    firstDate,
-    finalDate
-  );
+  const { finalList, totalIncomes, totalSpendings } =
+    filterResultsDependingOnCategoryAndDate(
+      data,
+      timeOptionSelected,
+      title,
+      singleDate,
+      firstDate,
+      finalDate
+    );
 
-  const {
-    currentBudget,
-    incomes: totalIncomes,
-    spendings: totalSpendings,
-  } = calculateBudgetAndIncomesAndSpendings(finalList);
+  const currentBudget = totalIncomes - totalSpendings;
 
   const renderSwitchTimeIntervals = () => {
     const renderOneTime = (number, text) => {
@@ -551,10 +552,13 @@ const History = ({ navigation }) => {
     // let allHistory = listSpendings.concat(listIncomes);
     let allHistory = finalList;
     let finalLength = returnFinalLength(allHistory);
-    let historySpecificCategory = returnFinalListSpecificCategory(
-      allHistory,
-      title
-    );
+    let historySpecificCategory = [];
+    if (title != "All") {
+      historySpecificCategory = returnFinalListSpecificCategory(
+        allHistory,
+        title
+      );
+    }
     const renderHistoryItem = (item) => {
       const { transaction } = item;
       console.log(item, "jajaja");
@@ -741,6 +745,7 @@ const History = ({ navigation }) => {
 
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
+      <StatusBarCustomized />
       <ScrollView>
         <View style={historyStyle.wholeContainer}>
           {renderProfileInformations(navigation)}

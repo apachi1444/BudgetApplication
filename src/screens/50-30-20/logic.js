@@ -104,7 +104,7 @@ export const returnColorAppropriateBorder = (difference) => {
 };
 
 export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesSummary =
-  (totalIncomes, data, totalWants, totalSaves, totalNeeds) => {
+  (totalIncomes, totalWants, totalSaves, totalNeeds) => {
     const {
       totalOptimamWantsIncomes,
       totalOptimalNeedsIncomes,
@@ -114,16 +114,16 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
     let percentageWant = (
       (totalWants / totalOptimamWantsIncomes) *
       100
-    ).toFixed(1);
+    ).toFixed(0);
 
     let percentageNeed = (
       (totalNeeds / totalOptimalNeedsIncomes) *
       100
-    ).toFixed(1);
+    ).toFixed(0);
     let percentageSave = (
       (totalSaves / totalOptimalSavesIncomes) *
       100
-    ).toFixed(1);
+    ).toFixed(0);
 
     let finalGuideDataExpenses = [
       {

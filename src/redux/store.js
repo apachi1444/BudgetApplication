@@ -7,7 +7,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
 
 const persistConfig = {
-  key: "yours",
+  key: "haha",
   storage: AsyncStorage,
 };
 const rootReducer = combineReducers({

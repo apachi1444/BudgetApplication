@@ -28,6 +28,7 @@ import {
   updateTypeTransaction,
 } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../components/alertDelete";
+import StatusBarCustomized from "../../components/statusBar";
 const PlannedPayments = ({ navigation }) => {
   let finalList = useSelector(
     (state) => state.userSpendingsAndIncomesCategories
@@ -306,12 +307,7 @@ const PlannedPayments = ({ navigation }) => {
 
   return (
     <View style={plannedPaymentsStyle.container}>
-      <StatusBar
-        barStyle="dark-content"
-        hidden={false}
-        backgroundColor="#00BCD4"
-        translucent={false}
-      />
+      <StatusBarCustomized />
       {renderHeader()}
 
       {filteredNonEmptyCategories.length == 0 && renderEmptyContent()}

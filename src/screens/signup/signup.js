@@ -9,6 +9,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import COLORS from "../../consts/color";
 import Input from "../../components/input/input";
+import StatusBarCustomized from "../../components/statusBar";
 export default SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -154,6 +155,7 @@ export default SignUp = ({ navigation }) => {
 
   return (
     <View style={[styles.container]}>
+      <StatusBarCustomized />
       <Text style={styles.title}>REGISTER NOW</Text>
       {renderInputs()}
       {renderSocials()}

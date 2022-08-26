@@ -16,4 +16,37 @@ function hey() {
   console.log(ob);
 }
 
+class Person {
+  constructor() {
+    this.hair = "blue";
+    this.eyes = "red";
+  }
+
+  showEyes() {
+    console.log(this.eyes);
+  }
+}
+
+function executeHOC(callback) {
+  if (callback) {
+    callback();
+  }
+}
+function meow() {
+  console.log("meow");
+}
+
+function multiplier(factor) {
+  return function (x) {
+    return x * factor;
+  };
+}
+
+let person = new Person();
+
 hey();
+person.showEyes();
+executeHOC(meow);
+
+let doubler = multiplier(2);
+console.log(doubler(4));

@@ -2,9 +2,8 @@ import COLORS from "../../consts/color";
 import { calculateSpendingsAndIncomes } from "../../global/functions/store";
 
 export const calculateBudgetAndIncomesAndSpendings = (list) => {
-  console.log("this is the list given", list);
   const { spendings, incomes } = calculateSpendingsAndIncomes(list);
-  const currentBudget = spendings - incomes;
+  const currentBudget = incomes - spendings;
   return { currentBudget, incomes, spendings };
 };
 

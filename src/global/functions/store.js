@@ -93,16 +93,6 @@ export const calculateAllIncomes = (list) => {
   return total;
 };
 
-export const returnListAllIncomes = () => {
-  let finalArrayIncomes = [];
-  list.map((item) => {
-    item.incomeElements.map((income) => {
-      total += income.price;
-    });
-  });
-  return finalArrayIncomes;
-};
-
 export const calculateAllIncomesCategories = (list) => {
   let total = 0;
   list.map((item) => {
@@ -222,6 +212,8 @@ export const doComparaisonIntervalIncome = (
 
 export const returnFilteredListInterval = (start, end, list, title) => {
   let finalList = [];
+  let totalSpendings = 0;
+  let totalIncomes = 0;
   list = list.map((item) => {
     const spendings = item.spendingElements.filter((spending) => {
       if (title == "All" || item.title == title) {
@@ -234,40 +226,52 @@ export const returnFilteredListInterval = (start, end, list, title) => {
       }
     });
 
+    totalSpendings += totalSpendingsFunction(spendings);
+
     const incomes = item.incomeElements.filter((income) => {
-      if (title == "All" || item.title == title) {
-        return doComparaisonIntervalIncome(
-          compareFirstTargetFinalDates,
-          income,
-          start,
-          end
-        );
-      }
+      // if (title == "All" || item.title == title) {
+      return doComparaisonIntervalIncome(
+        compareFirstTargetFinalDates,
+        income,
+        start,
+        end
+      );
+      // }
     });
+
+    totalIncomes += total(incomes);
+
     finalList.push({ ...item, spendings, incomes });
   });
-  return finalList;
+  return { finalList, totalIncomes, totalSpendings };
 };
 export const returnFilteredListAllTime = (list, title) => {
   let finalList = [];
+  let totalSpendings = 0;
+  let totalIncomes = 0;
   list.map((item) => {
     const spendings = item.spendingElements.filter((spending) => {
       if (title == "All" || item.title == title) {
         return doComparaisonAllTime(spending);
       }
     });
+    totalSpendings += totalSpendingsFunction(spendings);
     const incomes = item.incomeElements.filter((income) => {
       if (title == "All" || item.title == title) {
         return true;
       }
     });
+
+    totalIncomes += total(incomes);
     finalList.push({ ...item, spendings, incomes });
   });
-  return finalList;
+  return { finalList, totalIncomes, totalSpendings };
 };
 
 export const returnFilteredListSingleDay = (day, list, title) => {
   let finalList = [];
+  let totalIncomes = 0;
+  let totalSpendings = 0;
   list = list.map((item) => {
     const spendings = item.spendingElements.filter((spending) => {
       if (title == "All" || item.title == title) {
@@ -275,14 +279,19 @@ export const returnFilteredListSingleDay = (day, list, title) => {
       }
     });
 
+    totalSpendings += totalSpendingsFunction(spendings);
+
+    console.log("this is the total spendings haha", totalSpendings);
     const incomes = item.incomeElements.filter((income) => {
       if (title == "All" || item.title == title) {
         return doComparaisonSingleDayIncome(compareTwoDates, income, day);
       }
     });
+
+    totalIncomes += total(incomes);
     finalList.push({ ...item, spendings, incomes });
   });
-  return finalList;
+  return { finalList, totalIncomes, totalSpendings };
 };
 
 export const filterResultsDependingOnCategoryAndDate = (

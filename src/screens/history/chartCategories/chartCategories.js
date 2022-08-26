@@ -14,7 +14,10 @@ import { SIZESS, FONTS } from "../../../consts/theme";
 import COLORS from "../../../consts/color";
 import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from "../../../global/styles/globalStyles";
-import { total } from "../../../global/functions/store";
+import {
+  returnNewFormDisplayPrice,
+  total,
+} from "../../../global/functions/store";
 import { useSelector } from "react-redux";
 const ChartCategories = ({ navigation, route }) => {
   let data = useSelector((state) => state.userSpendingsAndIncomesCategories);
@@ -247,7 +250,8 @@ const ChartCategories = ({ navigation, route }) => {
         {/* Expenses */}
         <View style={{ justifyContent: "center" }}>
           <Text style={chartCategoriesStyle.textPriceAndPercentageSummaryLine}>
-            -{item.expenseCount} DH {"  |  "} {item.labelExpense}
+            -{returnNewFormDisplayPrice(item.expenseCount)} DH {"  |  "}{" "}
+            {item.labelExpense}
           </Text>
         </View>
       </TouchableOpacity>
@@ -293,7 +297,8 @@ const ChartCategories = ({ navigation, route }) => {
         {/* Expenses */}
         <View style={{ justifyContent: "center" }}>
           <Text style={chartCategoriesStyle.textPriceAndPercentageSummaryLine}>
-            -{item.incomeCount} DH {"  |  "} {item.labelIncome}
+            -{returnNewFormDisplayPrice(item.incomeCount)} DH {"  |  "}{" "}
+            {item.labelIncome}
           </Text>
         </View>
       </TouchableOpacity>
