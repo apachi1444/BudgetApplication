@@ -5,13 +5,14 @@ import { returnYearMonthDay } from "../../global/functions/time";
 export const spendingElementsContainsNonEmptyPeriods = (list) => {
   let total = 0;
   list.map((item) => {
-    total += Number(item.period);
+    total += item.period;
   });
   if (total > 0) return true;
   return false;
 };
 
 export const returnfilteredNonEmptyCategories = (finalList) => {
+  console.log("this is the final list in the functino ", finalList);
   return finalList.filter((item) => {
     console.log("spending Elements ", item.spendingElements);
     return (

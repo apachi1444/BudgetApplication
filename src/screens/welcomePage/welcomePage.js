@@ -15,16 +15,16 @@ import { displayData, findUser } from "../../global/async-storage";
 import { welcomePageStyle } from "./welcomePageStyle";
 import StatusBarCustomized from "../../components/statusBar";
 const WelcomePage = ({ navigation }) => {
-  useLayoutEffect(() => {
-    (async () => {
-      await AsyncStorage.clear();
-      const value = await findUser();
-      const obj = JSON.parse(value);
-      if (obj.email != "") {
-        navigation.navigate("AuthStack");
-      }
-    })();
-  }, []);
+  // useLayoutEffect(() => {
+  //   (async () => {
+  //     await AsyncStorage.clear();
+  //     const value = await findUser();
+  //     const obj = JSON.parse(value);
+  //     if (obj.email != "") {
+  //       navigation.navigate("AuthStack");
+  //     }
+  //   })();
+  // }, []);
 
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
   const opacityRef = useRef(new Animated.Value(0)).current;

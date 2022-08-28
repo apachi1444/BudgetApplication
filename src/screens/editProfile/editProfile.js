@@ -14,6 +14,7 @@ import COLORS from "../../consts/color";
 import { Avatar } from "react-native-paper";
 import { globalStyles } from "../../global/styles/globalStyles";
 import { editProfileStyle } from "./editProfileStyle";
+import StatusBarCustomized from "../../components/statusBar";
 
 const SIZES = {
   BASE: 6,
@@ -147,6 +148,7 @@ export default EditProfile = ({ navigation }) => {
 
   return (
     <>
+      <StatusBarCustomized />
       {renderHeader()}
       <View style={editProfileStyle.container}>{renderInputs()}</View>
     </>

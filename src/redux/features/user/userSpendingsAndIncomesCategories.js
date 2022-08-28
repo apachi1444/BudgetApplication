@@ -21,9 +21,13 @@ export const userSpendingsAndIncomesCategories = createSlice({
   reducers: {
     addTransaction: (state, action) => {
       state.map((item) => {
-        let { category, transaction, period, date } = action.payload;
+        let { category, transaction, period } = action.payload;
         let numberTimesPaid = 0;
         if (period != 0) {
+          console.log(
+            "this is the period the action payload that the user just typed in ",
+            period
+          );
           numberTimesPaid = 0;
         } else {
           numberTimesPaid = 1;
@@ -33,12 +37,13 @@ export const userSpendingsAndIncomesCategories = createSlice({
             transaction == "Income"
               ? item.incomeElements
               : item.spendingElements;
-          console.log("skldfjqsdklfjqskldjf", typeof date);
           finalList.push({
             key: finalList.length + 1,
             ...action.payload,
             numberTimesPaid,
           });
+
+          console.log("this is the final list of our item ", finalList);
         }
       });
     },
@@ -88,6 +93,27 @@ export const userSpendingsAndIncomesCategories = createSlice({
         }
       });
     },
+
+    deleteAllCategories: (state, action) => {
+      state.map((item) => {
+        item.spendingElements = item.spendingElements.filter((item) => {
+          return false;
+        });
+        item.incomeElements = item.incomeElements.filter((item) => {
+          return false;
+        });
+        if (item.spendings != null) {
+          item.spendings = item?.spendings.filter((item) => {
+            return false;
+          });
+        }
+        if (item.incomes != null) {
+          item.incomes = item?.incomes.filter((item) => {
+            return false;
+          });
+        }
+      });
+    },
   },
 });
 
@@ -98,4 +124,5 @@ export const {
   updateTransaction,
   deleteTransaction,
   updateTransactionPlanned,
+  deleteAllCategories,
 } = userSpendingsAndIncomesCategories.actions;

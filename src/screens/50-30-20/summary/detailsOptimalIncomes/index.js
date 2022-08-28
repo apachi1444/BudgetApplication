@@ -45,6 +45,27 @@ const DetailsOptimalIncomes = (props) => {
     },
   ];
 
+  const renderTotalIncomesTotalSpendings = () => {
+    const totalSpendings = totals[save] + totals[need] + totals[want];
+    return (
+      <View style={styleModal.containerOneDetail}>
+        <Text style={styleModal.title}>Total Incomes :</Text>
+
+        <Text style={styleModal.totalIncome}>
+          {returnNewFormDisplayPrice(totalIncomes)} DH
+        </Text>
+
+        <Text style={[styleModal.title, { marginTop: "5%" }]}>
+          Total Spendings :
+        </Text>
+
+        <Text style={styleModal.totalIncome}>
+          {returnNewFormDisplayPrice(totalSpendings)} DH
+        </Text>
+      </View>
+    );
+  };
+
   const renderModal = () => {
     const renderItem = (item) => {
       return (
@@ -109,13 +130,7 @@ const DetailsOptimalIncomes = (props) => {
               <Ionicons name="close-circle-outline" size={90} />
             </TouchableOpacity>
 
-            <View style={styleModal.containerOneDetail}>
-              <Text style={styleModal.title}>Total Incomes :</Text>
-
-              <Text style={styleModal.totalIncome}>
-                {returnNewFormDisplayPrice(totalIncomes)} DH
-              </Text>
-            </View>
+            {renderTotalIncomesTotalSpendings()}
 
             {array.map((item) => {
               return renderItem(item);

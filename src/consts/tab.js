@@ -4,6 +4,7 @@ import HistoryStack from "../routes/historyStack";
 import Guide_Stack from "../routes/guide_50_30_20_Stack";
 import Add from "../components/add/add";
 import { Icons } from "../components/icon";
+import profileUserStack from "../routes/profileUserStack";
 
 export const TabArr = [
   {
@@ -11,7 +12,7 @@ export const TabArr = [
     label: "Home",
     type: Icons.MaterialCommunityIcons,
     icon: "home",
-    component: ProfileUser,
+    component: profileUserStack,
   },
   {
     route: "History",

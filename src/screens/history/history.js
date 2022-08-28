@@ -41,9 +41,7 @@ import StatusBarCustomized from "../../components/statusBar";
 const renderProfileInformations = (navigation) => {
   return (
     <View style={globalStyles.headerContainer}>
-      <Text style={globalStyles.titleHistory}>
-        Spendings And Incomes Dashboard
-      </Text>
+      <Text style={globalStyles.titleHistory}>Spendings And Incomes</Text>
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <Image
           style={globalStyles.profileImage}
@@ -561,7 +559,6 @@ const History = ({ navigation }) => {
     }
     const renderHistoryItem = (item) => {
       const { transaction } = item;
-      console.log(item, "jajaja");
       const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
           return (

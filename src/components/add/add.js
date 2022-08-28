@@ -56,6 +56,7 @@ const Add = ({ handleModal }) => {
 
   const [category, setCategory] = useState(categories[0].name);
   const [categoryIncome, setCategoryIncome] = useState(categories[0].name);
+
   const renderIncomesAndSpendingsTitles = () => {
     return (
       <View style={addStyle.containerButtons}>
@@ -112,6 +113,7 @@ const Add = ({ handleModal }) => {
       </View>
     );
   };
+
   const renderCurrentBudget = () => {
     return (
       <View style={addStyle.containerBudget}>
@@ -150,6 +152,7 @@ const Add = ({ handleModal }) => {
       </View>
     );
   };
+
   const renderSetTitleIncomeInput = (props) => {
     return (
       <View style={addStyle.containerInput}>
@@ -171,6 +174,7 @@ const Add = ({ handleModal }) => {
       </View>
     );
   };
+
   const renderSetAmountIncomeInput = (props) => {
     let subtitle =
       choosenPart == 1
@@ -196,6 +200,7 @@ const Add = ({ handleModal }) => {
       </View>
     );
   };
+
   const renderSetAmountInput = (props) => {
     let subtitle =
       choosenPart == 1
@@ -274,8 +279,18 @@ const Add = ({ handleModal }) => {
   const renderSetPeriodInputFormTextInput = (props) => {
     return (
       <View style={addStyle.containerInput}>
-        <View style={globalStyles.flexRowAndAlignCenterAndSpaceBetweenJustify}>
-          <Text style={addStyle.title}>Set Period</Text>
+        <View
+          style={[
+            globalStyles.flexRowAndAlignCenterAndSpaceBetweenJustify,
+            { alignItems: "flex-start" },
+          ]}
+        >
+          <View>
+            <Text style={addStyle.title}>Set Period</Text>
+            <Text style={addStyle.subTitle}>
+              Make Your Spending Planned And Pay When You Want{" "}
+            </Text>
+          </View>
           <Switch
             trackColor={{ false: "#767577", true: COLORS.SECONDARY }}
             thumbColor={isEnabled ? COLORS.PRIMARY : "#f4f3f4"}
@@ -350,6 +365,11 @@ const Add = ({ handleModal }) => {
     return (
       <View style={[addStyle.containerInput, { marginTop: SIZES.BASE * 2 }]}>
         <Text style={addStyle.title}>Classify Your {title}</Text>
+        {choosenPart == 1 && (
+          <Text style={addStyle.subTitle}>
+            Choose From Which Income You Want To Make Your Spending
+          </Text>
+        )}
         <View style={addStyle.containerCategories}>
           <FlatList
             data={typeTransactions}
@@ -369,6 +389,33 @@ const Add = ({ handleModal }) => {
 
   const formikRef = useRef(null);
 
+  const dispatch = useDispatch();
+  const addingToStore = (title, amount, category, period = null) => {
+    dispatch(
+      addCategory({
+        transaction: convertNumberTypeTransactionToName(choosenPart),
+        date: new Date(),
+        title: title,
+        price: Number(amount),
+        category: category,
+        period: Number(period),
+        type: type,
+      })
+    );
+    dispatch(
+      addTypeTransaction({
+        transaction: convertNumberTypeTransactionToName(choosenPart),
+        date: new Date(),
+        title: title,
+        price: Number(amount),
+        category: category,
+        period: Number(period),
+        type: type,
+      })
+    );
+    handleModal();
+  };
+
   const renderButtonDoneForm = (props) => {
     let doneSpending =
       category != null &&
@@ -376,35 +423,11 @@ const Add = ({ handleModal }) => {
       !titleError &&
       !amountError;
 
-    const dispatch = useDispatch();
     return (
       <View
         onStartShouldSetResponder={() => {
           if (doneSpending) {
-            dispatch(
-              addCategory({
-                transaction: convertNumberTypeTransactionToName(choosenPart),
-                date: new Date(),
-                title: title,
-                price: Number(amount),
-                category: category,
-                period: period,
-                type: type,
-              })
-            );
-
-            dispatch(
-              addTypeTransaction({
-                transaction: convertNumberTypeTransactionToName(choosenPart),
-                date: new Date(),
-                title: title,
-                price: Number(amount),
-                category: category,
-                period: period,
-                type: type,
-              })
-            );
-            handleModal();
+            addingToStore(title, amount, category, period);
           }
         }}
         style={[
@@ -424,33 +447,11 @@ const Add = ({ handleModal }) => {
       !amountIncomeError != "" &&
       !titleIncomeError != "";
 
-    const dispatch = useDispatch();
     return (
       <View
         onStartShouldSetResponder={() => {
           if (doneIncome) {
-            dispatch(
-              addCategory({
-                transaction: convertNumberTypeTransactionToName(choosenPart),
-                date: new Date(),
-                title: titleIncome,
-                price: Number(amountIncome),
-                category: categoryIncome,
-                type: type,
-              })
-            );
-
-            dispatch(
-              addTypeTransaction({
-                transaction: convertNumberTypeTransactionToName(choosenPart),
-                date: new Date(),
-                title: titleIncome,
-                price: Number(amountIncome),
-                category: categoryIncome,
-                type: type,
-              })
-            );
-            handleModal();
+            addingToStore(titleIncome, amountIncome, categoryIncome);
           }
         }}
         style={[
@@ -488,8 +489,6 @@ const Add = ({ handleModal }) => {
               title: "",
               amount: "",
               period: 0,
-              titleIncome: "",
-              amountIncome: "",
             }}
             validationSchema={FormSchema}
             onSubmit={(values, actions) => {
@@ -521,9 +520,6 @@ const Add = ({ handleModal }) => {
           <Formik
             innerRef={formikRef}
             initialValues={{
-              title: "",
-              amount: "",
-              period: 0,
               titleIncome: "",
               amountIncome: "",
             }}

@@ -32,6 +32,7 @@ import {
 } from "../logic";
 import DetailsOptimalIncomes from "./detailsOptimalIncomes";
 import { Ionicons } from "@expo/vector-icons";
+import StatusBarCustomized from "../../../components/statusBar";
 
 const Guide_50_30_20_Summary = ({ navigation }) => {
   const pan = useRef(new Animated.ValueXY()).current;
@@ -44,11 +45,13 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   });
 
   let data = useSelector((state) => {
-    return state.userSpendingsAndIncomesCategories;
+    return state.userSpendingsAndIncomes;
   });
 
-  console.log("this is data ", data);
-
+  console.log(
+    "this is the data the we must get from the store haha dude  ",
+    data
+  );
   const totalIncomes = calculateAllIncomes(data);
 
   const totalWants = wantsSpendings(data);
@@ -56,7 +59,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   const totalNeeds = needsSpendings(data);
 
   const arraySpendings = [totalWants, totalNeeds, totalSaves];
-
+  console.log("this is the array of spendings ", arraySpendings);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
@@ -66,12 +69,10 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
     const { finalGuideDataExpenses, finalGuideDataExpensesSummary } =
       returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesSummary(
         totalIncomes,
-        data,
         totalWants,
         totalSaves,
         totalNeeds
       );
-
     return {
       finalGuideDataExpenses,
       finalGuideDataExpensesSummary,
@@ -154,9 +155,9 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
 
   const renderModalDetailsOptimalSpendings = () => {
     return (
-      <TouchableOpacity
+      <View
         style={guideStyle.containerModal}
-        onPress={() => {
+        onStartShouldSetResponder={() => {
           handleModal(true);
         }}
       >
@@ -169,7 +170,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
           totalIncomes={totalIncomes}
           totals={arraySpendings}
         />
-      </TouchableOpacity>
+      </View>
     );
   };
 
@@ -177,6 +178,7 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   let colorScales = finalGuideDataExpenses.map((item) => item.color);
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
+      <StatusBarCustomized />
       <ScrollView style={styles.page}>
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Guide 50_30_20</Text>
@@ -209,24 +211,30 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
             {totalIncomes == 0 && (
               <View style={styles.mainContainerEmpty}>
                 {totalNeeds == 0 && totalSaves == 0 && totalWants == 0 && (
-                  <Text style={[styles.textNoHistory, { color: "red" }]}>
-                    No Incomes And Spendings
-                  </Text>
+                  <View style={guideStyle.containerErrorMessage}>
+                    <Text style={[styles.textNoHistory, { color: "white" }]}>
+                      No Incomes And Spendings !
+                    </Text>
+                  </View>
                 )}
                 {totalNeeds != 0 ||
                   totalSaves != 0 ||
                   (totalWants != 0 && (
-                    <Text style={styles.textNoHistory}>
-                      You Have No Income For The Momenet
-                    </Text>
+                    <View style={guideStyle.containerErrorMessage}>
+                      <Text style={[styles.textNoHistory, { color: "white" }]}>
+                        You Have No Income !
+                      </Text>
+                    </View>
                   ))}
               </View>
             )}
             {totalIncomes == 0 &&
               (totalIncomes != 0 || totalNeeds != 0 || totalSaves != 0) && (
-                <Text style={styles.textNoHistory}>
-                  You Should Add An Income Before
-                </Text>
+                <View style={{ backgroundColor: COLORS.RED }}>
+                  <Text style={styles.textNoHistory}>
+                    You Should Add An Income Before
+                  </Text>
+                </View>
               )}
           </View>
         </View>

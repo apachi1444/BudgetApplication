@@ -11,27 +11,32 @@ import {
 } from "../../global/functions/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { findUser } from "../../global/async-storage";
+// import { findUser } from "../../global/async-storage";
 import StatusBarCustomized from "../../components/statusBar";
+import { displayResetAllAlert } from "../../components/alertResetAll";
+import { deleteAllCategories } from "../../redux/features/user/userSpendingsAndIncomesCategories";
+import { deleteAllTypeTransactions } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 
 export default ProfileUser = ({ navigation }) => {
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
   const [email, setEmail] = useState("yessine");
 
-  useEffect(() => {
-    (async () => {
-      const value = await findUser();
-      const obj = JSON.parse(value);
-      setEmail(obj.email);
-    })();
+  const dispatch = useDispatch();
 
-    // this is for the cleanup function
-    return () => {
-      console.log("i m unmounting");
-    };
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const value = await findUser();
+  //     const obj = JSON.parse(value);
+  //     setEmail(obj.email);
+  //   })();
+
+  //   // this is for the cleanup function
+  //   return () => {
+  //     console.log("i m unmounting");
+  //   };
+  // }, []);
 
   const { totalIncomes, totalSpendings, currentBudget } =
     calculateBudgetSpendingsAndIncomes(list);
@@ -49,6 +54,7 @@ export default ProfileUser = ({ navigation }) => {
   };
 
   const goToPlannedPayments = () => {
+    console.log("sdqf");
     navigation.navigate("PlannedPayments");
   };
 
@@ -88,7 +94,7 @@ export default ProfileUser = ({ navigation }) => {
       <>
         <Avatar.Image
           source={require("../../assets/images/elon_musk.jpg")}
-          size={130}
+          size={90}
         />
 
         <Text style={profileStyles.nameUser}>{email}</Text>
@@ -194,7 +200,7 @@ export default ProfileUser = ({ navigation }) => {
         ></View>
         <View
           style={profileStyles.profileDetailLine}
-          onStartShouldSetResponder={editProfile}
+          // onStartShouldSetResponder={editProfile}
         >
           <FontAwesome
             name="user"
@@ -214,6 +220,35 @@ export default ProfileUser = ({ navigation }) => {
     );
   };
 
+  const renderClearAllButton = () => {
+    const deleteItems = () => {
+      dispatch(deleteAllCategories());
+      dispatch(deleteAllTypeTransactions());
+    };
+    return (
+      <View
+        style={{
+          backgroundColor: COLORS.RED,
+          padding: SIZES.BASE * 3,
+          borderRadius: SIZES.BASE * 2,
+        }}
+        onStartShouldSetResponder={() => {
+          return displayResetAllAlert(deleteItems);
+        }}
+      >
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: SIZES.BASE * 2.5,
+          }}
+        >
+          Reset All
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <>
       <StatusBarCustomized />
@@ -228,6 +263,7 @@ export default ProfileUser = ({ navigation }) => {
           {renderTotalSpendingAndIncomes()}
 
           {renderLinesProfileDetails()}
+          {renderClearAllButton()}
         </View>
       </View>
     </>

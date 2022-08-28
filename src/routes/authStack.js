@@ -10,18 +10,18 @@ const AuthStack = createNativeStackNavigator();
 
 export default function () {
   const [loggedIn, setLoggedIn] = useState(true);
-  useLayoutEffect(() => {
-    (async () => {
-      console.log("haha");
-      const value = await findUser();
-      const obj = JSON.parse(value);
-      console.log(obj, "this is the object");
-      if (obj.email != "") {
-        // navigation.navigate("AuthStack");
-        setLoggedIn(true);
-      }
-    })();
-  }, []);
+  // useLayoutEffect(() => {
+  //   (async () => {
+  //     console.log("haha");
+  //     const value = await findUser();
+  //     const obj = JSON.parse(value);
+  //     console.log(obj, "this is the object");
+  //     if (obj.email != "") {
+  //       // navigation.navigate("AuthStack");
+  //       setLoggedIn(true);
+  //     }
+  //   })();
+  // }, []);
 
   return (
     <AuthStack.Navigator>
@@ -46,7 +46,7 @@ export default function () {
         </>
       )}
       <AuthStack.Screen
-        name="UserProfile"
+        name="DrawerNavigator"
         component={DrawerNavigator}
         options={{
           headerShown: false,

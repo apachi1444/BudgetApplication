@@ -87,4 +87,9 @@ export const guideStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  containerErrorMessage: {
+    backgroundColor: COLORS.RED,
+    padding: SIZES.BASE * 4,
+    borderRadius: SIZES.BASE * 2,
+  },
 });

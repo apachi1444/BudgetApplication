@@ -29,10 +29,15 @@ import {
 } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../components/alertDelete";
 import StatusBarCustomized from "../../components/statusBar";
+import DetailsPlanned from "./detail";
+import { displayUpdatePlanned } from "../../components/alertUpdatePlanned";
 const PlannedPayments = ({ navigation }) => {
   let finalList = useSelector(
     (state) => state.userSpendingsAndIncomesCategories
   );
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
   const dispatch = useDispatch();
   const filteredNonEmptyCategories =
@@ -207,7 +212,7 @@ const PlannedPayments = ({ navigation }) => {
           );
         };
         const renderDeleteAndEditButtons = () => {
-          let { date, key, period, transaction, type } = element;
+          let { date, key, period } = element;
 
           const deleteItem = () => {
             dispatch(deleteTransaction(element));
@@ -231,16 +236,20 @@ const PlannedPayments = ({ navigation }) => {
               })
             );
           };
+          const detailItem = () => {
+            return (
+              <DetailsPlanned
+                isModalVisible={isModalVisible}
+                handleModal={handleModal}
+              />
+            );
+          };
 
-          const renderIcon = (name) => {
+          const renderIcon = (name, cb) => {
             return (
               <TouchableOpacity
                 style={plannedPaymentsStyle.button}
-                onPress={
-                  name == "trash"
-                    ? () => displayDeleteAlert(deleteItem)
-                    : updateItem
-                }
+                onPress={cb()}
               >
                 <Ionicons
                   name={name}
@@ -252,8 +261,9 @@ const PlannedPayments = ({ navigation }) => {
           };
           return (
             <View style={plannedPaymentsStyle.containerDeleteAndEditButtons}>
-              {renderIcon("trash")}
-              {renderIcon("checkmark-done-circle")}
+              {renderIcon("trash", deleteItem)}
+              {renderIcon("checkmark-done-circle", updateItem)}
+              {renderIcon("information-circle", detailItem)}
             </View>
           );
         };

@@ -116,7 +116,7 @@ export const detailsStyle = StyleSheet.create({
 
   dateHistoryItem: {
     fontWeight: "bold",
-    fontSize: SIZES.BASE * 2.4,
+    fontSize: SIZES.BASE * 2,
     fontWeight: "bold",
   },
 

@@ -17,8 +17,16 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { CustomDrawerStyle } from "./customDrawerStyle";
 import { globalStyles } from "../../global/styles/globalStyles";
 import COLORS from "../../consts/color";
+import {
+  calculateBudgetSpendingsAndIncomes,
+  returnNewFormDisplayPrice,
+} from "../../global/functions/store";
+import { useSelector } from "react-redux";
 const CustomDrawer = (props) => {
   const [isEnabledSettings, setIsEnabledSettings] = useState(false);
+  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
+
+  const { currentBudget } = calculateBudgetSpendingsAndIncomes(list);
 
   const toggleSwitch = () => {
     setIsEnabledSettings(!isEnabledSettings);
@@ -92,9 +100,10 @@ const CustomDrawer = (props) => {
                 alignSelf: "center",
                 fontSize: 20,
                 marginRight: SIZES.BASE * 2,
+                fontWeight: "bold",
               }}
             >
-              200 dollar
+              {returnNewFormDisplayPrice(currentBudget)} DH
             </Text>
             <Ionicons name="cash" size={25} color={COLORS.WHITE} />
           </View>

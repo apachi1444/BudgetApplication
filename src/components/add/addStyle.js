@@ -75,7 +75,7 @@ export const addStyle = StyleSheet.create({
     textTransform: "uppercase",
   },
   subTitle: {
-    fontSize: SIZES.BASE * 2.2,
+    fontSize: SIZES.BASE * 1.6,
     fontWeight: "300",
     textTransform: "uppercase",
     marginBottom: SIZES.BASE * 2,

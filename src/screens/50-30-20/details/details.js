@@ -39,6 +39,7 @@ import {
   returnNewFormDisplayPrice,
 } from "../../../global/functions/store";
 import { displayDeleteAlert } from "../../../components/alertDelete";
+import StatusBarCustomized from "../../../components/statusBar";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
@@ -94,7 +95,7 @@ const Details = ({ navigation, route }) => {
           <Ionicons name="arrow-undo-circle-outline" size={42} />
         </TouchableOpacity>
         <Text style={detailsStyle.title}>{item.name}</Text>
-        <TouchableOpacity onPress={() => navigation.open()}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
             style={detailsStyle.profileImage}
             source={require("../../../assets/images/elon_musk.jpg")}
@@ -252,7 +253,6 @@ const Details = ({ navigation, route }) => {
 
   const renderRectangleDetailsList = () => {
     const renderHistoryItem = ({ item }) => {
-      console.log("this is the item of our flat list ", item);
       const { title, price, date, transaction } = item;
       const renderTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
@@ -433,10 +433,6 @@ const Details = ({ navigation, route }) => {
 
         {show && (
           <View style={detailsStyle.containerHistoryDetails}>
-            {console.log(
-              "this is the final array of incoems and spendings ",
-              finalArrayContainingSpendingsAndIncomes
-            )}
             <FlatList
               data={finalArrayContainingSpendingsAndIncomes}
               renderItem={(item) => renderHistoryItem(item)}
@@ -451,6 +447,7 @@ const Details = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={globalStyles.AndroidSafeArea}>
+      <StatusBarCustomized />
       {totalIncomes != 0 && (
         <ScrollView>
           {renderHeader()}

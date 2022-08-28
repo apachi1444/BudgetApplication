@@ -1,6 +1,7 @@
 import {
   calculateFinalPriceTransaction,
   total,
+  totalSpendingsFunction,
 } from "../../global/functions/store";
 import { compareTwoDates } from "../../global/functions/time";
 
@@ -36,6 +37,7 @@ export const renderCurrentBudget = (totalSpendings, totalIncomes) => {
 };
 import COLORS from "../../consts/color";
 import { needs, saves, wants } from "../../consts/percentages";
+import { need, save, want } from "../../consts/indexes";
 
 export const returnTotalSavesWantsNeeds = (data) => {
   let totalNeeds = 0;
@@ -56,15 +58,15 @@ export const returnTotalSavesWantsNeeds = (data) => {
 };
 
 export const savesSpedings = (data) => {
-  return total(data[2].spendingElements);
+  return totalSpendingsFunction(data[save].spendingElements);
 };
 
 export const needsSpendings = (data) => {
-  return total(data[1].spendingElements);
+  return totalSpendingsFunction(data[need].spendingElements);
 };
 
 export const wantsSpendings = (data) => {
-  return total(data[0].spendingElements);
+  return totalSpendingsFunction(data[want].spendingElements);
 };
 
 export const returnOptimalIncomes = (totalIncomes) => {
@@ -114,17 +116,20 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
     let percentageWant = (
       (totalWants / totalOptimamWantsIncomes) *
       100
-    ).toFixed(0);
+    ).toFixed(2);
 
     let percentageNeed = (
       (totalNeeds / totalOptimalNeedsIncomes) *
       100
-    ).toFixed(0);
+    ).toFixed(2);
     let percentageSave = (
       (totalSaves / totalOptimalSavesIncomes) *
       100
-    ).toFixed(0);
+    ).toFixed(2);
 
+    let differenceWant = (wants - percentageWant).toFixed(2);
+    let differenceNeed = (needs - percentageNeed).toFixed(2);
+    let differenceSave = (saves - percentageSave).toFixed(2);
     let finalGuideDataExpenses = [
       {
         y: totalWants,
@@ -151,7 +156,7 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
         // label: `${percentageWant}%`,
         color: COLORS.WANTS,
         normal: wants,
-        difference: `${wants - percentageWant}`,
+        difference: `${differenceWant}`,
         actual: percentageWant,
         totalOptimal: totalOptimamWantsIncomes,
       },
@@ -163,7 +168,7 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
         actual: percentageSave,
         color: COLORS.SAVES,
         normal: saves,
-        difference: `${saves - percentageSave}`,
+        difference: `${differenceSave}`,
         totalOptimal: totalOptimalSavesIncomes,
       },
       {
@@ -175,7 +180,7 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
         y: totalNeeds,
         color: COLORS.NEEDS,
         normal: needs,
-        difference: `${needs - percentageNeed}`,
+        difference: `${differenceNeed}`,
       },
     ];
 

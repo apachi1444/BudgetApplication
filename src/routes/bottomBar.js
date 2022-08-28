@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TabArr } from "../consts/tab";
 
-import { TabButton } from "./tabButton";
-import { TabIcon } from "./tabIcon";
+import { TabButton } from "../components/tabButton";
+import { TabIcon } from "../components/tabIcon";
 import COLORS from "../consts/color";
 import { SIZES } from "../consts/theme";
 
