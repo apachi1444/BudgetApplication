@@ -18,7 +18,7 @@ import {
   renderDifferenceBetweenDatesMilliseconds,
   returnColorMessageAppriopriate,
   returnDaysRemainingYearsRemainingAndNewDaysRemaining,
-  returnfilteredNonEmptyCategories,
+  returnFilteredData,
   returnTimeRemaining,
   returnTotalSpendingWithNonNullPeriod,
 } from "./logic";
@@ -32,16 +32,17 @@ import StatusBarCustomized from "../../components/statusBar";
 import DetailsPlanned from "./detail";
 import { displayUpdatePlanned } from "../../components/alertUpdatePlanned";
 const PlannedPayments = ({ navigation }) => {
-  let finalList = useSelector(
-    (state) => state.userSpendingsAndIncomesCategories
-  );
+  let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 
   const dispatch = useDispatch();
-  const filteredNonEmptyCategories =
-    returnfilteredNonEmptyCategories(finalList);
+
+  const filteredListNonEmptyCategories = returnFilteredData(list);
+  console.log(filteredListNonEmptyCategories, "sdlkfj");
+  // const filteredNonEmptyCategories = returnfilteredNonEmptyCategories(list);
 
   const renderHeader = () => {
     return (
@@ -50,7 +51,7 @@ const PlannedPayments = ({ navigation }) => {
           <Ionicons name="arrow-undo-circle-outline" size={42} />
         </TouchableOpacity>
         <Text style={plannedPaymentsStyle.titleHeader}>Planned Payments</Text>
-        <TouchableOpacity onPress={() => navigation.open()}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
             style={globalStyles.profileImage}
             source={require("../../assets/images/elon_musk.jpg")}
@@ -61,10 +62,9 @@ const PlannedPayments = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    const { id, title, spendingElements } = item;
+    const { id, title, plannedSpendingsElements } = item;
     let totalSpendings = returnTotalSpendingWithNonNullPeriod(
-      filteredNonEmptyCategories,
-      id
+      plannedSpendingsElements
     );
 
     const renderTitleAndImageAndPriceHeader = () => (
@@ -88,8 +88,17 @@ const PlannedPayments = ({ navigation }) => {
       </View>
     );
 
-    const renderLineDetailEachItem = (element) => {
-      let { date, period, numberTimesPaid } = element;
+    const renderLineDetailEachItem = ({ item: element }) => {
+      let {
+        date,
+        period,
+        numberTimesPaid,
+        title,
+        price,
+        transaction,
+        type,
+        key,
+      } = element;
 
       const periodMilliseconds = convertDateToMilliseconds(
         period * (numberTimesPaid + 1)
@@ -130,7 +139,7 @@ const PlannedPayments = ({ navigation }) => {
                   fontWeight: "bold",
                 }}
               >
-                {element.title}
+                {title}
               </Text>
               <View
                 style={{
@@ -155,7 +164,7 @@ const PlannedPayments = ({ navigation }) => {
                     fontSize: SIZES.BASE * 2.8,
                   }}
                 >
-                  {element.price}DH ( {element.period} Days )
+                  {price}DH ( {period} Days )
                 </Text>
               </View>
             </View>
@@ -212,8 +221,6 @@ const PlannedPayments = ({ navigation }) => {
           );
         };
         const renderDeleteAndEditButtons = () => {
-          let { date, key, period } = element;
-
           const deleteItem = () => {
             dispatch(deleteTransaction(element));
             dispatch(deleteGuide(element));
@@ -245,11 +252,11 @@ const PlannedPayments = ({ navigation }) => {
             );
           };
 
-          const renderIcon = (name, cb) => {
+          const renderIcon = (name, cb, secondary) => {
             return (
               <TouchableOpacity
                 style={plannedPaymentsStyle.button}
-                onPress={cb()}
+                onPress={() => secondary(cb)}
               >
                 <Ionicons
                   name={name}
@@ -261,9 +268,13 @@ const PlannedPayments = ({ navigation }) => {
           };
           return (
             <View style={plannedPaymentsStyle.containerDeleteAndEditButtons}>
-              {renderIcon("trash", deleteItem)}
-              {renderIcon("checkmark-done-circle", updateItem)}
-              {renderIcon("information-circle", detailItem)}
+              {renderIcon("trash", deleteItem, displayDeleteAlert)}
+              {renderIcon(
+                "checkmark-done-circle",
+                updateItem,
+                displayUpdatePlanned
+              )}
+              {renderIcon("information-circle", detailItem, displayDeleteAlert)}
             </View>
           );
         };
@@ -286,13 +297,10 @@ const PlannedPayments = ({ navigation }) => {
     const renderContainerDetails = () => {
       return (
         <View style={plannedPaymentsStyle.containerDetails}>
-          {spendingElements.map((element, index) => {
-            if (element.period != 0) {
-              return renderLineDetailEachItem(element);
-            } else {
-              return null;
-            }
-          })}
+          <FlatList
+            data={plannedSpendingsElements}
+            renderItem={renderLineDetailEachItem}
+          />
         </View>
       );
     };
@@ -320,8 +328,8 @@ const PlannedPayments = ({ navigation }) => {
       <StatusBarCustomized />
       {renderHeader()}
 
-      {filteredNonEmptyCategories.length == 0 && renderEmptyContent()}
-      <FlatList data={filteredNonEmptyCategories} renderItem={renderItem} />
+      {filteredListNonEmptyCategories.length == 0 && renderEmptyContent()}
+      <FlatList data={filteredListNonEmptyCategories} renderItem={renderItem} />
     </View>
   );
 };

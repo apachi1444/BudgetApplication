@@ -12,6 +12,7 @@ const initialState = categories.map((item) => {
     imageUrl: item.imageUrl,
     incomeElements: [],
     spendingElements: [],
+    plannedSpendingsElements: [],
   };
 });
 
@@ -20,19 +21,15 @@ export const userSpendingsAndIncomesCategories = createSlice({
   initialState: initialState,
   reducers: {
     addTransaction: (state, action) => {
+      let { category, transaction, period } = action.payload;
       state.map((item) => {
-        let { category, transaction, period } = action.payload;
-        let numberTimesPaid = 0;
-        if (period != 0) {
-          console.log(
-            "this is the period the action payload that the user just typed in ",
-            period
-          );
-          numberTimesPaid = 0;
-        } else {
-          numberTimesPaid = 1;
-        }
         if (item.title == category) {
+          let numberTimesPaid = 0;
+
+          if (period == 0) {
+            numberTimesPaid = 1;
+          }
+
           let finalList =
             transaction == "Income"
               ? item.incomeElements
@@ -42,8 +39,13 @@ export const userSpendingsAndIncomesCategories = createSlice({
             ...action.payload,
             numberTimesPaid,
           });
-
-          console.log("this is the final list of our item ", finalList);
+          if (period != 0) {
+            item.plannedSpendingsElements.push({
+              key: item.plannedSpendingsElements.length + 1,
+              ...action.payload,
+              numberTimesPaid,
+            });
+          }
         }
       });
     },
@@ -51,6 +53,13 @@ export const userSpendingsAndIncomesCategories = createSlice({
       const { id, period, key, date } = action.payload;
       state.map((item) => {
         if (item.id == id) {
+          item.plannedSpendingsElements.map((elem) => {
+            if (elem.key == key) {
+              let newDate = returnNewDate(new Date(date), period);
+              elem.newDate = newDate;
+              elem.numberTimesPaid++;
+            }
+          });
           item.spendingElements.map((elem) => {
             if (elem.key == key) {
               let newDate = returnNewDate(new Date(date), period);
@@ -86,6 +95,17 @@ export const userSpendingsAndIncomesCategories = createSlice({
               (income) => income.key != key
             );
           } else {
+            if (item.spendings != null) {
+              item.spendings = item?.spendings.filter((item) => {
+                item.key !== key;
+              });
+            }
+            if (item.plannedSpendingsElements != null) {
+              item.plannedSpendingsElements =
+                item?.plannedSpendingsElements.filter((item) => {
+                  item.key !== key;
+                });
+            }
             item.spendingElements = item.spendingElements.filter(
               (spending) => spending.key != key
             );
@@ -106,6 +126,13 @@ export const userSpendingsAndIncomesCategories = createSlice({
           item.spendings = item?.spendings.filter((item) => {
             return false;
           });
+        }
+        if (item.plannedSpendingsElements != null) {
+          item.plannedSpendingsElements = item?.plannedSpendingsElements.filter(
+            (item) => {
+              return false;
+            }
+          );
         }
         if (item.incomes != null) {
           item.incomes = item?.incomes.filter((item) => {

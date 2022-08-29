@@ -14,6 +14,8 @@ import { displayData, findUser } from "../../global/async-storage";
 
 import { welcomePageStyle } from "./welcomePageStyle";
 import StatusBarCustomized from "../../components/statusBar";
+import { useDispatch, useSelector } from "react-redux";
+import { renderAppVisisted } from "../../redux/features/user/userInformations";
 const WelcomePage = ({ navigation }) => {
   // useLayoutEffect(() => {
   //   (async () => {
@@ -26,6 +28,8 @@ const WelcomePage = ({ navigation }) => {
   //   })();
   // }, []);
 
+  const user = useSelector((state) => state.userInformations);
+  const dispatch = useDispatch();
   const value = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
   const opacityRef = useRef(new Animated.Value(0)).current;
 
@@ -126,7 +130,7 @@ const WelcomePage = ({ navigation }) => {
         <TouchableOpacity
           onPressIn={async () => {
             let userLoggedIn = await displayData();
-
+            dispatch(renderAppVisisted());
             if (!userLoggedIn) {
               navigation.navigate("AuthStack");
             } else {

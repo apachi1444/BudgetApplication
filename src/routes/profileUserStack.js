@@ -2,26 +2,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import editProfile from "../screens/editProfile/editProfile";
 import PlannedPayments from "../screens/plannedPayments/plannedPayments";
-import ProfileUser from "../screens/profile/profile";
-// import { TabBottomNavigation } from "./tabBottomNavigationStack";
-// import BottomBar from "./bottomBar";
-import { DrawerNavigator } from "./drawerNavigationStack";
+import profile from "../screens/profile/profile";
 const ProfileUserStack = createNativeStackNavigator();
 
 export default function () {
   return (
     <ProfileUserStack.Navigator>
-      {/* <ProfileUserStack.Screen
-        name="BottomBar"
-        component={BottomBar}
-        options={{
-          headerShown: false,
-          headerStyle: { backgroundColor: "#eee" },
-        }}
-      /> */}
       <ProfileUserStack.Screen
-        name="ProfilePage"
-        component={ProfileUser}
+        name="HomePage"
+        component={profile}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },

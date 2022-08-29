@@ -1,15 +1,14 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { useState } from "react";
-import { useLayoutEffect } from "react";
-import { findUser } from "../global/async-storage";
+import { useSelector } from "react-redux";
+import config from "../../config";
 import authStack from "./authStack";
 import welcomePageStack from "./welcomePageStack";
-
 const WelcomeStack = createNativeStackNavigator();
 
 export default function () {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const user = useSelector((state) => state.userInformations);
+  const visited = user.visited;
   // useLayoutEffect(() => {
   //   (async () => {
   //     console.log("haha");
@@ -23,11 +22,11 @@ export default function () {
   //   })();
   // }, []);
 
-  console.log("this is the value of the boolean ", loggedIn);
+  console.log("this is the boolean of visited ", visited);
 
   return (
     <WelcomeStack.Navigator>
-      {loggedIn == false && (
+      {visited != true && (
         <WelcomeStack.Screen
           name="WelcomePageStack"
           component={welcomePageStack}

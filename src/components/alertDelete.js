@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 export const displayDeleteAlert = (deleteFunction) => {
   Alert.alert(
     "Are you sure ! ",
-    "This action will delete your spending permanently",
+    "This action will delete this transaction permanently",
     [
       {
         text: "Delete ",

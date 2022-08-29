@@ -390,7 +390,8 @@ const Add = ({ handleModal }) => {
   const formikRef = useRef(null);
 
   const dispatch = useDispatch();
-  const addingToStore = (title, amount, category, period = null) => {
+  const addingToStore = (title, amount, category, period = 0) => {
+    console.log("period of the user ", period);
     dispatch(
       addCategory({
         transaction: convertNumberTypeTransactionToName(choosenPart),

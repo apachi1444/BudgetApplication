@@ -73,7 +73,7 @@ export const chartCategoriesStyle = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.BASE * 3,
-    fontWeight: "350",
+    fontWeight: "300",
   },
 
   containerNumberCategoriesChart: {

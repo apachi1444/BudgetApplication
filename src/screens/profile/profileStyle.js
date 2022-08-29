@@ -19,7 +19,7 @@ export const profileStyles = StyleSheet.create({
     color: COLORS.PRIMARY,
   },
   container: {
-    paddingVertical: "10%",
+    paddingVertical: "3%",
   },
   containerInformationsUser: {
     alignItems: "center",
@@ -64,7 +64,6 @@ export const profileStyles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: SIZES.BASE * 2.5,
   },
   textPriceOfSpecificContainer: { marginTop: SIZES.BASE * 1 },
   caption: {
@@ -110,7 +109,8 @@ export const profileStyles = StyleSheet.create({
     backgroundColor: COLORS.TOTALINCOMES,
     flexDirection: "row",
     width: "50%",
-    height: windowHeight * 0.12,
+    // height: windowHeight * 0.12,
+    padding: "5%",
     alignItems: "center",
     justifyContent: "center",
   },

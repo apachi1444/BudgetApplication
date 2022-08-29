@@ -7,6 +7,7 @@ const initialState = typeTransactions.map((item) => {
     type: item.name,
     spendingElements: [],
     incomeElements: [],
+    plannedSpendingsElements: [],
   };
 });
 
@@ -16,15 +17,13 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
   reducers: {
     add: (state, action) => {
       let { type, transaction, period } = action.payload;
-      let numberTimesPaid = 0;
-      if (Number(period) != 0) {
-        numberTimesPaid = 0;
-      } else {
-        numberTimesPaid = 1;
-      }
 
       state.map((item) => {
         if (item.type == type) {
+          let numberTimesPaid = 0;
+          if (period == 0) {
+            numberTimesPaid = 1;
+          }
           let finalList =
             transaction == "Income"
               ? item.incomeElements
@@ -34,6 +33,13 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
             numberTimesPaid: Number(numberTimesPaid),
             ...action.payload,
           });
+          if (period != 0) {
+            item.plannedSpendingsElements.push({
+              key: item.plannedSpendingsElements.length + 1,
+              ...action.payload,
+              numberTimesPaid,
+            });
+          }
         }
       });
     },
@@ -46,6 +52,17 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
               (income) => income.key != key
             );
           } else {
+            if (item.spendings != null) {
+              item.spendings = item?.spendings.filter((item) => {
+                item.key !== key;
+              });
+            }
+            if (item.plannedSpendingsElements != null) {
+              item.plannedSpendingsElements =
+                item?.plannedSpendingsElements.filter((item) => {
+                  item.key !== key;
+                });
+            }
             item.spendingElements = item.spendingElements.filter(
               (spending) => spending.key != key
             );
@@ -57,6 +74,11 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
       const { id, key } = action.payload;
       state.map((item) => {
         if (item.id == id) {
+          item.plannedSpendingsElements.map((elem) => {
+            if (elem.key == key) {
+              elem.numberTimesPaid++;
+            }
+          });
           item.spendingElements.map((elem) => {
             if (elem.key == key) {
               elem.numberTimesPaid++;
@@ -77,6 +99,13 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
           item.spendings = item?.spendings.filter((item) => {
             return false;
           });
+        }
+        if (item.plannedSpendingsElements != null) {
+          item.plannedSpendingsElements = item?.plannedSpendingsElements.filter(
+            (item) => {
+              return false;
+            }
+          );
         }
         if (item.incomes != null) {
           item.incomes = item?.incomes.filter((item) => {

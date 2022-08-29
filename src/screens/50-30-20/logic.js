@@ -194,8 +194,8 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
   };
 
 export const returnPercentageUsedAndRemaining = (y, totalOptimal) => {
-  let percentageUsed = ((y / totalOptimal) * 100).toFixed(1);
-  let percentageRemaining = 100 - percentageUsed;
+  let percentageUsed = ((y / totalOptimal) * 100).toFixed(2);
+  let percentageRemaining = (100 - percentageUsed).toFixed(2);
   if (percentageUsed >= 100) {
     percentageRemaining = 0;
   }

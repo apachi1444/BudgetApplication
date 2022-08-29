@@ -1,15 +1,15 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useLayoutEffect, useState } from "react";
-import WelcomePage from "../screens/welcomePage/welcomePage";
+import React from "react";
 import Login from "./../screens/login/login";
 import SignUp from "./../screens/signup/signup";
 import ProfileUserStack from "./profileUserStack";
-import { DrawerNavigator } from "./drawerNavigationStack";
 import { findUser } from "../global/async-storage";
+import loggedStack from "./loggedStack";
+import config from "../../config";
+
 const AuthStack = createNativeStackNavigator();
 
 export default function () {
-  const [loggedIn, setLoggedIn] = useState(true);
   // useLayoutEffect(() => {
   //   (async () => {
   //     console.log("haha");
@@ -22,10 +22,10 @@ export default function () {
   //     }
   //   })();
   // }, []);
-
+  console.log("this is the value of the config ", config.LOGGEDIN);
   return (
     <AuthStack.Navigator>
-      {loggedIn == false && (
+      {config.LOGGEDIN != "true" && (
         <>
           <AuthStack.Screen
             name="LoginPage"
@@ -46,8 +46,8 @@ export default function () {
         </>
       )}
       <AuthStack.Screen
-        name="DrawerNavigator"
-        component={DrawerNavigator}
+        name="loggedIn"
+        component={loggedStack}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: "#eee" },

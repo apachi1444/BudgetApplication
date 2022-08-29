@@ -10,9 +10,9 @@ const SIZES = {
   PADDING: 12,
 };
 
-export const settingsStyles = StyleSheet.create({
+export const profileStyles = StyleSheet.create({
   container: {
-    paddingVertical: "26%",
+    paddingVertical: "12%",
     flex: 1,
   },
   containerInformationsUser: {
@@ -44,6 +44,7 @@ export const settingsStyles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: SIZES.BASE * 2,
     marginVertical: SIZES.BASE * 3,
+    marginTop: SIZES.BASE * 12,
     padding: SIZES.BASE * 3,
   },
   editProfileText: {
@@ -74,7 +75,6 @@ export const settingsStyles = StyleSheet.create({
     marginHorizontal: SIZES.BASE * 1.2,
   },
   toggleSetting: {
-    backgroundColor: isEnabledSettings ? COLORS.GREY : COLORS.PRIMARY,
     width: windowWidth * 0.08,
     height: windowWidth * 0.05,
     borderRadius: SIZES.BASE * 8,
@@ -86,7 +86,7 @@ export const settingsStyles = StyleSheet.create({
     width: "50%",
     height: "100%",
     position: "absolute",
-    left: isEnabledSettings ? "10%" : "55%",
+
     top: "16.5%",
   },
   dividerOfProfileDetailsLines: {

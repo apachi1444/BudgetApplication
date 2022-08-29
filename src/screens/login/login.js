@@ -8,6 +8,10 @@ import { globalStyles } from "../../global/styles/globalStyles";
 import Input from "../../components/input/input";
 import { findUser, handleSubmit } from "../../global/async-storage/index";
 import { useLayoutEffect } from "react";
+import { addUser } from "../../redux/features/user/userInformations";
+import { useDispatch } from "react-redux";
+import { displayEmptyContentInput } from "../../components/alertEmptyContentInput";
+import config from "../../../config";
 export default ({ navigation }) => {
   const [email, setEmail] = useState("");
   // var db = openDatabase(
@@ -37,17 +41,25 @@ export default ({ navigation }) => {
   //   });
   // }, []);
 
-  useLayoutEffect(() => {
-    (async () => {
-      const value = await findUser();
-      const obj = JSON.parse(value);
-      if (obj.email != "") {
-        navigation.navigate("UserProfile");
-      }
-    })();
-  }, []);
+  // useLayoutEffect(() => {
+  //   (async () => {
+  //     const value = await findUser();
+  //     const obj = JSON.parse(value);
+  //     if (obj.email != "") {
+  //       navigation.navigate("loggedIn");
+  //     }
+  //   })();
+  // }, []);
+
+  if (__DEV__) {
+    console.log("Development");
+  } else {
+    console.log("Production");
+  }
 
   const [password, setPassword] = useState("");
+  console.log("this is the value in the config file ", config.HAHA);
+  const dispatch = useDispatch();
 
   const renderInputs = () => {
     return (
@@ -109,7 +121,17 @@ export default ({ navigation }) => {
         <View
           onStartShouldSetResponder={() => {
             handleSubmit(email, password);
-            navigation.navigate("UserProfile");
+            console.log(email, password, "haha");
+            if (email == "" || password == "") {
+              displayEmptyContentInput();
+            } else {
+              dispatch(
+                addUser({
+                  email,
+                })
+              );
+              navigation.navigate("loggedIn");
+            }
           }}
           disabled={!isValid}
           style={[styles.button, styles.signin]}

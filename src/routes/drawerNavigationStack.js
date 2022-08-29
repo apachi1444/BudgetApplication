@@ -30,7 +30,7 @@ export const DrawerNavigator = () => {
       drawerContent={(props) => <CustomDrawer {...props} />}
     >
       <Drawer.Screen
-        name="Home"
+        name="Main"
         component={BottomBar}
         options={{
           drawerIcon: ({ color, size }) => (

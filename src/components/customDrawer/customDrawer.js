@@ -22,10 +22,12 @@ import {
   returnNewFormDisplayPrice,
 } from "../../global/functions/store";
 import { useSelector } from "react-redux";
+import { renderUserNameIfNUll } from "../../global/functions/nameUser";
 const CustomDrawer = (props) => {
   const [isEnabledSettings, setIsEnabledSettings] = useState(false);
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
-
+  const user = useSelector((state) => state.userInformations);
+  const name = renderUserNameIfNUll(user.name);
   const { currentBudget } = calculateBudgetSpendingsAndIncomes(list);
 
   const toggleSwitch = () => {
@@ -85,7 +87,7 @@ const CustomDrawer = (props) => {
               marginVertical: SIZES.BASE * 2,
             }}
           >
-            JAOUA YESSINE
+            {name}
           </Text>
           <View
             style={{

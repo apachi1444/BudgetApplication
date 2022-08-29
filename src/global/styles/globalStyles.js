@@ -169,6 +169,12 @@ export const globalStyles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "flex-end",
   },
+  tabBar: {
+    height: SIZES.BASE * 10,
+    backgroundColor: COLORS.BOTTOMBAR,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
 });
 
 // export const images = {

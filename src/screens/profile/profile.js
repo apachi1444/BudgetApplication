@@ -10,7 +10,7 @@ import {
   returnNewFormDisplayPrice,
 } from "../../global/functions/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import config from "../../../config";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 // import { findUser } from "../../global/async-storage";
@@ -18,13 +18,19 @@ import StatusBarCustomized from "../../components/statusBar";
 import { displayResetAllAlert } from "../../components/alertResetAll";
 import { deleteAllCategories } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 import { deleteAllTypeTransactions } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
+import { addUser } from "../../redux/features/user/userInformations";
+import { renderUserNameIfNUll } from "../../global/functions/nameUser";
+import { returnFilteredData } from "../plannedPayments/logic";
 
 export default ProfileUser = ({ navigation }) => {
   let list = useSelector((state) => state.userSpendingsAndIncomesCategories);
-  const [email, setEmail] = useState("yessine");
-
+  const user = useSelector((state) => state.userInformations);
+  const [email, setEmail] = useState(renderUserNameIfNUll(user.name));
   const dispatch = useDispatch();
 
+  const filteredListNonEmptyCategories = returnFilteredData(list);
+
+  console.log("sqsdfqsdfsdqfdf", filteredListNonEmptyCategories);
   // useEffect(() => {
   //   (async () => {
   //     const value = await findUser();
@@ -54,7 +60,6 @@ export default ProfileUser = ({ navigation }) => {
   };
 
   const goToPlannedPayments = () => {
-    console.log("sdqf");
     navigation.navigate("PlannedPayments");
   };
 
@@ -76,14 +81,15 @@ export default ProfileUser = ({ navigation }) => {
               size={SIZES.BASE * 7}
             />
           </View>
-          <View onStartShouldSetResponder={logOut}>
-            <Ionicons
-              name="log-out-outline"
-              style={profileStyles.logoutIcon}
-              size={SIZES.BASE * 7}
-            />
-            {/* <Text>{renderEmailUser()}</Text> */}
-          </View>
+          {config.LOGGEDIN != "true" && (
+            <View onStartShouldSetResponder={logOut}>
+              <Ionicons
+                name="log-out-outline"
+                style={profileStyles.logoutIcon}
+                size={SIZES.BASE * 7}
+              />
+            </View>
+          )}
         </View>
       </>
     );
@@ -231,6 +237,7 @@ export default ProfileUser = ({ navigation }) => {
           backgroundColor: COLORS.RED,
           padding: SIZES.BASE * 3,
           borderRadius: SIZES.BASE * 2,
+          marginVertical: SIZES.BASE * 1,
         }}
         onStartShouldSetResponder={() => {
           return displayResetAllAlert(deleteItems);

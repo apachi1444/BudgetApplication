@@ -22,7 +22,6 @@ import { useSelector } from "react-redux";
 const ChartCategories = ({ navigation, route }) => {
   let data = useSelector((state) => state.userSpendingsAndIncomesCategories);
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [modeSelected, setModeSelected] = useState("Spendings");
   // function setSelectCategoryByName(name) {
   //   let category = categories.filter((a) => a.name == name);
@@ -36,7 +35,7 @@ const ChartCategories = ({ navigation, route }) => {
           <Ionicons name="arrow-undo-circle-outline" size={42} />
         </TouchableOpacity>
         <Text style={chartCategoriesStyle.title}>Charts</Text>
-        <TouchableOpacity onPress={() => navigation.open()}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
             style={globalStyles.profileImage}
             source={require("../../../assets/images/elon_musk.jpg")}

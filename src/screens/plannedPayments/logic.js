@@ -7,19 +7,23 @@ export const spendingElementsContainsNonEmptyPeriods = (list) => {
   list.map((item) => {
     total += item.period;
   });
+
   if (total > 0) return true;
   return false;
 };
 
 export const returnfilteredNonEmptyCategories = (finalList) => {
-  console.log("this is the final list in the functino ", finalList);
-  return finalList.filter((item) => {
-    console.log("spending Elements ", item.spendingElements);
-    return (
-      item?.spendingElements?.length != 0 &&
-      spendingElementsContainsNonEmptyPeriods(item?.spendingElements) == true
-    );
+  let final = [];
+  console.log("we are in the list ", finalList);
+  finalList.map((item) => {
+    if (
+      item.spendingElements.length != 0 &&
+      spendingElementsContainsNonEmptyPeriods(item.spendingElements)
+    ) {
+      final.push(item);
+    }
   });
+  return final;
 };
 
 export const returnTimeRemaining = (yearsRemaining, newDaysRemaining) => {
@@ -41,16 +45,7 @@ export const returnTimeRemaining = (yearsRemaining, newDaysRemaining) => {
 export const returnTotalSpendingWithNonNullPeriod = (list, id) => {
   let total = 0;
   list.map((item) => {
-    console.log("item id ", item.id);
-    console.log("our id ", id);
-    if (item.id == id) {
-      item.spendingElements.map((spendingElement) => {
-        if (spendingElement.period != 0) {
-          total +=
-            spendingElement.price * (spendingElement.numberTimesPaid + 1);
-        }
-      });
-    }
+    total += item.price * (item.numberTimesPaid + 1);
   });
   return total;
 };
@@ -107,4 +102,11 @@ export const returnColorMessageAppriopriate = (
     color = COLORS.ORANGE;
   }
   return { color, message };
+};
+
+export const returnFilteredData = (list) => {
+  return list.filter((elem) => {
+    console.log(elem);
+    return elem.plannedSpendingsElements.length > 0;
+  });
 };

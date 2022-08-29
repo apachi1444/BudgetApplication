@@ -1,12 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useEffect, useRef } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 import { TabArr } from "../consts/tab";
-
 import { TabButton } from "../components/tabButton";
 import { TabIcon } from "../components/tabIcon";
-import COLORS from "../consts/color";
-import { SIZES } from "../consts/theme";
+import { StackActions } from "@react-navigation/native";
+import { globalStyles } from "../global/styles/globalStyles";
 
 const Tab = createBottomTabNavigator();
 export default function BottomBar() {
@@ -14,7 +12,7 @@ export default function BottomBar() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: globalStyles.tabBar,
       }}
     >
       {TabArr.map((item, index) => {
@@ -36,44 +34,21 @@ export default function BottomBar() {
               tabBarShowLabel: false,
               tabBarIcon: (props) => <TabIcon {...props} item={item} />,
             }}
+            listeners={({ navigation, route }) => ({
+              tabPress: (e) => {
+                let state = route?.state;
+                if (state) {
+                  const stackKey = state.key;
+                  navigation.dispatch({
+                    ...StackActions.popToTop(),
+                    target: stackKey,
+                  });
+                }
+              },
+            })}
           />
         );
       })}
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  tabBar: {
-    height: SIZES.BASE * 10,
-    backgroundColor: COLORS.BOTTOMBAR,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  buttonAdd: {
-    width: SIZES.BASE * 9,
-    height: SIZES.BASE * 9,
-    borderRadius: SIZES.BASE * 4,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: SIZES.BASE * 8,
-  },
-  circle: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: COLORS.SECONDARY,
-    borderRadius: 25,
-  },
-  icon: {
-    fontSize: 26,
-  },
-  iconAndLabelView: {
-    alignItems: "center",
-  },
-});
