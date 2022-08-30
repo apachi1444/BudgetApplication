@@ -4,12 +4,15 @@ import { Avatar } from "react-native-paper";
 import { globalStyles } from "../../global/styles/globalStyles";
 import COLORS from "../../consts/color";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { profileStyles } from "./settingsStyle";
 import { renderUserNameIfNUll } from "../../global/functions/nameUser";
+import { displayResetAllAlert } from "../../components/alertResetAll";
+import { deleteAllCategories } from "../../redux/features/user/userSpendingsAndIncomesCategories";
+import { deleteAllTypeTransactions } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 export default function Settings({ navigation }) {
   const [isEnabledSettings, setIsEnabledSettings] = useState(false);
-
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.userInformations);
   const name = renderUserNameIfNUll(user.name);
   const toggleSwitch = () => {
@@ -36,6 +39,36 @@ export default function Settings({ navigation }) {
         },
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]
+    );
+  };
+
+  const renderClearAllButton = () => {
+    const deleteItems = () => {
+      dispatch(deleteAllCategories());
+      dispatch(deleteAllTypeTransactions());
+    };
+    return (
+      <View
+        style={{
+          backgroundColor: COLORS.RED,
+          padding: SIZES.BASE * 3,
+          borderRadius: SIZES.BASE * 2,
+          marginVertical: SIZES.BASE * 8,
+        }}
+        onStartShouldSetResponder={() => {
+          return displayResetAllAlert(deleteItems);
+        }}
+      >
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: SIZES.BASE * 2.5,
+          }}
+        >
+          Reset All
+        </Text>
+      </View>
     );
   };
 
@@ -110,6 +143,7 @@ export default function Settings({ navigation }) {
               />
             </View>
           </View>
+          {renderClearAllButton()}
         </View>
       </View>
     </SafeAreaView>

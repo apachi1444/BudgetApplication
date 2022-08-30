@@ -29,21 +29,24 @@ export const userSpendingsAndIncomesCategories = createSlice({
           if (period == 0) {
             numberTimesPaid = 1;
           }
-
-          let finalList =
-            transaction == "Income"
-              ? item.incomeElements
-              : item.spendingElements;
-          finalList.push({
-            key: finalList.length + 1,
-            ...action.payload,
-            numberTimesPaid,
-          });
           if (period != 0) {
             item.plannedSpendingsElements.push({
               key: item.plannedSpendingsElements.length + 1,
               ...action.payload,
               numberTimesPaid,
+              id: item.id,
+              // datePayments,
+            });
+          } else {
+            let finalList =
+              transaction == "Income"
+                ? item.incomeElements
+                : item.spendingElements;
+            finalList.push({
+              key: finalList.length + 1,
+              ...action.payload,
+              paymentNumber: numberTimesPaid,
+              // datePayments,
             });
           }
         }
@@ -51,39 +54,33 @@ export const userSpendingsAndIncomesCategories = createSlice({
     },
     updateTransaction: (state, action) => {
       const { id, period, key, date } = action.payload;
+      console.log("this is actino payload", action.payload, "lkjsdf ", id);
+      let newDate = returnNewDate(new Date(date), period);
       state.map((item) => {
         if (item.id == id) {
+          let numberPayment = 0;
           item.plannedSpendingsElements.map((elem) => {
             if (elem.key == key) {
-              let newDate = returnNewDate(new Date(date), period);
+              // elem.datePayments.push({ date, ...elem.numberTimesPaid });
               elem.newDate = newDate;
               elem.numberTimesPaid++;
+              elem.lastTimePaid = new Date();
+              numberPayment = elem.numberTimesPaid;
+              // elem.datePayments.push({
+              //   date: new Date(),
+              //   ...elem.numberTimesPaid,
+              // });
             }
           });
-          item.spendingElements.map((elem) => {
-            if (elem.key == key) {
-              let newDate = returnNewDate(new Date(date), period);
-              elem.newDate = newDate;
-              elem.numberTimesPaid++;
-            }
+          item.spendingElements.push({
+            ...action.payload,
+            numberTimesPaid: 1,
+            planned: true,
+            key: item.spendingElements.length + 1,
+            numberPayment,
           });
         }
       });
-    },
-
-    updateTransactionPlanned: (state, action) => {
-      // const { id, period, key, date, numberTimesPaid } = action.payload;
-      // console.log(action.payload);
-      // state.map((item) => {
-      //   if (item.id == id) {
-      //     item.spendingElements.map((elem) => {
-      //       if (elem.key == key) {
-      //         let newDate = returnNewDate(date, period);
-      //         elem.date = newDate;
-      //       }
-      //     });
-      //   }
-      // });
     },
 
     deleteTransaction: (state, action) => {
@@ -100,16 +97,36 @@ export const userSpendingsAndIncomesCategories = createSlice({
                 item.key !== key;
               });
             }
-            if (item.plannedSpendingsElements != null) {
-              item.plannedSpendingsElements =
-                item?.plannedSpendingsElements.filter((item) => {
-                  item.key !== key;
-                });
+            const booleanPlanned = action.payload?.planned;
+            if (booleanPlanned) {
+              item.plannedSpendingsElements.map((elem) => {
+                if (elem.key == key) {
+                  elem.numberTimesPaid--;
+                }
+              });
             }
+
             item.spendingElements = item.spendingElements.filter(
               (spending) => spending.key != key
             );
           }
+        }
+      });
+    },
+
+    deletePlannedTransactionCategories: (state, action) => {
+      const { key, id } = action.payload;
+      state.map((item) => {
+        if (item.id == id) {
+          item.plannedSpendingsElements = item.plannedSpendingsElements.filter(
+            (elem) => elem.key !== key
+          );
+
+          item.spendingElements = item.spendingElements.filter((elem) => {
+            if (elem.key == key && elem.planned == true) {
+              return false;
+            }
+          });
         }
       });
     },
@@ -127,6 +144,7 @@ export const userSpendingsAndIncomesCategories = createSlice({
             return false;
           });
         }
+
         if (item.plannedSpendingsElements != null) {
           item.plannedSpendingsElements = item?.plannedSpendingsElements.filter(
             (item) => {
@@ -134,6 +152,7 @@ export const userSpendingsAndIncomesCategories = createSlice({
             }
           );
         }
+
         if (item.incomes != null) {
           item.incomes = item?.incomes.filter((item) => {
             return false;
@@ -152,4 +171,5 @@ export const {
   deleteTransaction,
   updateTransactionPlanned,
   deleteAllCategories,
+  deletePlannedTransactionCategories,
 } = userSpendingsAndIncomesCategories.actions;

@@ -22,6 +22,11 @@ export const styleModal = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
   },
+  titleDetail: {
+    fontWeight: "bold",
+    fontSize: 21,
+    color: COLORS.SECONDARY,
+  },
   containerOneDetail: {
     backgroundColor: COLORS.PRIMARY,
     padding: SIZES.BASE * 4,

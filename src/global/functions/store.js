@@ -107,6 +107,7 @@ export const calculateAllSpendingsCategories = (list) => {
   let total = 0;
   list.map((item) => {
     item.spendingElements.map((spending) => {
+      console.log("this is spending ", spending);
       total += spending.price * spending.numberTimesPaid;
     });
   });

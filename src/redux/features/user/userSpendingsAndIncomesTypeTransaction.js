@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { typeTransactions } from "../../../consts/spendingCategories";
+import { returnNewDate } from "../../../global/functions/time";
 
 const initialState = typeTransactions.map((item) => {
   return {
@@ -20,24 +21,28 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
 
       state.map((item) => {
         if (item.type == type) {
+          let datePayments = [];
           let numberTimesPaid = 0;
           if (period == 0) {
             numberTimesPaid = 1;
           }
-          let finalList =
-            transaction == "Income"
-              ? item.incomeElements
-              : item.spendingElements;
-          finalList.push({
-            key: finalList.length + 1,
-            numberTimesPaid: Number(numberTimesPaid),
-            ...action.payload,
-          });
           if (period != 0) {
             item.plannedSpendingsElements.push({
               key: item.plannedSpendingsElements.length + 1,
               ...action.payload,
               numberTimesPaid,
+              // datePayments,
+            });
+          } else {
+            let finalList =
+              transaction == "Income"
+                ? item.incomeElements
+                : item.spendingElements;
+            finalList.push({
+              key: finalList.length + 1,
+              ...action.payload,
+              numberTimesPaid,
+              // datePayments,
             });
           }
         }
@@ -57,11 +62,13 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
                 item.key !== key;
               });
             }
-            if (item.plannedSpendingsElements != null) {
-              item.plannedSpendingsElements =
-                item?.plannedSpendingsElements.filter((item) => {
-                  item.key !== key;
-                });
+            const booleanPlanned = action.payload?.planned;
+            if (booleanPlanned) {
+              item.plannedSpendingsElements.map((elem) => {
+                if (elem.key == key) {
+                  elem.numberTimesPaid--;
+                }
+              });
             }
             item.spendingElements = item.spendingElements.filter(
               (spending) => spending.key != key
@@ -71,18 +78,29 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
       });
     },
     updateTypeTransaction: (state, action) => {
-      const { id, key } = action.payload;
+      const { id, key, date, period } = action.payload;
+      let newDate = returnNewDate(new Date(date), period);
       state.map((item) => {
         if (item.id == id) {
+          let numberPayment = 0;
           item.plannedSpendingsElements.map((elem) => {
             if (elem.key == key) {
               elem.numberTimesPaid++;
+              elem.newDate = newDate;
+              numberPayment = elem.numberTimesPaid;
+              elem.lastTimePaid = new Date();
+              // elem.datePayments = elem.datePayments.push({
+              //   date,
+              //   ...elem.numberTimesPaid,
+              // });
             }
           });
-          item.spendingElements.map((elem) => {
-            if (elem.key == key) {
-              elem.numberTimesPaid++;
-            }
+          item.spendingElements.push({
+            ...action.payload,
+            numberTimesPaid: 1,
+            planned: true,
+            key: item.spendingElements.length + 1,
+            numberPayment,
           });
         }
       });
@@ -100,6 +118,7 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
             return false;
           });
         }
+
         if (item.plannedSpendingsElements != null) {
           item.plannedSpendingsElements = item?.plannedSpendingsElements.filter(
             (item) => {
@@ -114,6 +133,21 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
         }
       });
     },
+    deletePlannedTransactionTypeTransactions: (state, action) => {
+      const { key, id } = action.payload;
+      state.map((item) => {
+        if (item.id == id) {
+          item.plannedSpendingsElements = item.plannedSpendingsElements.filter(
+            (elem) => elem.key !== key
+          );
+          item.spendingElements = item.spendingElements.filter((elem) => {
+            if (elem.key == key && elem.planned == true) {
+              return false;
+            }
+          });
+        }
+      });
+    },
   },
 });
 
@@ -124,4 +158,5 @@ export const {
   deleteGuide,
   updateTypeTransaction,
   deleteAllTypeTransactions,
+  deletePlannedTransactionTypeTransactions,
 } = userSpendingsAndIncomesTypeTransaction.actions;

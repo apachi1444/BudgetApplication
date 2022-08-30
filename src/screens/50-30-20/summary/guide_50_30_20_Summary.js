@@ -48,10 +48,6 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
     return state.userSpendingsAndIncomes;
   });
 
-  console.log(
-    "this is the data the we must get from the store haha dude  ",
-    data
-  );
   const totalIncomes = calculateAllIncomes(data);
 
   const totalWants = wantsSpendings(data);
@@ -59,7 +55,6 @@ const Guide_50_30_20_Summary = ({ navigation }) => {
   const totalNeeds = needsSpendings(data);
 
   const arraySpendings = [totalWants, totalNeeds, totalSaves];
-  console.log("this is the array of spendings ", arraySpendings);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
 

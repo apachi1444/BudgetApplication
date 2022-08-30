@@ -87,7 +87,7 @@ const ChartCategories = ({ navigation, route }) => {
     // Calculate percentage and repopulate chart data
     let finalChartDataIncome = filterChartDataIncomes.map((item) => {
       let percentageIncome = ((item.incomeCount / totalIncome) * 100).toFixed(
-        0
+        2
       );
       return {
         labelIncome: `${percentageIncome}%`,
@@ -103,7 +103,7 @@ const ChartCategories = ({ navigation, route }) => {
       let percentageExpense = (
         (item.expenseCount / totalExpense) *
         100
-      ).toFixed(0);
+      ).toFixed(2);
       return {
         labelExpense: `${percentageExpense}%`,
         y: Number(item.expenseCount),
@@ -222,8 +222,7 @@ const ChartCategories = ({ navigation, route }) => {
 
   const renderNavigationToTheDetailsCategoryChoosen = () => {};
   const renderExpenseSummary = () => {
-    let { finalChartDataExpense, categoriesExpenses, categoriesIncomes } =
-      processCategoryDataToDisplay();
+    let { finalChartDataExpense } = processCategoryDataToDisplay();
 
     const renderItem = ({ item }) => (
       <TouchableOpacity
@@ -249,7 +248,7 @@ const ChartCategories = ({ navigation, route }) => {
         {/* Expenses */}
         <View style={{ justifyContent: "center" }}>
           <Text style={chartCategoriesStyle.textPriceAndPercentageSummaryLine}>
-            -{returnNewFormDisplayPrice(item.expenseCount)} DH {"  |  "}{" "}
+            -{returnNewFormDisplayPrice(item.expenseCount)} DH {"|"}
             {item.labelExpense}
           </Text>
         </View>

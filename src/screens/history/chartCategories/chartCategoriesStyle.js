@@ -105,8 +105,8 @@ export const chartCategoriesStyle = StyleSheet.create({
 
   containerOneLineSummaryChart: {
     flexDirection: "row",
-    height: 40,
-    paddingHorizontal: SIZESS.radius,
+    paddingHorizontal: SIZESS.radius / 2,
+    paddingVertical: SIZES.BASE,
     borderRadius: 10,
     backgroundColor: COLORS.BOTTOMBAR,
     marginBottom: SIZESS.base * 2,

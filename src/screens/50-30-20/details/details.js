@@ -19,14 +19,12 @@ import COLORS from "../../../consts/color";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  concatenateIncomesAndSpendingsOneTypeTransactionAndTotalSpendingAndTotalIncomes,
   renderAppropriateOptimalIncomes,
   renderAppropriateSpendings,
   renderCurrentBudget,
   returnFinalChartData,
   returnPercentageUsedAndRemaining,
   returnListIncomes,
-  returnListSpendings,
   returnListSpendingsAndTotalSpendings,
   returnFinalStringDate,
 } from "../logic";
@@ -40,6 +38,7 @@ import {
 } from "../../../global/functions/store";
 import { displayDeleteAlert } from "../../../components/alertDelete";
 import StatusBarCustomized from "../../../components/statusBar";
+import { windowWidth } from "../../../utils/dimensions";
 
 const Details = ({ navigation, route }) => {
   let { item } = route.params;
@@ -67,7 +66,6 @@ const Details = ({ navigation, route }) => {
     returnListIncomes(data, new Date(date));
   let finalArrayContainingSpendingsAndIncomes =
     finalArrayContainingSpendings.concat(finalArrayContainingIncomes);
-  console.log("this iqsdfklsjdqlfk", finalArrayContainingSpendingsAndIncomes);
   let currentBudget = renderCurrentBudget(
     totalSpendings,
     totalIncomesDaySelected
@@ -107,7 +105,8 @@ const Details = ({ navigation, route }) => {
 
   const renderRectangleDetailsChart = () => {
     let y = renderAppropriateSpendings(item.name, data);
-    let totalOptimal = renderAppropriateOptimalIncomes(item.type, totalIncomes);
+
+    let totalOptimal = renderAppropriateOptimalIncomes(item.name, totalIncomes);
     const renderOptimalIncome = () => {
       return (
         <View
@@ -183,11 +182,11 @@ const Details = ({ navigation, route }) => {
           <TouchableOpacity
             style={{
               flexDirection: "row",
-              height: 40,
-              paddingHorizontal: SIZESS.radius,
+              paddingHorizontal: SIZESS.radius / 1.5,
               borderRadius: 10,
               backgroundColor: COLORS.BOTTOMBAR,
               marginBottom: SIZESS.base * 2,
+              padding: SIZES.BASE * 3,
             }}
           >
             {/* Name/Category */}
@@ -204,6 +203,7 @@ const Details = ({ navigation, route }) => {
               />
               <Text
                 style={{
+                  width: windowWidth * 0.25,
                   marginLeft: SIZESS.base,
                   color: COLORS.PRIMARY,
                   fontWeight: "bold",
@@ -253,7 +253,7 @@ const Details = ({ navigation, route }) => {
 
   const renderRectangleDetailsList = () => {
     const renderHistoryItem = ({ item }) => {
-      const { title, price, date, transaction } = item;
+      const { title, date, transaction } = item;
       const renderTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
           return (
@@ -285,7 +285,10 @@ const Details = ({ navigation, route }) => {
               >
                 {" "}
                 {finalSign}
-                {calculateFinalPriceTransaction(item)} DH
+                {returnNewFormDisplayPrice(
+                  calculateFinalPriceTransaction(item)
+                )}{" "}
+                DH
               </Text>
             </View>
           );
@@ -464,7 +467,7 @@ const Details = ({ navigation, route }) => {
               {
                 justifyContent: "center",
                 alignItems: "center",
-                padding: SIZES.BASE * 3,
+                padding: SIZES.BASE * 2,
               },
             ]}
           >

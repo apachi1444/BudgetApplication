@@ -5,18 +5,63 @@ import { Ionicons } from "@expo/vector-icons";
 import { styleModal } from "./style";
 import { SIZES } from "../../../consts/theme";
 import { returnNewFormDisplayPrice } from "../../../global/functions/store";
+import { globalStyles } from "../../../global/styles/globalStyles";
+import { returnFinalStringDate } from "./../../50-30-20/logic";
+import { returnFinalNewDateAfterPeriodAndFinalString } from "../logic";
 
 const DetailsPlanned = (props) => {
-  const { isModalVisible, handleModal } = props;
+  const { isModalVisible, handleModal, element } = props;
 
+  const { date, newDate, numberTimesPaid, period, price, title, lastTimePaid } =
+    element;
+
+  const totalPayed = price * numberTimesPaid;
   const renderTotalIncomesTotalSpendings = () => {
     return (
       <View style={styleModal.containerOneDetail}>
-        <Text style={styleModal.title}>Total Incomes :</Text>
+        <Text style={styleModal.title}>Total Payed :</Text>
 
         <Text style={styleModal.totalIncome}>
-          {returnNewFormDisplayPrice(15000)} DH
+          {returnNewFormDisplayPrice(totalPayed)} DH
         </Text>
+      </View>
+    );
+  };
+
+  const renderInformationsAboutPlannedPayment = () => {
+    const renderOneDetail = (title, information) => {
+      return (
+        <View
+          style={[
+            globalStyles.flexRowAndAlignCenterAndSpaceBetweenJustify,
+            { marginVertical: SIZES.BASE * 1.5 },
+          ]}
+        >
+          <Text style={[styleModal.titleDetail]}>{title} :</Text>
+
+          <Text style={styleModal.totalIncome}>{information}</Text>
+        </View>
+      );
+    };
+
+    const { finalStringDate: finalStringLastDelay } =
+      returnFinalNewDateAfterPeriodAndFinalString(
+        period,
+        numberTimesPaid,
+        date
+      );
+
+    return (
+      <View style={styleModal.containerOneDetail}>
+        {renderOneDetail("Price", returnNewFormDisplayPrice(price) + " DH")}
+        {renderOneDetail("Title", title)}
+        {renderOneDetail("Added", returnFinalStringDate(new Date(date)))}
+        {renderOneDetail("Next Delay", finalStringLastDelay)}
+        {renderOneDetail(
+          "Last Time Paid",
+          newDate != null ? returnFinalStringDate(lastTimePaid) : "Not Paid Yet"
+        )}
+        {renderOneDetail("Number Times Paid ", numberTimesPaid)}
       </View>
     );
   };
@@ -55,6 +100,7 @@ const DetailsPlanned = (props) => {
             </TouchableOpacity>
 
             {renderTotalIncomesTotalSpendings()}
+            {renderInformationsAboutPlannedPayment()}
           </ScrollView>
         </Modal>
       </View>

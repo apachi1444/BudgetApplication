@@ -1,6 +1,7 @@
 import COLORS from "../../consts/color";
 import { windowWidth } from "../../utils/dimensions";
 import { StyleSheet, Platform, StatusBar } from "react-native";
+import { SIZESS } from "../../consts/theme";
 
 const SIZES = {
   BASE: 6,

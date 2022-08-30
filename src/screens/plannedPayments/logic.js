@@ -14,7 +14,6 @@ export const spendingElementsContainsNonEmptyPeriods = (list) => {
 
 export const returnfilteredNonEmptyCategories = (finalList) => {
   let final = [];
-  console.log("we are in the list ", finalList);
   finalList.map((item) => {
     if (
       item.spendingElements.length != 0 &&
@@ -44,11 +43,21 @@ export const returnTimeRemaining = (yearsRemaining, newDaysRemaining) => {
 
 export const returnTotalSpendingWithNonNullPeriod = (list, id) => {
   let total = 0;
+  console.log("thisi sh tlie sdklqfskldqfj ", list);
   list.map((item) => {
     total += item.price * (item.numberTimesPaid + 1);
   });
   return total;
 };
+
+export const returnTotalSpendingWithNonNullPeriodTotal = (list, id) => {
+  let total = 0;
+  list.map((item) => {
+    total += item.price * item.numberTimesPaid;
+  });
+  return total;
+};
+
 export const convertDateToMilliseconds = (period) => {
   return period * 24 * 60 * 60 * 1000;
 };
@@ -106,7 +115,28 @@ export const returnColorMessageAppriopriate = (
 
 export const returnFilteredData = (list) => {
   return list.filter((elem) => {
-    console.log(elem);
     return elem.plannedSpendingsElements.length > 0;
   });
+};
+
+export const returnFinalNewDateAfterPeriodAndFinalString = (
+  period,
+  numberTimesPaid,
+  date
+) => {
+  const periodMilliseconds = convertDateToMilliseconds(
+    period * (numberTimesPaid + 1)
+  );
+  const newDateAfterPeriod = new Date(
+    periodMilliseconds + new Date(date).getTime()
+  );
+
+  const {
+    year: yearNewDateAfterPeriod,
+    month: monthNewDateAfterPeriod,
+    day: dayNewDateAfterPeriod,
+  } = returnYearMonthDay(newDateAfterPeriod);
+
+  let finalStringDate = `${yearNewDateAfterPeriod}-${monthNewDateAfterPeriod}-${dayNewDateAfterPeriod}`;
+  return { finalStringDate, newDateAfterPeriod };
 };

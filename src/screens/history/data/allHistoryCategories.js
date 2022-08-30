@@ -3,7 +3,7 @@ import React from "react";
 import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import COLORS from "../../../consts/color";
 import { SIZES } from "../../../consts/theme";
-import { renderFinalDate } from "../../../global/functions/time";
+import { renderFinalDate, returnNewDate } from "../../../global/functions/time";
 import { globalStyles } from "../../../global/styles/globalStyles";
 import { historyStyle } from "../historyStyle";
 import { allHistoryStyle } from "./allHistoryCategoriesStyle";
@@ -34,17 +34,20 @@ const AllHistoryCategories = (props) => {
     // let arrayIncomesSpendings = finalListSpendings.concat(finalListIncomes);
     let categoryRecordsLength = returnFinalLengthSpecificCategory(item);
     const iconCategory = item.icon;
+    let incomesAndSpendings = [];
 
-    const renderRecordLine = (item) => {
+    const renderRecordLine = (item, repeated) => {
       const finalDate = renderFinalDate(item?.date);
-      console.log("this is the item in our rectangle ", { ...item });
       const nameIconArrow =
         item.transaction == "Spending"
           ? "arrow-down-circle"
           : "arrow-up-circle";
 
-      console.log(item.title, "hahahah");
       const color = item.transaction == "Spending" ? COLORS.RED : COLORS.GREEN;
+      // const newDate = new Date(date);
+      if (repeated) {
+        newDate = returnNewDate(date, period);
+      }
       const renderArrowAndImageAndTitleAndPriceAndDate = () => {
         const renderImageAndTitle = () => {
           return (
@@ -217,7 +220,7 @@ const AllHistoryCategories = (props) => {
                 color: "white",
               }}
             >
-              {categoryRecordsLength} Records
+              {incomesAndSpendings.length} Records
             </Text>
           </View>
         </View>
@@ -225,12 +228,14 @@ const AllHistoryCategories = (props) => {
     };
     {
       if (categoryRecordsLength != 0) {
-        let incomesAndSpendings = concatenateIncomesAndSpendings(item);
+        incomesAndSpendings = concatenateIncomesAndSpendings(item);
+
         return (
           <View style={allHistoryStyle.containerCategory}>
             {renderImageAndTitle()}
 
             {incomesAndSpendings.map((item) => {
+              console.log(item, "hahah this is mine ");
               return renderRecordLine(item);
             })}
           </View>

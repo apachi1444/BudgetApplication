@@ -173,9 +173,10 @@ export const historyStyle = StyleSheet.create({
     alignItems: "center",
     padding: SIZES.BASE / 2,
     alignSelf: "center",
-    height: windowHeight * 0.25,
-    width: windowWidth * 0.8,
     backgroundColor: COLORS.LIGHTGREY,
+    padding: SIZES.BASE * 4,
+    height: windowHeight * 0.15,
+    borderRadius: SIZES.BASE * 4,
   },
   textInsideCategoryContent: {
     alignSelf: "center",

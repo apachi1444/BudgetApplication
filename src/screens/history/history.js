@@ -22,10 +22,7 @@ import { categories } from "../../consts/categories";
 
 import { deleteTransaction } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 
-import {
-  calculateBudgetAndIncomesAndSpendings,
-  renderColorCircleBudget,
-} from "./logic";
+import { renderColorCircleBudget } from "./logic";
 import { deleteGuide } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../components/alertDelete";
 import {
@@ -632,7 +629,6 @@ const History = ({ navigation }) => {
             dispatch(deleteTransaction(item));
             dispatch(deleteGuide(item));
           };
-          const updateItem = () => {};
           const renderIcon = (name) => {
             return (
               <TouchableOpacity

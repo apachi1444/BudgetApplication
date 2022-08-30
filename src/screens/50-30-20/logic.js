@@ -13,8 +13,6 @@ export const concatenateIncomesAndSpendingsOneTypeTransactionAndTotalSpendingAnd
 
     if (item.spendingElements.length > 0) {
       item.spendingElements.map((spendingElement) => {
-        const { date } = spendingElement;
-        console.log(day, "lksdjfklj");
         const comparaisonBothDates = compareTwoDates(day);
         if (comparaisonBothDates) {
           totalSpendings += calculateFinalPriceTransaction(spendingElement);
@@ -95,6 +93,8 @@ export const renderAppropriateOptimalIncomes = (type, totalIncomes) => {
 export const returnOverpassedOrRemaining = (difference) => {
   if (difference < 0) {
     return "Overpassed";
+  } else if (difference == 0) {
+    return "Optimal !";
   }
   return "Remaining";
 };
@@ -122,14 +122,16 @@ export const returnPercentageWantAndNeedAndSaveAndGuideExpensesAndGuideExpensesS
       (totalNeeds / totalOptimalNeedsIncomes) *
       100
     ).toFixed(2);
+
     let percentageSave = (
       (totalSaves / totalOptimalSavesIncomes) *
       100
     ).toFixed(2);
 
-    let differenceWant = (wants - percentageWant).toFixed(2);
-    let differenceNeed = (needs - percentageNeed).toFixed(2);
-    let differenceSave = (saves - percentageSave).toFixed(2);
+    let differenceWant = (100 - percentageWant).toFixed(1);
+    let differenceNeed = (100 - percentageNeed).toFixed(1);
+    let differenceSave = (100 - percentageSave).toFixed(1);
+
     let finalGuideDataExpenses = [
       {
         y: totalWants,

@@ -10,21 +10,23 @@ import { globalStyles } from "../../global/styles/globalStyles";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
+  deletePlannedTransactionCategories,
   deleteTransaction,
   updateTransaction,
 } from "../../redux/features/user/userSpendingsAndIncomesCategories";
 import {
-  convertDateToMilliseconds,
   renderDifferenceBetweenDatesMilliseconds,
   returnColorMessageAppriopriate,
   returnDaysRemainingYearsRemainingAndNewDaysRemaining,
   returnFilteredData,
+  returnFinalNewDateAfterPeriodAndFinalString,
   returnTimeRemaining,
   returnTotalSpendingWithNonNullPeriod,
+  returnTotalSpendingWithNonNullPeriodTotal,
 } from "./logic";
-import { returnYearMonthDay } from "../../global/functions/time";
 import {
   deleteGuide,
+  deletePlannedTransactionTypeTransactions,
   updateTypeTransaction,
 } from "../../redux/features/user/userSpendingsAndIncomesTypeTransaction";
 import { displayDeleteAlert } from "../../components/alertDelete";
@@ -41,7 +43,6 @@ const PlannedPayments = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const filteredListNonEmptyCategories = returnFilteredData(list);
-  console.log(filteredListNonEmptyCategories, "sdlkfj");
   // const filteredNonEmptyCategories = returnfilteredNonEmptyCategories(list);
 
   const renderHeader = () => {
@@ -63,7 +64,12 @@ const PlannedPayments = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     const { id, title, plannedSpendingsElements } = item;
+
     let totalSpendings = returnTotalSpendingWithNonNullPeriod(
+      plannedSpendingsElements
+    );
+
+    let totalSpendingsHeader = returnTotalSpendingWithNonNullPeriodTotal(
       plannedSpendingsElements
     );
 
@@ -83,37 +89,22 @@ const PlannedPayments = ({ navigation }) => {
             size={25}
             style={{ marginRight: SIZES.BASE * 1.5 }}
           />
-          <Text style={plannedPaymentsStyle.price}>{totalSpendings}</Text>
+          <Text style={plannedPaymentsStyle.price}>
+            {totalSpendingsHeader} {"(Payed)"}
+          </Text>
         </View>
       </View>
     );
 
     const renderLineDetailEachItem = ({ item: element }) => {
-      let {
-        date,
-        period,
-        numberTimesPaid,
-        title,
-        price,
-        transaction,
-        type,
-        key,
-      } = element;
+      let { date, period, numberTimesPaid, title, price, key } = element;
 
-      const periodMilliseconds = convertDateToMilliseconds(
-        period * (numberTimesPaid + 1)
-      );
-      const newDateAfterPeriod = new Date(
-        periodMilliseconds + new Date(date).getTime()
-      );
-
-      const {
-        year: yearNewDateAfterPeriod,
-        month: monthNewDateAfterPeriod,
-        day: dayNewDateAfterPeriod,
-      } = returnYearMonthDay(newDateAfterPeriod);
-
-      let finalStringDate = `${yearNewDateAfterPeriod}-${monthNewDateAfterPeriod}-${dayNewDateAfterPeriod}`;
+      const { newDateAfterPeriod, finalStringDate } =
+        returnFinalNewDateAfterPeriodAndFinalString(
+          period,
+          numberTimesPaid,
+          date
+        );
 
       const differenceBetweenDatesMilliSeconds =
         renderDifferenceBetweenDatesMilliseconds(newDateAfterPeriod);
@@ -222,47 +213,48 @@ const PlannedPayments = ({ navigation }) => {
         };
         const renderDeleteAndEditButtons = () => {
           const deleteItem = () => {
-            dispatch(deleteTransaction(element));
-            dispatch(deleteGuide(element));
+            dispatch(deletePlannedTransactionTypeTransactions(element));
+            dispatch(deletePlannedTransactionCategories(element));
           };
+          console.log(element, "kljdfklqsjdfklqsjdfklsjqdfkl");
           const updateItem = () => {
             dispatch(
               updateTransaction({
-                id,
-                period,
-                key,
-                date,
+                ...element,
               })
             );
             dispatch(
               updateTypeTransaction({
-                id,
-                period,
-                key,
-                date,
+                ...element,
               })
             );
           };
-          const detailItem = () => {
-            return (
-              <DetailsPlanned
-                isModalVisible={isModalVisible}
-                handleModal={handleModal}
-              />
-            );
-          };
 
-          const renderIcon = (name, cb, secondary) => {
+          const renderIcon = (name, cb = null, secondary = null) => {
+            const onPress = () => {
+              if (name == "information-circle") {
+                handleModal();
+              } else {
+                secondary(cb);
+              }
+            };
             return (
               <TouchableOpacity
                 style={plannedPaymentsStyle.button}
-                onPress={() => secondary(cb)}
+                onPress={onPress}
               >
                 <Ionicons
                   name={name}
                   size={SIZES.BASE * 3}
                   color={COLORS.WHITE}
                 />
+                {name == "information-circle" && (
+                  <DetailsPlanned
+                    isModalVisible={isModalVisible}
+                    handleModal={handleModal}
+                    element={element}
+                  />
+                )}
               </TouchableOpacity>
             );
           };
@@ -274,7 +266,7 @@ const PlannedPayments = ({ navigation }) => {
                 updateItem,
                 displayUpdatePlanned
               )}
-              {renderIcon("information-circle", detailItem, displayDeleteAlert)}
+              {renderIcon("information-circle")}
             </View>
           );
         };
