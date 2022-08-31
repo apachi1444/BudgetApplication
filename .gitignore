@@ -13,8 +13,8 @@ web-build/
 # macOS
 .DS_Store
 .env
-/.env.production
-/.env.development
-/.env.staging
+.env.production
+.env.development
+.env.staging
 /eas.json
-/your_key_name.keystore
+.your_key_name.keystore
