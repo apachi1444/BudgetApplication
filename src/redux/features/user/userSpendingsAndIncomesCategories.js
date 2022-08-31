@@ -78,6 +78,7 @@ export const userSpendingsAndIncomesCategories = createSlice({
             planned: true,
             key: item.spendingElements.length + 1,
             numberPayment,
+            numberTimesPaid: 1,
           });
         }
       });
