@@ -2,7 +2,7 @@
 
 # E-Wall$t
 
-It's a budget application to organize people's money
+It's a budget application to organize people's money ( and adding the guide to automatically caluclaute their optimal spendings)
 
 **Here's the link of the figma**
 
