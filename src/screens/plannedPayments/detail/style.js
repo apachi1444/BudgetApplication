@@ -9,22 +9,14 @@ export const styleModal = StyleSheet.create({
     marginTop: SIZES.BASE,
     color: COLORS.SECONDARY,
   },
-  titleCategory: {
-    color: COLORS.WHITE,
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  price: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
+
   totalIncome: {
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 19,
   },
   titleDetail: {
     fontWeight: "bold",
-    fontSize: 21,
+    fontSize: 20,
     color: COLORS.SECONDARY,
   },
   containerOneDetail: {

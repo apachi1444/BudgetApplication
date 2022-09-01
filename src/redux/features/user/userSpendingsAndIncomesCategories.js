@@ -46,6 +46,7 @@ export const userSpendingsAndIncomesCategories = createSlice({
               key: finalList.length + 1,
               ...action.payload,
               paymentNumber: numberTimesPaid,
+              numberTimesPaid,
               // datePayments,
             });
           }

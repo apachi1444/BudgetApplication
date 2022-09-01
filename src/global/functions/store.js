@@ -226,6 +226,11 @@ export const returnFilteredListInterval = (start, end, list, title) => {
       }
     });
 
+    console.log(
+      "this is the list of all spendings that we have in our store ",
+      spendings
+    );
+
     totalSpendings += totalSpendingsFunction(spendings);
 
     const incomes = item.incomeElements.filter((income) => {

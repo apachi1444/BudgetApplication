@@ -21,7 +21,6 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
 
       state.map((item) => {
         if (item.type == type) {
-          let datePayments = [];
           let numberTimesPaid = 0;
           if (period == 0) {
             numberTimesPaid = 1;
@@ -41,8 +40,8 @@ export const userSpendingsAndIncomesTypeTransaction = createSlice({
             finalList.push({
               key: finalList.length + 1,
               ...action.payload,
+              paymentNumber: numberTimesPaid,
               numberTimesPaid,
-              // datePayments,
             });
           }
         }
