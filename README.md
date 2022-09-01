@@ -14,4 +14,8 @@ https://docs.google.com/spreadsheets/d/1IbXkPZyXB9pozgjWm7wmfyBzu3rPJM8I/edit?us
 
 **Here's the link of the apk**
 
-https://expo.dev/artifacts/eas/6YKrKgp9DfG5uNoJ59PHQz.apk
+https://expo.dev/artifacts/eas/6YtrvLd9fHSxo7xVUYQkjF.apk
+
+**Here's the command to generate the apk**
+
+eas build --profile production --platform android
