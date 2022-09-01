@@ -8,12 +8,10 @@ global.db = openDatabase(
     createFromLocation: "~mine.db",
   },
   () => {},
-  (error) => console.log(error)
+  (error) => {}
 );
 
-export const createTable = () => {
-  console.log(db);
-};
+export const createTable = () => {};
 
 export const insertUser = (user) => {
   const { email, password } = user;

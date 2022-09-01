@@ -25,25 +25,14 @@ export const compareTwoDates = (date1, date2) => {
 };
 
 export const compareFirstTargetFinalDates = (first, target, final) => {
-  console.log("this is the target date ", typeof target);
-  const firstYear = first.getFullYear();
-  const targetYear = target.getFullYear();
-  const finalYear = final.getFullYear();
+  first = new Date(first.getFullYear(), first.getMonth(), first.getDate());
+  final = new Date(final.getFullYear(), final.getMonth(), first.getDate());
+  target = new Date(target.getFullYear(), target.getMonth(), target.getDate());
 
-  const firstMonth = first.getMonth();
-  const targetMonth = target.getMonth();
-  const finalMonth = final.getMonth();
+  const comparaison =
+    first.getTime() <= target.getTime() && target.getTime() <= final.getTime();
 
-  const firstDay = first.getDate();
-  const targetDay = target.getDate();
-  const finalDay = final.getDate();
-
-  const comparaisonYear = firstYear <= targetYear && targetYear <= finalYear;
-  const comparaisonMonth =
-    firstMonth <= targetMonth && targetMonth <= finalMonth;
-  const comparaisonDay = firstDay <= targetDay && targetDay <= finalDay;
-
-  return comparaisonDay && comparaisonMonth && comparaisonYear;
+  return comparaison;
 };
 
 export const returnYearMonthDay = (date) => {

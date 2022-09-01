@@ -1,8 +1,8 @@
-import Settings from "../screens/settings/settings";
-import ProfileUser from "../screens/profile/profile";
+import Settings from "../screens/settings/index";
+import ProfileUser from "../screens/profile/index";
 import HistoryStack from "../routes/historyStack";
-import Guide_Stack from "../routes/guide_50_30_20_Stack";
-import Add from "../components/add/add";
+import Guide_Stack from "../routes/guide-stack";
+import Add from "../components/add";
 import { Icons } from "../components/icon";
 import profileUserStack from "../routes/profileUserStack";
 

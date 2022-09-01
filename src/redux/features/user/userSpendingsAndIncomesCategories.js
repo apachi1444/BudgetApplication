@@ -55,7 +55,6 @@ export const userSpendingsAndIncomesCategories = createSlice({
     },
     updateTransaction: (state, action) => {
       const { id, period, key, date } = action.payload;
-      console.log("this is actino payload", action.payload, "lkjsdf ", id);
       let newDate = returnNewDate(new Date(date), period);
       state.map((item) => {
         if (item.id == id) {

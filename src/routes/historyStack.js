@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import ChartCategories from "../screens/history/chartCategories/chartCategories";
-import History from "../screens/history/history";
+import ChartCategories from "../screens/history/chartCategories/index";
+import History from "../screens/history/index";
 
 const HistoryStack = createNativeStackNavigator();
 

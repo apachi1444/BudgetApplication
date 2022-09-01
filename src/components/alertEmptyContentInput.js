@@ -7,9 +7,7 @@ export const displayEmptyContentInput = () => {
     [
       {
         text: "Ok!",
-        onPress: () => {
-          console.log("heyeheye");
-        },
+        onPress: () => {},
       },
     ],
     {

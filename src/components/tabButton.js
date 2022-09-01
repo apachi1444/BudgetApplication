@@ -10,7 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Icon from "@expo/vector-icons/FontAwesome";
 import Modal from "react-native-modal";
 import COLORS from "../consts/color";
-import Add from "./add/add";
+import Add from "./add";
 import { windowWidth } from "../utils/dimensions";
 
 const SIZE = windowWidth * 0.19;

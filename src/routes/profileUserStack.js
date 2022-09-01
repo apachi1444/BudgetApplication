@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import editProfile from "../screens/editProfile/editProfile";
-import PlannedPayments from "../screens/plannedPayments/plannedPayments";
-import profile from "../screens/profile/profile";
+import editProfile from "../screens/edit-profile/index";
+import PlannedPayments from "../screens/planned-payments/index";
+import profile from "../screens/profile";
 const ProfileUserStack = createNativeStackNavigator();
 
 export default function () {

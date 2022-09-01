@@ -1,8 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import MoviesCarousel from "../screens/carousel/moviesCarouselGestureResponder";
-import MoviesCarouselPanResponder from "../screens/carousel/moviesCarouselPanResponder";
-import WelcomePage from "./../screens/welcomePage/welcomePage";
+import WelcomePage from "./../screens/welcome-page/index";
 
 const WelcomePageStack = createNativeStackNavigator();
 

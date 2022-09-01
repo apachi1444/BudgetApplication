@@ -226,11 +226,6 @@ export const returnFilteredListInterval = (start, end, list, title) => {
       }
     });
 
-    console.log(
-      "this is the list of all spendings that we have in our store ",
-      spendings
-    );
-
     totalSpendings += totalSpendingsFunction(spendings);
 
     const incomes = item.incomeElements.filter((income) => {
@@ -286,7 +281,6 @@ export const returnFilteredListSingleDay = (day, list, title) => {
 
     totalSpendings += totalSpendingsFunction(spendings);
 
-    console.log("this is the total spendings haha", totalSpendings);
     const incomes = item.incomeElements.filter((income) => {
       if (title == "All" || item.title == title) {
         return doComparaisonSingleDayIncome(compareTwoDates, income, day);

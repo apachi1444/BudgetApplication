@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { useSelector } from "react-redux";
-import config from "../../config";
 import authStack from "./authStack";
 import welcomePageStack from "./welcomePageStack";
 const WelcomeStack = createNativeStackNavigator();
@@ -21,8 +20,6 @@ export default function () {
   //     }
   //   })();
   // }, []);
-
-  console.log("this is the boolean of visited ", visited);
 
   return (
     <WelcomeStack.Navigator>

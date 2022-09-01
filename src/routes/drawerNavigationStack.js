@@ -1,16 +1,9 @@
-import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
-import profileUserStack from "./profileUserStack";
-import CustomDrawer from "../components/customDrawer/customDrawer";
+import { Feather } from "@expo/vector-icons";
+import CustomDrawer from "../components/customDrawer";
 import { SIZES } from "../consts/theme";
 import COLORS from "../consts/color";
-import historyStack from "./historyStack";
-import Settings from "../screens/settings/settings";
-import guide_50_30_20_Stack from "./guide_50_30_20_Stack";
-import AboutUs from "../screens/about-us/about-us";
 import BottomBar from "./bottomBar";
 const Drawer = createDrawerNavigator();
 

@@ -11,9 +11,7 @@ export const displayDeleteAlert = (deleteFunction) => {
       },
       {
         text: "No Thanks ",
-        onPress: () => {
-          console.log("no thanks");
-        },
+        onPress: () => {},
       },
     ],
     {

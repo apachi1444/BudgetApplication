@@ -11,9 +11,7 @@ export const displayUpdatePlanned = (updatePlanned) => {
       },
       {
         text: "No Thanks ",
-        onPress: () => {
-          console.log("no thanks");
-        },
+        onPress: () => {},
       },
     ],
     {

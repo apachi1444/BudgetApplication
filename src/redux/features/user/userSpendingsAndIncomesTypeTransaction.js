@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { typeTransactions } from "../../../consts/spendingCategories";
+import { typeTransactions } from "../../../consts/spendingsTypes";
 import { returnNewDate } from "../../../global/functions/time";
 
 const initialState = typeTransactions.map((item) => {

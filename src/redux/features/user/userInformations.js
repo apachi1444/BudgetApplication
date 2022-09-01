@@ -11,7 +11,6 @@ export const userInformations = createSlice({
   reducers: {
     addUser: (state, action) => {
       const { email } = action.payload;
-      console.log("this is the email in the payload ", email);
       if (email == null) {
         state.name = "Anonymous";
       } else {
