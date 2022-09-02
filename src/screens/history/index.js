@@ -541,10 +541,6 @@ const History = ({ navigation }) => {
   };
 
   const renderHistoryCategory = () => {
-    // const listSpendings = returnListSpendingWithNonNullPeriod(data, title);
-    // const listIncomes = returnListIncomes(data, title);
-
-    // let allHistory = listSpendings.concat(listIncomes);
     let allHistory = finalList;
     let finalLength = returnFinalLength(allHistory);
     let historySpecificCategory = [];
@@ -553,6 +549,7 @@ const History = ({ navigation }) => {
         allHistory,
         title
       );
+      finalLength = historySpecificCategory.length;
     }
     const renderHistoryItem = (item) => {
       const { transaction } = item;
@@ -705,6 +702,7 @@ const History = ({ navigation }) => {
             singleDate={singleDate}
           />
         )}
+
         {finalLength == 0 && (
           <View>
             <Text style={historyStyle.textInsideCategoryContent}>
