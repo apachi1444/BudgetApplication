@@ -316,7 +316,7 @@ const ChartCategories = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{ ...globalStyles.AndroidSafeArea, padding: 0 }}>
       {renderHeader()}
       <View style={chartCategoriesStyle.container}>
         {/* // this is for the spending and incomes titles 000 */}

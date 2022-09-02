@@ -19,7 +19,7 @@ export const profileStyles = StyleSheet.create({
     color: COLORS.PRIMARY,
   },
   container: {
-    paddingVertical: "12%",
+    paddingVertical: "3%",
   },
   containerInformationsUser: {
     alignItems: "center",

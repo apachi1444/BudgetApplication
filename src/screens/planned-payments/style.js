@@ -5,7 +5,8 @@ import { SIZES, SIZESS } from "../../consts/theme";
 export const plannedPaymentsStyle = StyleSheet.create({
   container: {
     flex: 1,
-    margin: "4%",
+    backgroundColor: "white",
+    padding: "4%",
   },
 
   containerItem: {

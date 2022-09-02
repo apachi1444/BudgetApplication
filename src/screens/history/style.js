@@ -9,7 +9,7 @@ export const historyStyle = StyleSheet.create({
   },
 
   containerProfileInformations: {
-    paddingVertical: "6%",
+    paddingVertical: "1%",
     flexDirection: "row",
     alignItems: "center",
   },
